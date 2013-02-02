@@ -1,0 +1,123 @@
+R Self Assessment
+=================
+
+[Questions](http://www.biostat.jhsph.edu/~rpeng/coursera/selfquiz/quiz.html) | [Answers](http://www.biostat.jhsph.edu/~rpeng/coursera/selfquiz/quiz_answer.html)
+
+1. Download and install R from the Comprehensive R Archive Network. Make sure to choose a version that is appropriate for your computing platform (Windows, Mac, or Unix/Linux)
+
+2. Download the dataset available located on this web page and load it into R with the read.csv function. Assign the output of read.csv to an object named dataset.
+```{r}
+dataset <- read.csv("~/Desktop/selfquiz-data.csv")
+```
+
+3. What are the column names of the data frame?
+```{r}
+colnames(dataset)
+```
+
+4. What are the row names of the data frame?
+```{r}
+rownames(dataset)
+```
+
+5. Extract the first 6 rows of the data frame and print them to the console
+```{r}
+head(dataset)
+```
+
+6. How many observations (i.e. rows) are in this data frame?
+```{r}
+nrow(dataset)
+```
+
+7. Extract the last 6 rows of the data frame and print them to the console
+```{r}
+tail(dataset)
+```
+
+8. How many missing values are in the "Ozone" column of this data frame?
+```{r}
+# mine
+sum(sapply(dataset$Ozone, function(x) sum(is.na(x))))
+
+# from the answer page:
+miss <- is.na(dataset[, "Ozone"])  ## A vector of TRUE/FALSE
+sum(miss)
+```
+
+9. What is the mean of the "Ozone" column in this dataset? Exclude missing values (coded as NA) from this calculation.
+```{r}
+# mine
+mean(dataset$Ozone[!is.na(dataset$Ozone)])
+
+# from the answer page:
+mean(dataset[, "Ozone"], na.rm = TRUE)
+```
+
+10. Extract the subset of rows of the data frame where Ozone values are above 31 and Temp values are above 90.
+```{r}
+subset(dataset, Ozone > 31 & Temp > 90)
+```
+
+11. Use a for loop to create a vector of length 6 containing the mean of each column in the data frame (excluding all missing values).
+```{r}
+# mine
+dataset.means <- vector()
+for (col in colnames(dataset)) {
+  dataset.means <- c(dataset.means,
+                     mean(as.vector(dataset[[col]])[!is.na(dataset[[col]])]))
+}
+
+# from the answer page:
+m <- numeric(6)
+for (i in 1:6) {
+    m[i] <- mean(dataset[, i], na.rm = TRUE)
+}
+print(m)
+```
+
+12. Use the apply function to calculate the standard deviation of each column in the data frame (excluding all missing values).
+```{r}
+# got a bit stuck here...
+# minus the filtering bit...
+# apply(dataset, colnames(dataset), sd)
+# how to do this in a one-liner? w/o looping?
+
+# from the answer page:
+s <- apply(dataset, 2, sd, na.rm = TRUE)
+print(s)
+
+# Dave H. explains further:
+# MARGIN = 2
+for (i in 1:ncol(dataset)) {
+  sd(dataset[, i], na.rm = TRUE)
+}
+
+# MARGIN = 1
+for (i in 1:nrow(dataset)) {
+  sd(dataset[i, ], na.rm = TRUE)
+}
+```
+
+13. Calculate the mean of "Ozone" for each Month in the data frame and create a vector containing the monthly means (exclude all missing values).
+```{r}
+# ick ... loops are a code smell
+dataset.ozone.means.by.month <- vector()
+for (m in unique(dataset$Month)) {
+  dataset.ozone.means.by.month <- c(dataset.ozone.means.by.month, 
+                                    mean(subset(dataset, !is.na(Ozone) & Month==m)[["Ozone"]]))
+}
+# a way to do it without looping?
+
+# from the answer page:
+tapply(dataset$Ozone, dataset$Month, mean, na.rm = TRUE)
+
+# Dave H. suggests:
+library(plyr)
+ddply(dataset, .(Month), function(d, ...) sd(d$Ozone, ...), na.rm = TRUE)
+```
+
+14. Draw a random sample of 5 rows from the data frame
+```{r}
+dataset[sample(nrow(dataset), 5), ]
+```
