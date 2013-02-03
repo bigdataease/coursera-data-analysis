@@ -19,7 +19,7 @@ and so do I. (Also: do yourself a favor and get R Studio set up to use
 
 The general layout here:
 
-* **`lectures`** - Lecture notes and associated materials.
-* **`quizzes`** - "Showing my work" for the quizzes. (These are ignored with
+* `lectures` - Lecture notes and associated materials.
+* `quizzes` - "Showing my work" for the quizzes. (These are ignored with
   `.gitignore` until the course is over or until the quizzes are "over"; can't
   have anyone cheating, after all.)
