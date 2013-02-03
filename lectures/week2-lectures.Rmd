@@ -2,13 +2,13 @@
 
 ## Structure of a Data Analysis (Part 1 & 2)
 
-* slides
+slides
   [1](https://dl.dropbox.com/u/7710864/courseraPublic/week2/001structureOfADataAnalysis1/index.html) +
   [2 (pdf)](https://d19vezwu8eufl6.cloudfront.net/dataanalysis/structureOfADataAnalysis2.pdf) |
-  transcript
+transcript
   [1](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=65_en&format=txt) +
   [2](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=67_en&format=txt) |
-  videos
+videos
   [1](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=65) +
   [2](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=67)
 
@@ -97,9 +97,9 @@ plot(hCluster)
 
 ## Organizing a Data Analysis
 
-* [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/003organizingADataAnalysis/index.html) |
-  [transcript](https://dl.dropbox.com/u/7710864/courseraPublic/week2/003organizingADataAnalysis/index.html) |
-  [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=71)
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/003organizingADataAnalysis/index.html) |
+[transcript](https://dl.dropbox.com/u/7710864/courseraPublic/week2/003organizingADataAnalysis/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=71)
 
 ### directory structure
 
@@ -152,20 +152,23 @@ A proposed sensible convention to follow for directory structures:
 
 ## Getting Data (Part 1 & 2)
 
-* slides
+slides
   [1](https://dl.dropbox.com/u/7710864/courseraPublic/week2/004gettingData1/index.html) +
   [2](https://dl.dropbox.com/u/7710864/courseraPublic/week2/005gettingData2/index.html) |
-  transcripts
+transcripts
   [1](https://dl.dropbox.com/u/7710864/courseraPublic/week2/004gettingData1/index.html) +
   [2](https://dl.dropbox.com/u/7710864/courseraPublic/week2/005gettingData2/index.html) |
-  videos
+videos
   [1](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=73) +
   [2](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=75)
+
 * (( most of it in the week2-lectures.Rmd file... ))
-* get/set your working directory
-  * `getwd()`
-  * `setwd('/home/username/etc/etc')`
+* get/set your working directory:
   * relative & absolute paths
+```{r}
+getwd()
+setwd('/Users/ddcrob/Desktop/R')
+```
 * types of data files... (examples)
   * tab-delimited
   * comma-separated
@@ -198,7 +201,7 @@ A proposed sensible convention to follow for directory structures:
   * `gzfile`
   * `bzfile`
   * `?connections` → for help on connections
-  * remember to close connections! 
+  * **remember to close connections!**
 * `readLines()` → 
   * `file()` to open the connection (file returns a connection)
     * `read.csv(connection)`
@@ -227,20 +230,12 @@ A proposed sensible convention to follow for directory structures:
   * `RHadoop`
   * `foreign` → for getting data from SAS or SPSS etc.
 
-### some "follow along" exercises
-
-get/set working directory:
-
-```{r}
-getwd()
-setwd('/Users/ddcrob/Desktop/R')
-```
-
 ## Data Resources (where to go and get data) 
 
-* slides: https://dl.dropbox.com/u/7710864/courseraPublic/week2/006dataResources/index.html
-* transcript: https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=77_en&format=txt
-* video: https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=77
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/006dataResources/index.html) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=77_en&format=txt) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=77)
+
 * [www.data.gov](http://www.data.gov) → public govt. data
   * (( other examples ))
   * France... UK...
@@ -252,9 +247,10 @@ setwd('/Users/ddcrob/Desktop/R')
 
 ## Summarizing Data 
 
-* [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/007summarizingData/index.html) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=79_en&format=txt) |
-  [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=79)
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/007summarizingData/index.html) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=79_en&format=txt) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=79)
+
 * "Why summarize?"
   * data often too big to look at the whole thing
   * first steps:
@@ -286,15 +282,14 @@ setwd('/Users/ddcrob/Desktop/R')
 
 ## Data Munging Basics
 
-* [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/008dataMungingBasics/index.html) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=81_en&format=txt) |
-  [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=81)
-* RECALL : **"Tidy Data"** → this is where you want to end up
-  * RECALL: Tidy Data is: ([citation](http://vita.had.co.nz/papers/tidy-data.html))
-    * Variables in columns
-    * Observations in rows
-    * Tables hold elements of one kind only
-  * Plus:
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/008dataMungingBasics/index.html) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=81_en&format=txt) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=81)
+* RECALL : **["Tidy Data"](http://vita.had.co.nz/papers/tidy-data.html)** → this is where you want to end up → **_Tidy Data_ is:**
+  * Variables in columns
+  * Observations in rows
+  * Tables hold elements of one kind only
+  * (_addendum_) Plus:
     * col names are easy to use (informative)
     * row names are easy...
     * obvious mistakes are removed
