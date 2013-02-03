@@ -2,17 +2,19 @@
 
 ## Course Introduction
 
-* [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=7) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=7_en&format=txt)
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=7) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=7_en&format=txt)
+
 * Jeff Leeks - professor, biostatistics at JHU 
   * [Simply Statistics blog](http://simplystatistics.org/)
 * (( going to be pretty comprehensive, but not enough time to go in-depth on it all ))
 
 ## Getting Help
 
-* [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=9) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=9_en&format=txt) |
-  [slides](https://dl.dropbox.com/u/7710864/002gettingHelp/index.html)
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=9) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=9_en&format=txt) |
+[slides](https://dl.dropbox.com/u/7710864/002gettingHelp/index.html)
+
 * *where to get help?*
   * message boards are one place... to ask questions 
 * *where to look for answers?*
@@ -32,9 +34,10 @@
 
 ## What _is_ Data?
 
-* [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=45) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=45_en&format=txt) |
-  [slides](https://dl.dropbox.com/u/7710864/003whatIsData/index.html)
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=45) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=45_en&format=txt) |
+[slides](https://dl.dropbox.com/u/7710864/003whatIsData/index.html)
+
 * (( start w/ the Wikipedia definition )) → and/but break it down 
   * Data are values of qualitative or quantitative variables, belonging to a set of items.
 * **set of items** → population or sample 
@@ -56,8 +59,9 @@
 
 ## Representing Data
 
-* [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=49) |
-  [slides](https://dl.dropbox.com/u/7710864/004representingData/index.html)
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=49) |
+[slides](https://dl.dropbox.com/u/7710864/004representingData/index.html)
+
 * "How do we represent data?" 
   * important to know how to write about it → b/c _The Point_ is communicating 
 * How do we write about data?
@@ -128,9 +132,10 @@
 
 ## Representing Data in R
 
-* [slides](https://dl.dropbox.com/u/7710864/005representingDataR/index.html) |
-  [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=51) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=51_en&format=txt)
+[slides](https://dl.dropbox.com/u/7710864/005representingDataR/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=51) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=51_en&format=txt)
+
 * (( more/less an intro to R and its core concepts ))
   * recommended video: [Peng's "Lecture 2a: Data Types" (video)](http://www.youtube.com/watch?v=5AQM-yUX9zg)
 * data types:
@@ -162,92 +167,103 @@
   * acceptable: camelCase, with_underscores
   * idiomatic: with.dots 
 * Style guides are out there for R:
-  * check it: [Google's R style guide](http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html)
+  * e.g., [Google's R style guide](http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html)
 
 ## Simulation Basics
 
-* [slides](https://dl.dropbox.com/u/7710864/006simulationBasics/index.html) |
-  [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=53) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=53_en&format=txt)
+[slides](https://dl.dropbox.com/u/7710864/006simulationBasics/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=53) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=53_en&format=txt)
+
 * basics of simulation →
   * primarily (at beginning of class) for generating idealized data sets 
 * 3 categories:
   * distributions
-    * all functions start with "r"
+    * all functions start with `r`
   * densities
-    * all functions start with "d"
+    * all functions start with `d`
   * sampling
 * "r functions" 
-  * to generate data → e.g., `coin.flips <- rbinom(10, size=10, prob=0.5)`
+  * to generate data → example:
+```{r}
+coin.flips <- rbinom(10, size=10, prob=0.5)
+```
 * "d functions"
-  * to generate data → e.g.,
-    * `x <- seq(from=-5, to=5, length-10)`
-    * `normal.density <- dnorm(x, mean=0, sd=1)`
-    * `round(normal.density, 2)`
+  * to generate data → example:
   * (see also : `dbinom`) 
-* sample → to sample from data we already have 
-  * `heights <- rnorm(100, mean=188, sd=3)`
-  * `sample(height, size=10, replace=TRUE)`
+```{r}
+x <- seq(from=-5, to=5, length=10)
+normal.density <- dnorm(x, mean=0, sd=1)
+round(normal.density, 2)
+```
+* sample → to sample from data we already have
   * see also : prob arg for probabilities (takes a vector of probabilities (remember: probabilities must sum to 1))
+```{r}
+heights <- rnorm(100, mean=188, sd=3)
+sample(heights, size=10, replace=TRUE)
+```
 * `set.seed(12345) # or whatever int you want for an arg`
   * anyway : that is a way of saying "repeatably random" 
 * see also : [Peng's "Simulation in R" (video)](http://www.youtube.com/watch?v=tvv4IA8PEzw)
 
 ## Types of Data Analysis Questions 
 
-* [slides](https://dl.dropbox.com/u/7710864/007typesOfQuestions/index.html) |
-  [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=55) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=55_en&format=txt)
-* what kind of question are you trying to answer? try categories:
-  * **descriptive** → describe something 
-    * usually on a "census" or population 
-  * **exploratory** → goal : find relationships that you didn't necessarily know about
-    * ok to do on a census, but more commonly on a smaller data set 
-    * this type of analysis is usually where you need to remember "correlation does not equal causation"
-      * (( you are looking for clues here about where to look next )) 
-  * **inferential** → goal : use a small sample to imply something about a larger population 
-    * must: estimate the qty. you care about & the quantify the uncertainty you have about that estimate 
-    * case study: look at air pollution in 500 counties across the USA, make inferences about air pollution throughout the USA
-  * **predictive** → goal : use the data on some objects to predict values for another object
-    * REMEMBER : just because "x predicts y" does not mean that "x _causes_ y"
-    * prediction is very hard 
-    * case study : [Nate Silver's 538 blog](http://fivethirtyeight.blogs.nytimes.com/)
-    * case study : how Target figured out how a girl was pregnant before her father did (source Forbes.com)
-  * **causal** → goal : find out what happens to one variable when you make another variable change 
-    * randomized studies more/less required 
-    * usually ID'd as "average effects" 
-    * "the gold standard" 
-    * controlling variables & "doing experiments" so be go beyond "x _predicts_ y"
-      * ( however : again : even with "causal" studies, it can be difficult to prove a causal relationship )
-  * **mechanistic** → goal : Understand the exact changes in variables that lead to changes in other variables for individual objects.
-    * incredibly hard 
-    * try to "prove" that by manipulating variable(s) that you can predict changes in other variable(s)
-      * (( complex relationships w/in systems ))
+[slides](https://dl.dropbox.com/u/7710864/007typesOfQuestions/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=55) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=55_en&format=txt)
+
+_"What kind of question are you trying to answer?"_ try categories:
+
+* **descriptive** → describe something 
+  * usually on a "census" or population 
+* **exploratory** → goal : find relationships that you didn't necessarily know about
+  * ok to do on a census, but more commonly on a smaller data set 
+  * this type of analysis is usually where you need to remember "correlation does not equal causation"
+    * (( you are looking for clues here about where to look next )) 
+* **inferential** → goal : use a small sample to imply something about a larger population 
+  * must: estimate the qty. you care about & the quantify the uncertainty you have about that estimate 
+  * case study: look at air pollution in 500 counties across the USA, make inferences about air pollution throughout the USA
+* **predictive** → goal : use the data on some objects to predict values for another object
+  * REMEMBER : just because "x predicts y" does not mean that "x _causes_ y"
+  * prediction is very hard 
+  * case study : [Nate Silver's 538 blog](http://fivethirtyeight.blogs.nytimes.com/)
+  * case study : [Forbes.com: How Target Figured Out A Teen Girl Was Pregnant Before Her Father Did](http://www.forbes.com/sites/kashmirhill/2012/02/16/how-target-figured-out-a-teen-girl-was-pregnant-before-her-father-did/)
+* **causal** → goal : find out what happens to one variable when you make another variable change 
+  * randomized studies more/less required 
+  * usually ID'd as "average effects" 
+  * "the gold standard" 
+  * controlling variables & "doing experiments" so be go beyond "x _predicts_ y"
+    * ( however : again : even with "causal" studies, it can be difficult to prove a causal relationship )
+* **mechanistic** → goal : Understand the exact changes in variables that lead to changes in other variables for individual objects.
+  * incredibly hard 
+  * try to "prove" that by manipulating variable(s) that you can predict changes in other variable(s)
+    * (( complex relationships w/in systems ))
 
 ## Sources of Data Sets
 
-* [slides](https://dl.dropbox.com/u/7710864/008sourcesOfDataSets/index.html) |
-  [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=57) |
-  [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=57_en&format=txt)
-* data are defined by how they are collected 
-  * **census** → usually for descriptive studies 
-    * census → population → measure all variables across each individual in the population 
-  * **observational study** → ...inferential
-    * random sample from your target population
-      * based on that sample, extrapolate about the population 
-  * **convenience sample** → all types (may be biases)
-    * a sample, but not random (e.g., you can't travel too far to get your subjects)
-  * **randomized trial** → mandatory for causal studies 
-    * get your sample, assign different treatments to different groups 
-      * note: hold all other variables constant 
-  * (main above, other below)
-  * **prediction study**
-    * need 2 data sets → training set (build predictive model) + test set (evaluate predictive model)
-    * result of 1st set: build the predictive model
-    * 2nd time around : use your predictive model and see if you can validate it 
-  * **studies over time** (_cross-sectional_, _longitudinal_)
-    * cross-sectional: pick a time point, and measure your sample at that time point (!????)
-    * longitudinal: assign individuals from your sample, and follow them over a period of time (measuring your variables again and again and again...)
-  * **retrospective** (_inferential_) 
-    * do an "exposure" → "fast forward" to the end, and take your measurements then 
-    * noted : it's inferential (not predictive, not causal)
+[slides](https://dl.dropbox.com/u/7710864/008sourcesOfDataSets/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=57) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=57_en&format=txt)
+
+* data are defined by how they are collected:
+* **census** → usually for descriptive studies 
+  * census → population → measure all variables across each individual in the population 
+* **observational study** → ...inferential
+  * random sample from your target population
+    * based on that sample, extrapolate about the population 
+* **convenience sample** → all types (may be biases)
+  * a sample, but not random (e.g., you can't travel too far to get your subjects)
+* **randomized trial** → mandatory for causal studies 
+  * get your sample, assign different treatments to different groups 
+    * note: hold all other variables constant 
+* (main above, other below)
+* **prediction study**
+  * need 2 data sets → training set (build predictive model) + test set (evaluate predictive model)
+  * result of 1st set: build the predictive model
+  * 2nd time around : use your predictive model and see if you can validate it 
+* **studies over time** (_cross-sectional_, _longitudinal_)
+  * cross-sectional: pick a time point, and measure your sample at that time point (!????)
+  * longitudinal: assign individuals from your sample, and follow them over a period of time (measuring your variables again and again and again...)
+* **retrospective** (_inferential_) 
+  * do an "exposure" → "fast forward" to the end, and take your measurements then 
+  * noted : it's inferential (not predictive, not causal)
