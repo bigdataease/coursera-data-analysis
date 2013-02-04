@@ -23,3 +23,5 @@ The general layout here:
 * `quizzes` - "Showing my work" for the quizzes. (These are ignored with
   `.gitignore` until the course is over or until the quizzes are "over"; can't
   have anyone cheating, after all.)
+* `example-data-analysis-assignment` - Leek's example data analysis project; basically
+  a reference implementation for the student projects.
