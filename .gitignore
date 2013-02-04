@@ -6,3 +6,6 @@ lectures/*.md
 lectures/figure/
 
 quizzes/
+
+# the example analysis: (we only want the zip, not the contents)
+example-data-analysis-assignment/exampleProject/
