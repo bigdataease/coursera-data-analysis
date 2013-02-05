@@ -1,0 +1,111 @@
+# [Data Analysis] Week 3 Lectures
+
+## Example Analysis Assignment
+
+[example file](https://d19vezwu8eufl6.cloudfront.net/dataanalysis/exampleProject.zip) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=83_en&format=txt) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=83)
+
+"How did I do this analysis?"
+
+* **prompt** - contains the question (naturally?)
+* **assignment** - the materials that should be submitted
+* **core** - has `finalcode` and `rawcode`
+  * note that `raw`... contains _all_ analyses performed (not just the ones that appear in the final)
+* **figures** - just the final figure
+  * optionally (and/or: for yourself) consider keeping interesting exploratory figures
+    * and/but - if you're using `Rmd` then you probably don't need to do this
+
+## Exploratory Graphs (1 + 2)
+
+slides
+  [1](https://dl.dropbox.com/u/7710864/courseraPublic/week3/001exploratoryGraphs1/index.html) +
+  [2](https://dl.dropbox.com/u/7710864/courseraPublic/week3/002exploratoryGraphs2/index.html) |
+videos
+  [1](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=85) +
+  [2](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=87)
+
+* "Why do we use graphs?"
+  * _communication!_
+  * see patterns that you can't see w/ numbers alone
+  * understand properties of the data
+  * suggest modeling strategies
+* characteristics of _exploratory_ graphs
+  * make many of them, and quickly
+  * (clean it up later)
+* (( illustrating how 1 set of data could be visualized _n_ different ways... ))
+* "position vs. length"
+  * ask: "What is the main take-away from the graph? Is it easy to 'see what you're saying'?"
+  * (is the graph easy to read?)
+* "position vs. angle"
+  * ("why statisticians don't like pie charts")
+* whenever possible: try to use **position** as the basis for graphical comparisons
+
+### example plots
+(using the American Community Survey data from last week's quiz)
+
+```{r}
+pData <- read.csv("../quizzes/ss06pid.csv")
+```
+
+#### Boxplot
+* for a quantitative variable
+* goal: get an idea of the distribution of the data
+* observe:
+  * **median** (thick line in the middle)
+  * **75th** & **25th percentile** (upper & lower bounds of the box)
+  * **whiskers** - 1.5x the value of 75th & 25th percentiles, respectively
+  * also: outliers appear as dots
+* `varwidth` = size the width based on the number of observations (for that factor)
+
+```{r}
+boxplot(pData$AGEP, col="blue")
+
+# "Show me AGEP but broken down by DDRS"
+boxplot(pData$AGEP ~ as.factor(pData$DDRS), col="blue")
+
+# encode additional information with `varwidth`
+boxplot(pData$AGEP ~ as.factor(pData$DDRS), col=c("blue", "orange"), names=c("yes", "no"), varwidth=TRUE)
+```
+
+#### Barplot
+* height of the bar = data value
+  * "number of observations per class"
+* continuous data?
+  * break it down into chunks and look at the values that way
+
+```{r}
+barplot(table(pData$CIT), col="blue")
+```
+
+#### Histograms
+* important params: breaks, freq, col, xlab, ylab, xlim, ylim, main
+* "sort of like boxplots"
+  * goal : quanity a univariate distribution of data
+* still chunking the distribution and summing them
+  * (similar to the barplot example?)
+  * and/but - more fine-grained
+* helps to show the shape of the distribution
+  * (in that regard: more resolution on the data than w/ a boxplot)
+* you can set the number of breaks
+
+```{r}
+hist(pData$AGEP, col="blue", breaks=100)
+```
+
+#### Density Plots
+* like a histogram but smoothed out
+* warning: could introduce errors at the boundaries
+  * careful when interpretting!
+
+```{r}
+dens <- density(pData$AGEP)
+plot(dens, lwd=3, col="blue")
+# `lwd` = 'line width' (roughly)
+
+# useful (vs. histogram) b/c you can overlay them
+dens <- density(pData$AGEP)
+densMales <- density(pData$AGEP[which(pData$SEX=1)])
+plot(dens, lwd=3, col="blue")
+lines(densMales, lwd=3, col="orange")
+```
