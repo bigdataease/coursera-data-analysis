@@ -105,7 +105,140 @@ plot(dens, lwd=3, col="blue")
 
 # useful (vs. histogram) b/c you can overlay them
 dens <- density(pData$AGEP)
-densMales <- density(pData$AGEP[which(pData$SEX=1)])
+densMales <- density(pData$AGEP[which(pData$SEX==1)])
 plot(dens, lwd=3, col="blue")
 lines(densMales, lwd=3, col="orange")
 ```
+
+#### Scatterplots
+* most widely used plot for exploratory analysis
+* `x` & `y` are critical variables
+  * (list of several other important params)
+  * `?par` for more
+* remember: each point represents 1 observation
+* interesting: scatterplots can help illuminate weird patterns quickly
+  * and/or outliers become flaringly obvious
+* "size matters"
+  * pay attn to scale on axis & size of dots
+
+```{r}
+plot(pData$JWMNP, pData$WAGP, pch=19, col="blue")
+
+# try again:
+plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=0.5)
+
+# w/ color: (remember: need a number value for `col`)
+plot(pData$JWMNP, pData$WAGP, pch=19, col=pData$SEX, cex=0.5)
+
+# you can also use size to illustrate "the third variable"
+percentMaxAge <- pData$AGEP/max(pData$AGEP)
+plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=percentMaxAge*0.5)
+
+# get fancy: overlay lines/points
+plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=0.5)
+lines(rep(100, dim(pData)[1]), pData$WAGP, col="grey", lwd=5)
+points(seq(0, 200, length=100), seq(0, 20e5, length=100), col="red", pch=19)
+
+# more fancy: visualizing numeric variables as factors
+library(Hmisc)
+ageGroups <- cut2(pData$AGEP, g=5) # <-- breaks up the age groups into "factors" (5 chunks of age groups)
+plot(pData$JWMNP, pData$AGEP, pch=19, col=ageGroups, cex=0.5)
+```
+
+"If you have lots of points..." (e.g., 100k)
+
+```{r}
+# big black mass!
+x <- rnorm(1e5)
+y <- rnorm(1e5)
+plot(x, y, pch=19)
+
+# try sampling the values
+x <- rnorm(1e5)
+y <- rnorm(1e5)
+sampledValues <- sample(1:1e5, size=1000, replace=FALSE)
+plot(x[sampledValues], y[sampledValues], pch=19)
+
+# ...or a "smooth scatter"
+x <- rnorm(1e5)
+y <- rnorm(1e5)
+smoothScatter(x,y)
+
+# ...or "hexbin"
+library(hexbin)
+x <- rnorm(1e5)
+y <- rnorm(1e5)
+hbo <- hexbin(x,y)
+plot(hbo)
+```
+
+#### QQ Plots
+
+* "Sort of like a scatter plot but with a very particular purpose..."
+* plots quantiles of `x` vs. quantiles of `y`
+
+```{r}
+x <- rnorm(20)
+y <- rnorm(20)
+qqplot(x,y)
+abline(c(0,1))
+```
+
+#### Matplot and spaghetti
+
+* takes each column and plots it as one line
+  * each column (in the matrix) becomes one specific line
+* compare trends/trajectories over time
+
+```{r}
+X <- matrix(rnorm(20*5), nrow=20)
+matplot(X, type="b")
+```
+
+#### Heatmaps
+
+* "sort of like a 2D histogram"
+* goal: visualize the whole matrix of data
+* color --> intensity
+
+```{r}
+image(1:10, 161:236, as.matrix(pData[1:10, 161:236]))
+
+# might want to transpose that...
+newMatrix <- as.matrix(pData[1:10, 161:236])
+newMatrix <- t(newMatrix)[,nrow(newMatrix):1]
+image(161:236, 1:10, newMatrix)
+```
+
+#### Maps (very basics)
+
+* very basics
+  * too much to cover
+* use lat/lon values w/ these
+
+```{r}
+# let's get a map
+library(maps)
+map("world")
+
+# let's make up some stuff and throw it on the map
+lat <- runif(40, -180, 180)
+lon <- runif(40, -90, 90)
+points(lat, lon, col="blue", pch=19)
+```
+
+#### Missing values and plots
+
+* can use plots to help understand what values are missing
+* gaps in the plot? check the data for `NA`!
+* and/but/also : try using the `boxplot`
+  * relationships b/w missing values and... values?
+
+### Further Resources
+
+* [R Graph Gallery](http://gallery.r-enthusiasts.com/)
+* [ggplot2](http://cran.r-project.org/web/packages/ggplot2/index.html)
+  * [basic introduction](http://www.r-bloggers.com/basic-introduction-to-ggplot2/)
+* [lattice](http://cran.r-project.org/web/packages/lattice/index.html)
+  * [introduction](http://lmdvr.r-forge.r-project.org/figures/figures.html)
+* [R bloggers](http://www.r-bloggers.com/)
