@@ -16,6 +16,8 @@
   * optionally (and/or: for yourself) consider keeping interesting exploratory figures
     * and/but - if you're using `Rmd` then you probably don't need to do this
 
+
+
 ## Exploratory Graphs (1 + 2)
 
 slides
@@ -23,7 +25,10 @@ slides
   [2](https://dl.dropbox.com/u/7710864/courseraPublic/week3/002exploratoryGraphs2/index.html) |
 videos
   [1](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=85) +
-  [2](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=87)
+  [2](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=87) |
+transcripts
+  [1](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=85_en&format=txt) +
+  [2](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=87_en&format=txt)
 
 * "Why do we use graphs?"
   * _communication!_
@@ -173,7 +178,6 @@ plot(hbo)
 ```
 
 #### QQ Plots
-
 * "Sort of like a scatter plot but with a very particular purpose..."
 * plots quantiles of `x` vs. quantiles of `y`
 
@@ -185,7 +189,6 @@ abline(c(0,1))
 ```
 
 #### Matplot and spaghetti
-
 * takes each column and plots it as one line
   * each column (in the matrix) becomes one specific line
 * compare trends/trajectories over time
@@ -196,7 +199,6 @@ matplot(X, type="b")
 ```
 
 #### Heatmaps
-
 * "sort of like a 2D histogram"
 * goal: visualize the whole matrix of data
 * color --> intensity
@@ -211,7 +213,6 @@ image(161:236, 1:10, newMatrix)
 ```
 
 #### Maps (very basics)
-
 * very basics
   * too much to cover
 * use lat/lon values w/ these
@@ -228,17 +229,309 @@ points(lat, lon, col="blue", pch=19)
 ```
 
 #### Missing values and plots
-
 * can use plots to help understand what values are missing
 * gaps in the plot? check the data for `NA`!
 * and/but/also : try using the `boxplot`
   * relationships b/w missing values and... values?
 
 ### Further Resources
-
 * [R Graph Gallery](http://gallery.r-enthusiasts.com/)
 * [ggplot2](http://cran.r-project.org/web/packages/ggplot2/index.html)
   * [basic introduction](http://www.r-bloggers.com/basic-introduction-to-ggplot2/)
 * [lattice](http://cran.r-project.org/web/packages/lattice/index.html)
   * [introduction](http://lmdvr.r-forge.r-project.org/figures/figures.html)
 * [R bloggers](http://www.r-bloggers.com/)
+
+
+
+## Expository Graphs
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week3/003expositoryGraphs/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=89) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=89_en&format=txt)
+
+* expository graphs are for communicating results to others
+* characteristics
+  * goal: communicate
+  * information density = good
+  * color/size are for communication (not just aesthetics)
+  * needs good axes, titles, legends etc.
+  * (again: COMMUNICATE CLEARLY!)
+
+### example plots
+(again: using the American Community Survey data from last week's quiz)
+
+```{r}
+pData <- read.csv("../quizzes/ss06pid.csv")
+```
+
+#### Axes
+* axes need to be clear
+* `xlab` + `ylab` for the axis label
+* `cex.label` + `cex.axis` to adjust axis size
+
+```{r}
+plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=0.5,
+     xlab="Travel time (min)", ylab="Last 12 months wages ($)",
+     cex.label=2, cex.axis=1.5)
+```
+
+#### Legends
+* legends to clearly communicate what's on the plot
+* `legend` to add the legend
+* 1st 2 params: `x` + `y` (position)
+  * but the values correspond to the _scales_ of the `x` + `y` axes, respectively (so: not pixels)
+* reminder: _YOU_ are on the hook to make sure that the dots (etc.) in your legend match what's in your plot
+  * R isn't going to do it for you
+
+```{r}
+plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=0.5,
+     xlab="TT (min)", ylab="Wages ($)")
+legend(100, 200000, legend="All surveyed", col="blue", pch=19, cex=0.5)
+
+plot(pData$JWMNP, pData$WAGP, pch=19, cex=0.5, col=pData$SEX,
+     xlab="TT (min)", ylab="Wages ($)")
+legend(100, 200000, legend=c("men", "women"), col=c("black", "red"),
+       pch=c(19, 19), cex=c(0.5, 0.5))
+```
+
+#### Titles
+* titles: communicate the type of plot or conclusion of the plot
+* the param is `main` for most plot types
+
+```{r}
+plot(pData$JWMNP, pData$WAGP, pch=19, cex=0.5, col=pData$SEX,
+     xlab="CT (min)", ylab="Wages ($)",
+     main="Wages earned vs. commuting time")
+legend(100, 200000, legend=c("men", "women"), col=c("black", "red"),
+       pch=c(19, 19), cex=c(0.5, 0.5))
+```
+
+#### Multiple panels
+* if you have related plots and one to present them together
+  * "to help tell the story"
+* `par` is the key here
+* don't overdo it! (too many becomes hard to see)
+
+```{r}
+par(mfrow=c(1,2))
+hist(pData$JWMNP, xlab="CT (min)", col="blue", breaks=100, main="")
+plot(pData$JWMNP, pData$WAGP, pch=19, cex=0.5, col=pData$SEX,
+     xlab="CT (min)", ylab="Wages ($)")
+legend(100, 200000, legend=c("men", "women"), col=c("black", "red"),
+       pch=c(19, 19), cex=c(0.5, 0.5))
+```
+
+#### Adding text
+* `mtext` to add some text
+  * look in the function's API to see the valid values for the `side` param
+* and/but : allows you to add some arbitrary text
+
+```{r}
+par(mfrow=c(1,2))
+hist(pData$JWMNP, xlab="CT (min)", col="blue", breaks=100, main="")
+mtext(text="(a)", side=3, line=1)
+plot(pData$JWMNP, pData$WAGP, pch=19, cex=0.5, col=pData$SEX,
+     xlab="CT (min)", ylab="Wages ($)")
+legend(100, 200000, legend=c("men", "women"), col=c("black", "red"),
+       pch=c(19, 19), cex=c(0.5, 0.5))
+mtext(text="(b)", side=3, line=1)
+```
+
+#### Figure captions
+* "a little bit pedantic"
+* make sure to add a figure caption to explain it; something like:
+
+> **Figure 1. Distribution of commute time and relationship to wage earned by sex (a)** and some expository text
+> that goes on to explain (a) and then **(b)** we have some expository text about (b), assuming our figure has
+> an (a) and a (b).
+
+### Other considerations
+What else about your audience do you need to consider before "finishing" your figures?
+
+#### Colorblindness
+* check it: [vischeck.com](http://www.vischeck.com)
+
+### Graphical workflow
+* start with rough plot (exploratory!)
+* refine it (expository!)
+* save it...
+* `?Devices` for info
+
+#### PDF
+* `pdf(file="", heigh="", width="")`
+  * `height` + `width` given in inches
+
+```{r}
+# open it:
+pdf(file="twoPanel.pdf", height=4, width=8)
+
+# business as usual (think "pipe it")
+par(mfrow=c(1,2))
+hist(pData$JWMNP, xlab="CT (min)", col="blue", breaks=100, main="")
+mtext(text="(a)", side=3, line=1)
+plot(pData$JWMNP, pData$WAGP, pch=19, cex=0.5, col=pData$SEX,
+     xlab="CT (min)", ylab="Wages ($)")
+legend(100, 200000, legend=c("men", "women"), col=c("black", "red"),
+       pch=c(19, 19), cex=c(0.5, 0.5))
+mtext(text="(b)", side=3, line=1)
+
+# close it:
+dev.off()
+```
+
+#### PNG
+* almost identical to the `pdf` device commands
+  * but this time: `height` + `width` are in pixels this time
+* (skip the sample code this time ... it's basically the same as `pdf`)
+
+#### dev.copy2pdf
+* `dev.copy2pdf` - more/less allows you to work interactively first
+
+```{r}
+# do your regular business...
+# observe your beautiful graph...
+
+# copy exactly what you see to pdf:
+dev.copy2pdf(file="twoPanelv2.pdf")
+```
+
+### Some things to avoid
+* too much information
+* too little
+* unnecessary 3D
+* poor captions
+
+### Further resources
+
+* [How to display data badly](http://www.jstor.org/discover/10.2307/2683253?uid=3739704&uid=2&uid=4&uid=3739256&sid=21101619120151)
+* [The visual display of quantitative information](http://www.amazon.com/exec/obidos/ASIN/0961392142/7210-20)
+* [Creating more effective graphs](http://www.amazon.com/exec/obidos/ASIN/047127402X/7210-20)
+* [R Graphics Cookbook](http://www.amazon.com/R-Graphics-Cookbook-Winston-Chang/dp/1449316956)
+* [ggplot2: Elegant Graphics for Data Analysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403)
+* [Flowing Data](http://flowingdata.com/)
+
+
+
+## Hierarchical Clustering
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week3/004hierachicalClustering/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=91) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=91_en&format=txt)
+
+* exploratory analysis technique
+* **clustering** in general
+  * organizing things "close" into groups
+  * definition of "close"?
+* clustering = very important
+  * used often in academics _and_ business, science, tech. etc.
+
+### Hierarchical Clustering
+* agglomerative / "bottom up"
+  * find the 2 observations closest into each other
+    * then merge into a single "super observation"
+  * repeat!
+* requires a defined distance
+* requires a "merging" approach
+* produces: a **dendrogram**
+* **"How do we define close?"**
+  * distance or similarity
+    * continuous (Euclidean distance)
+      * _Euclidean_ - looking (basically) for hypotenuse...
+        * e.g., Baltimore lat, lon vs. D.C. lat, lon
+          * figure the trigonometry out
+        * √((X₁ - X₂)² + (Y₁ - Y₂)² + ... + (Z₁ - Z₂)²)
+    * continuous (correlation similarity)
+    * binary (Manhattan distance)
+      * _Manhattan distance_ - shortest path b/w 2 points "on a grid"
+      * |A₁ - A₂| + |B₁ - B₂| + ... + |Z₁ - Z₂|
+  * pick a distance/similarity that makes sense w/ _your_ data
+
+#### Example
+
+Simple simulated data set:
+
+```{r}
+set.seed(1234); par(mar=c(0,0,0,0))
+x <- rnorm(12, mean=rep(1:3, each=4), sd=0.2)
+y <- rnorm(12, mean=rep(c(1,2,1), each=4), sd=0.2)
+plot(x, y, col-"blue", pch=19, cex=2)
+text(x+0.05, y+0.05, labels=as.character(1:12))
+```
+
+Calculate a distance b/w all of the different points:
+```{r}
+dataFrame <- data.frame(x=x, y=y)
+dist(dataFrame)
+# `dist` also takes a `method` as 2nd param ("Euclidean" is default)
+```
+
+1. "What are 2 closest points?" (points 5 & 6)
+2. Merge them together.
+3. Repeat! (10 & 11, merge; 9 & 12, merge; etc.)
+4. Give us a dendrogram:
+```{r}
+dataFrame <- data.frame(x=x, y=y)
+distxy <- dist(dataFrame)
+hClustering <- hclust(distxy)
+plot(hClustering)
+```
+5. Examine the dendrogram; what's close together, really?
+   Where should you cut the tree? (look at the `Height` axis)
+
+#### Example 2 ("Prettier")
+
+```{r}
+myplclust <- function( hclust, lab=hclust$labels, lab.col=rep(1, length(hclust$labels)), hang=0.1, ...) {
+  # slides have copyright notice here (Eva KF Chan, 2009)
+  y <- rep(hclust$height, 2)
+  x <- as.numeric(hclust$merge)
+  y <- y[which(x<0)]
+  x <- x[which(x<0)]
+  x <- abs(x)
+  y <- y[order(x)]
+  x <- x[order(x)]
+  plot(hclust, labels=FALSE, hang=hang, ...)
+  text(x=x, y=y[hclust$order]-(max(hclust$height)*hang),
+       labels=lab[hclust$order], col=lab.col[hclust$order],
+       srt=90, adj=c(1,0.5), xpd=NA, ...)
+}
+```
+
+Above: allows you to color the leaves with a particular color...
+```{r}
+dataFrame <- data.frame(x=x, y=y)
+distxy <- dist(dataFrame)
+hClustering <- hclust(distxy)
+myplclust(hClustering, lab=rep(1:3, each=4), lab.col=rep(1:3, each=4))
+```
+
+_Even_ prettier ones available... (see "R Gallery")
+
+#### Merging
+* complete
+* average
+* experiment : try out different ones -- which make sense?
+
+#### Visualizing the clusters
+* try `heatmap`
+```{r}
+dataFrame <- data.frame(x=x, y=y)
+set.seed(143)
+dataMatrix <- as.matric(dataFrame)[sample(1:12),]
+heatmap(dataMatrix)
+```
+
+### A few more notes
+* _can_ give an idea of relationships w/in the data
+* picture may be unstable
+  * what happens if you change a few points?
+  * what happens w/ diff. missing values?
+  * what happens if you pick a diff. distance?
+  * what happens if you change your merge strategy?
+  * what happens if you change the scale of points for one variable?
+* and/but : deterministic! (functional?)
+  * put same data in w/ same params: get same clustering out
+* where to cut? (not always obvious)
+* clustering: primarily for exploration
+  * not too much explanatory power (but can lead you there)
