@@ -268,12 +268,12 @@ pData <- read.csv("../quizzes/ss06pid.csv")
 #### Axes
 * axes need to be clear
 * `xlab` + `ylab` for the axis label
-* `cex.label` + `cex.axis` to adjust axis size
+* `cex.lab` + `cex.axis` to adjust axis size
 
 ```{r}
 plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=0.5,
      xlab="Travel time (min)", ylab="Last 12 months wages ($)",
-     cex.label=2, cex.axis=1.5)
+     cex.lab=2, cex.axis=1.5)
 ```
 
 #### Legends
@@ -453,10 +453,10 @@ Simple simulated data set:
 
 ```{r}
 set.seed(1234); par(mar=c(0,0,0,0))
-x <- rnorm(12, mean=rep(1:3, each=4), sd=0.2)
-y <- rnorm(12, mean=rep(c(1,2,1), each=4), sd=0.2)
-plot(x, y, col-"blue", pch=19, cex=2)
-text(x+0.05, y+0.05, labels=as.character(1:12))
+x <- rnorm(12,mean=rep(1:3,each=4),sd=0.2)
+y <- rnorm(12,mean=rep(c(1,2,1),each=4),sd=0.2)
+plot(x,y,col="blue",pch=19,cex=2)
+text(x+0.05,y+0.05,labels=as.character(1:12))
 ```
 
 Calculate a distance b/w all of the different points:
@@ -518,7 +518,7 @@ _Even_ prettier ones available... (see "R Gallery")
 ```{r}
 dataFrame <- data.frame(x=x, y=y)
 set.seed(143)
-dataMatrix <- as.matric(dataFrame)[sample(1:12),]
+dataMatrix <- as.matrix(dataFrame)[sample(1:12),]
 heatmap(dataMatrix)
 ```
 
@@ -535,3 +535,230 @@ heatmap(dataMatrix)
 * where to cut? (not always obvious)
 * clustering: primarily for exploration
   * not too much explanatory power (but can lead you there)
+
+
+
+## K-Means Clustering
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week3/005kmeansClustering/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=93) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=93_en&format=txt)
+
+* clustering: defining things that are close together
+  * and then grouping those things that fit that definition of "close"
+* remember: "define close in an appropriate way"
+* Euclidean distance is the primary means of performing K-Means clustering
+* mainly for quantitative variables
+* **defined:** partitioning approach (_NOT_ agglomerative)
+  * fix a number of clusters
+  * get "centroids"
+  * assign observations to closest centroid
+  * recalculate centroids
+  * **req'd:**
+    * defined distance metric
+    * defined # of clusters
+    * an initial guess
+
+### Example
+
+```{r}
+set.seed(1234); par(mar=c(0,0,0,0))
+x <- rnorm(12,mean=rep(1:3,each=4),sd=0.2)
+y <- rnorm(12,mean=rep(c(1,2,1),each=4),sd=0.2)
+plot(x,y,col="blue",pch=19,cex=2)
+text(x+0.05,y+0.05,labels=as.character(1:12))
+```
+
+* assign initial centroids
+* assign observations to centroids
+* repeat! recalculate!
+  * (to adjust the centroids to be more reflective of the data)
+
+```{r}
+dataFrame <- data.frame(x, y)
+kmeansObj <- kmeans(dataFrame, centers=3)
+names(kmeansObj)
+
+kmeansObj$cluster
+```
+
+* noted: K-Means is **not** deterministic!
+  * given same inputs, you can wind up w/ different centroids
+  * combat this w/ `nstart` param
+
+```{r}
+par(mar=rep(0.2,4))
+plot(x, y, col=kmeansObj$cluster, pch=19, cex=2)
+points(kmeansObj$centers, col=1:3, pch=3, cex=3, lwd=3)
+```
+
+#### see also: Heatmaps
+```{r}
+set.seed(1234)
+dataMatrix <- as.matrix(dataFrame[sample(1:12),])
+kmeansObj2 <- kmeans(dataMatrix, centers=3)
+par(mfrow=c(1,2), mar=rep(0.2,4))
+image(t(dataMatrix)[,nrow(dataMatrix):1], yaxt="n")
+image(t(dataMatrix)[,order(kmeansObj$cluster):1], yaxt="n")
+```
+
+### Notes & further resources
+* [Determining the number of clusters in a data set](http://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set)
+* [Rafa's "Distances and Clustering" (video)](http://www.youtube.com/watch?v=wQhVWUcXM0A)
+* [The Elements of Statistical Learning](http://www-stat.stanford.edu/~tibs/ElemStatLearn/)
+
+
+## Dimension Reduction
+
+"Principal components analysis and singular value decomposition"
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week3/006dimensionReduction/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=95) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=95_en&format=txt)
+
+* 2 dimension reduction techniques: **"Principal components analysis** and **singular value decomposition**
+  * used to take a large set of variables
+  * ...& compress them into a smaller # that's easier to interpret
+* starting example: matrix data
+
+```{r}
+set.seed(12345)
+par(mar=rep(0.2, 4))
+dataMatrix <- matrix(rnorm(400), nrow=40)
+image(1:10, 1:40, t(dataMatrix)[,nrow(dataMatrix):1])
+```
+
+* "See? No apparent patterns."
+  * even when you cluster them:
+
+```{r}
+par(mar=rep(0.2, 4))
+heatmap(dataMatrix)
+```
+
+* "What if we _add a pattern_?"
+
+```{r}
+set.seed(678910)
+for(i in 1:40) {
+  # flip a coin
+  coinFlip <- rbinom(1, size=1, prob=0.5)
+  # if coin is heads add a common pattern to that row
+  if (coinFlip) {
+    dataMatrix[i,] <- dataMatrix[i,] + replace(c(0,3), each=5)
+  }
+}
+```
+
+* Look again:
+
+```{r}
+par(mar=rep(0.2, 4))
+image(1:10, 1:40, t(dataMatrix)[,nrow(dataMatrix):1])
+```
+
+* Perform a clustering:
+
+```{r}
+par(mar=rep(0.2, 4))
+heatmap(dataMatrix)
+```
+
+* (something starts to emerge?)
+* looking for patterns in the rows
+
+```{r}
+hh <- hclust(dist(dataMatrix)); dataMatrixOrdered <- dataMatrix[hh$order,]
+par(mfrow=c(1,3))
+image(t(dataMatrixOrdered)[,nrow(dataMatrixOrdered):1])
+plot(rowMeans(dataMatrixOrdered),40:1,,xlab="Row",ylab="Row Mean",pch=19)
+plot(colMeans(dataMatrixOrdered),xlab="Column",ylab="Column Mean",pch=19)
+```
+
+* "It turns out..." 2 related problems
+  * find a new set of multivariate variables that are uncorrelated and explain
+    as much variance as possible.
+    * _statistical_ goal
+  * put all variables together in one matrix, find the best matrix created with
+    fewer variables (lower rank) that explains the original data.
+    * _data compression_ goal
+
+### **SVD** - singular value decomposition
+* compresses the data by performing a matrix decomposition
+* _X = UVD^T_
+  * _U_ = left singular vectors
+  * _D_ = singular values
+  * _V_ = right singular vectors
+* components of the SVD: (u and v)
+
+```{r}
+svd1 <- svd(scale(dataMatrixOrdered))
+par(mfrow=c(1,3))
+image(t(dataMatrixOrdered)[,nrow(dataMatrixOrdered):1])
+plot(svd1$u[,1],40:1,,xlab="Row",ylab="First left singular vector",pch=19)
+plot(svd1$v[,1],xlab="Column",ylab="First right singular vector",pch=19)
+```
+
+* d and variance explained
+
+```{r}
+svd1 <- svd(scale(dataMatrixOrdered))
+par(mfrow=c(1,2))
+plot(svd1$d,xlab="Column",ylab="Singluar value",pch=19)
+plot(svd1$d^2/sum(svd1$d^2),xlab="Column",ylab="Percent of variance explained",pch=19)
+```
+
+* relationship to principal components
+  * SVD should be equivalent to the PCA
+  * "exactly the same"
+    * PCA's rotation matrix
+    * 1st right singular vector in SVD
+
+```{r}
+svd1 <- svd(scale(dataMatrixOrdered))
+pca1 <- prcomp(dataMatrixOrdered,scale=TRUE)
+plot(pca1$rotation[,1],svd1$v[,1],pch=19,xlab="Principal Component 1",ylab="Right Singular Vector 1")
+abline(c(0,1))
+```
+
+* Components of the SVD - variance explained
+
+```{r}
+constantMatrix <- dataMatrixOrdered*0
+for(i in 1:dim(dataMatrixOrdered)[1]){constantMatrix[i,] <- rep(c(0,1),each=5)}
+svd1 <- svd(constantMatrix)
+par(mfrow=c(1,3))
+image(t(constantMatrix)[,nrow(constantMatrix):1])
+plot(svd1$d,xlab="Column",ylab="Singluar value",pch=19)
+plot(svd1$d^2/sum(svd1$d^2),xlab="Column",ylab="Percent of variance explained",pch=19)
+```
+
+* "What if we add a second pattern?"
+
+```{r}
+set.seed(678910)
+for(i in 1:40){
+  # flip a coin
+  coinFlip1 <- rbinom(1,size=1,prob=0.5)
+  coinFlip2 <- rbinom(1,size=1,prob=0.5)
+  # if coin is heads add a common pattern to that row
+  if(coinFlip1){
+    dataMatrix[i,] <- dataMatrix[i,] + rep(c(0,5),each=5)
+  }
+  if(coinFlip2){
+    dataMatrix[i,] <- dataMatrix[i,] + rep(c(0,5),5)
+  }
+}
+hh <- hclust(dist(dataMatrix)); dataMatrixOrdered <- dataMatrix[hh$order,]
+```
+
+* ... (lots of "???")
+* noted: SVD cannot be performed on missing values (`NA`)
+* case study: SVD on "face data"
+  * perform SVD --> look at % variance explained
+  * (starts to look like a way to compress the face image)
+
+### alternatives
+* [factor analysis](http://en.wikipedia.org/wiki/Factor_analysis)
+* [Independent component analysis](http://en.wikipedia.org/wiki/Independent_component_analysis)
+* [Latent semantic analysis](http://en.wikipedia.org/wiki/Latent_semantic_analysis)

@@ -3,6 +3,7 @@
 
 lectures/*.html
 lectures/*.md
+lectures/*.pdf
 lectures/figure/
 
 quizzes/
