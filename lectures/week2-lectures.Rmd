@@ -167,7 +167,7 @@ videos
   * relative & absolute paths
 ```{r}
 getwd()
-setwd('/Users/ddcrob/Desktop/R')
+setwd('~/Desktop/coursera-data-analysis')
 ```
 * types of data files... (examples)
   * tab-delimited
