@@ -1,5 +1,7 @@
 .Rdata
 .Rhistory
+**/.Rdata
+**/.Rhistory
 
 lectures/*.html
 lectures/*.md
@@ -7,6 +9,9 @@ lectures/*.pdf
 lectures/figure/
 
 quizzes/
+
+assignments/1/R/raw/*.html
+assignments/1/R/raw/*.md
 
 # the example analysis: (we only want the zip, not the contents)
 example-data-analysis-assignment/exampleProject/
