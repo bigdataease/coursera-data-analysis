@@ -17,6 +17,8 @@
 
 [Source.](https://class.coursera.org/dataanalysis-001/human_grading/view/courses/294/assessments/4/submissions)
 
+_Short version?_ **Given the same FICO score, can you explain the differences in interest rates?**
+
 ## Preliminaries
 
 Load data:
@@ -24,7 +26,7 @@ Load data:
 ```{r}
 setwd('~/Desktop/coursera-data-analysis/assignments/1')
 load('data/raw/loansData.rda')
-head(loansData)
+head(loansData, 2)
 ```
 
 ~~Anything wrong with it?~~ _not yet_
@@ -32,21 +34,300 @@ head(loansData)
 summary(loansData)
 ```
 
-What's in there?
+### What's in there?
+
 ```{r}
 names(loansData)
-unique(loansData$Amount.Requested)
-unique(loansData$Amount.Funded.By.Investors)
-unique(loansData$Interest.Rate)
+
+# Qualitative data:
 unique(loansData$Loan.Length)
 unique(loansData$Loan.Purpose)
-unique(loansData$Debt.To.Income.Ratio)
 unique(loansData$State)
 unique(loansData$Home.Ownership)
-unique(loansData$Monthly.Income)
 unique(loansData$FICO.Range)
-unique(loansData$Open.CREDIT.Lines)
-unique(loansData$Revolving.CREDIT.Balance)
 unique(loansData$Inquiries.in.the.Last.6.Months)
 unique(loansData$Employment.Length)
+
+# Quantitative... so: what can we summarize with quantiles?
+quantile(loansData$Amount.Requested)
+boxplot(loansData$Amount.Requested)
+quantile(loansData$Amount.Funded.By.Investors)
+boxplot(loansData$Amount.Funded.By.Investors)
+
+# factors?
+par(las=2, mar=c(4, 4, 1, 1))
+#loansData$Interest.Rate
+hist(sapply(sub("%", "", loansData$Interest.Rate,), as.numeric), breaks=20)
+#loansData$Debt.To.Income.Ratio
+hist(sapply(sub("%", "", loansData$Debt.To.Income.Ratio,), as.numeric), breaks=35)
+#loansData$Monthly.Income
+hist(loansData$Monthly.Income, breaks=100)
+quantile(loansData$Monthly.Income, na.rm=TRUE)
+#loansData$Open.CREDIT.Lines
+hist(loansData$Open.CREDIT.Lines, breaks=30)
+#loansData$Revolving.CREDIT.Balance
+hist(loansData$Revolving.CREDIT.Balance, breaks=50)
+```
+
+#### Ideas? Things to consider:
+* Amount requested vs. amount funded?
+* ~~Loan Purpose as a factor in getting funded?~~
+  * _(this is tangential to the question)_
+* Any loans that were _NOT_ funded?
+  * `0` rows at `NA`
+  * `4` rows at `0`
+
+**What does the distribution of Loan Purpose look like?**
+```{r}
+par(las=2, mar=c(9, 4, 1, 1))
+barplot(table(loansData$Loan.Purpose), col="blue", ylab="# loans requested")
+
+# anything interesting here?
+boxplot(loansData$Amount.Requested ~ as.factor(loansData$Loan.Purpose),
+        ylab="$", varwidth=TRUE)
+```
+(You might be getting ahead of yourself here...)
+
+#### Exploring the factors
+```{r}
+boxplot(loansData$Amount.Funded.By.Investors ~ loansData$Open.CREDIT.Lines)
+boxplot(loansData$Amount.Funded.By.Investors ~ loansData$Revolving.CREDIT.Balance)
+boxplot(loansData$Amount.Funded.By.Investors ~ loansData$State)
+```
+
+Going to need some buckets...
+
+## Partition by FICO
+```{r}
+unique(loansData$FICO.Range)
+# 43 levels ... what does it look like if collapsed to 5?
+loansData.FICO.Range.floor <- cut(sapply(sub("-\\d{3}", "", loansData$FICO.Range), as.numeric), breaks=5)
+table(loansData.FICO.Range.floor)
+plot(loansData.FICO.Range.floor)
+```
+
+## Partition by Interest Rate
+```{r}
+unique(loansData$Interest.Rate)
+# 430 levels
+
+# convert nominal Interest Rate data into Ratio
+loansData.Interest.Rate.as.factor <- cut(sapply(sub("%", "", loansData$Interest.Rate,), as.numeric), breaks=5)
+table(loansData.Interest.Rate.as.factor)
+plot(loansData.Interest.Rate.as.factor, col="blue")
+```
+
+## Exploration (1)
+
+**Try to think about** what columns should you focus on?
+
+Key columns to start with:
+* FICO.Range
+* Interest.Rate
+
+### Any relationships between FICO range and interest range?
+
+```{r}
+par(mfrow=c(2,1))
+plot(loansData.FICO.Range.floor, col="green")
+plot(loansData.Interest.Rate.as.factor, col="red")
+```
+
+Looks like there might be -- similar shapes to those distributions.
+
+As a scatter?
+```{r}
+par(las=2, mfrow=c(1,1), mar=c(4, 4, 1, 1))
+plot(sapply(sub("-\\d{3}", "", loansData$FICO.Range), as.numeric),
+     sapply(sub("%", "", loansData$Interest.Rate,), as.numeric),
+     pch=19, cex=0.5, xlab="FICO range (floor)", ylab="Interest Rate (%)")
+```
+
+Generally speaking: as FICO goes up, interest rate goes down.
+
+Does Loan Amount play a part?
+```{r}
+loansData$Amount.Requested.range <- cut(loansData$Amount.Requested, breaks=5)
+par(las=2, mar=c(4, 4, 1, 1))
+colors <- c("black", "red", "blue", "cyan", "green")
+plot(sapply(sub("-\\d{3}", "", loansData$FICO.Range), as.numeric),
+     sapply(sub("%", "", loansData$Interest.Rate,), as.numeric),
+     col=colors,
+     pch=19, cex=0.5, xlab="FICO range (floor)", ylab="Interest Rate (%)")
+legend(750, 25,
+       legend = unique(loansData$Amount.Requested.range),
+       col = colors,
+       pch=rep(19,5), cex=rep(0.5,5))
+```
+
+**Hard to tell...** With 5 levels of `Amount.Requested` it's a little hard to
+see what's going on in there. Maybe with only 3 levels of `Amount.Requested`?
+```{r}
+loansData$Amount.Requested.range <- cut(loansData$Amount.Requested, breaks=3)
+par(las=2, mar=c(4, 4, 1, 1))
+colors <- c("red", "green", "blue")
+plot(sapply(sub("-\\d{3}", "", loansData$FICO.Range), as.numeric),
+     sapply(sub("%", "", loansData$Interest.Rate,), as.numeric),
+     col=colors,
+     pch=19, cex=0.5, xlab="FICO range (floor)", ylab="Interest Rate (%)")
+legend(750, 25,
+       legend = unique(loansData$Amount.Requested.range),
+       col = colors,
+       pch=rep(19,3), cex=rep(0.5,3))
+```
+
+### Try visualizing relationships of other factors to `Interest.Rate`
+
+First: store the sanitized interest rates:
+```{r}
+loansData$Interest.Rate.numeric <- sapply(sub("%", "", loansData$Interest.Rate,), as.numeric)
+```
+
+#### "Amount.Requested"
+```{r}
+par(las=2, mar=c(4, 4, 1, 1))
+plot(loansData$Interest.Rate.numeric,
+     loansData$Amount.Requested,
+     pch=19, cex=0.25,
+     xlab="Interest Rate (%)", ylab="$ requested")
+```
+
+"Amount.Funded.By.Investors"
+```{r}
+par(las=2, mar=c(4, 4, 1, 1))
+plot(loansData$Interest.Rate.numeric,
+     loansData$Amount.Funded.By.Investors,
+     pch=19, cex=0.25,
+     xlab="Interest Rate (%)", ylab="$ requested")
+
+# Any values missing?
+nrow(loansData[is.na(loansData$Amount.Funded.By.Investors),])
+
+# Any *NOT* funded?
+nrow(loansData[loansData$Amount.Funded.By.Investors == 0,])
+
+plot(loansData$Amount.Requested,
+     loansData$Amount.Funded.By.Investors,
+     pch=19, cex=0.25)
+
+# what about diffs? (Requested - Funded)
+loansData$Amount.diff <- apply(loansData, 1, function(row){ as.numeric(row[1]) - as.numeric(row[2])})
+
+hist(loansData$Amount.diff)
+
+par(mfrow=c(2,2))
+hist(loansData[loansData$Amount.diff > 0,]$Amount.diff, breaks=25, main="")
+hist(loansData[loansData$Amount.diff > 100,]$Amount.diff, breaks=25, main="")
+hist(loansData[loansData$Amount.diff > 500,]$Amount.diff, breaks=25, main="")
+hist(loansData[loansData$Amount.diff > 1000,]$Amount.diff, breaks=25, main="")
+```
+
+"Debt.To.Income.Ratio" (numeric)
+```{r}
+par(mfrow=c(1,1))
+loansData$Debt.To.Income.Ratio.numeric <- sapply(sub("%", "", loansData$Debt.To.Income.Ratio,), as.numeric)
+par(las=2, mar=c(4, 4, 1, 1))
+plot(loansData$Interest.Rate.numeric,
+     loansData$Debt.To.Income.Ratio.numeric,
+     pch=19, cex=0.25,
+     xlab="Interest Rate (%)", ylab="Debt/Income Ratio (%)")
+```
+
+"Open.CREDIT.Lines""
+```{r}
+# remember: loansData$Open.CREDIT.Lines comes up as a factor
+par(las=2, mar=c(4, 4, 1, 1))
+plot(loansData$Interest.Rate.numeric,
+     loansData$Open.CREDIT.Lines,
+     pch=19, cex=0.25,
+     xlab="Interest Rate (%)", ylab="# open credit lines")
+
+boxplot(loansData$Interest.Rate.numeric ~ loansData$Open.CREDIT.Lines)
+```
+
+"Revolving.CREDIT.Balance"
+```{r}
+# remember: loansData$Open.CREDIT.Lines comes up as a factor
+par(las=2, mar=c(4, 4, 1, 1))
+plot(loansData$Interest.Rate.numeric,
+     loansData$Revolving.CREDIT.Balance,
+     pch=19, cex=0.25,
+     xlab="Interest Rate (%)", ylab="revolving credit balance ($)")
+```
+
+"Monthly.Income"
+```{r}
+par(las=2, mar=c(4, 4, 1, 1))
+plot(loansData$Interest.Rate.numeric,
+     loansData$Monthly.Income,
+     pch=19, cex=0.25,
+     xlab="Interest Rate (%)", ylab="monthly income ($)")
+
+# Curious: Monthly Income vs. Open Credit Lines
+plot(loansData$Open.CREDIT.Lines,
+     loansData$Monthly.Income,
+     pch=19, cex=0.25,
+     ylab="Monthly Income ($)", xlab="# open credit lines")
+
+# Curious: and/or :  vs. Revolving Balance
+plot(loansData$Revolving.CREDIT.Balance,
+     loansData$Monthly.Income,
+     pch=19, cex=0.25,
+     ylab="Monthly Income ($)", xlab="revolving credit bal. ($)")
+```
+
+"Inquiries.in.the.Last.6.Months"
+```{r}
+par(las=2, mar=c(4, 4, 1, 1))
+plot(loansData$Interest.Rate.numeric,
+     loansData$Inquiries.in.the.Last.6.Months,
+     pch=19, cex=0.25,
+     xlab="Interest Rate (%)", ylab="# credit inquiries (past 6 mo.)")
+
+boxplot(loansData$Interest.Rate.numeric ~ loansData$Inquiries.in.the.Last.6.Months)
+```
+
+"Employment.Length"
+```{r}
+# 1st: fix the ordering of the factor
+# http://www.r-bloggers.com/reorder-factor-levels/
+loansData$Employment.Length <- factor(loansData$Employment.Length,
+                                      levels(loansData$Employment.Length)[c(2:3,5:12,4,13,1)])
+
+barplot(table(loansData$Employment.Length))
+boxplot(loansData$Interest.Rate.numeric ~ loansData$Employment.Length)
+```
+
+"Home.Ownership"
+```{r}
+barplot(table(loansData$Home.Ownership))
+boxplot(loansData$Interest.Rate.numeric ~ loansData$Home.Ownership)
+```
+(probably won't look any further at "Home.Ownership" as a factor)
+
+"State"
+```{r}
+barplot(table(loansData$State))
+boxplot(loansData$Interest.Rate.numeric ~ loansData$State)
+# wow that was noisy...
+```
+(probably won't look any further at "State" as a factor)
+
+"Loan.Purpose"
+```{r}
+par(las=2, mar=c(9, 3, 1, 1))
+boxplot(loansData$Interest.Rate.numeric ~ loansData$Loan.Purpose)
+# might be something here; look at:
+# - car, educational, renewable_energy
+```
+
+(won't waste time with "Loan.Length")
+
+### "Uh... what else?"
+
+Heatmap?
+```{r}
+set.seed(282147)
+hmSample <- loansData[sample(nrow(loansData), 100),]
+heatmap(matrix(c(hmSample$Amount.Requested, hmSample$Amount.Funded.By.Investors, hmSample$Interest.Rate.numeric, hmSample$Debt.To.Income.Ratio.numeric, hmSample$Monthly.Income), nrow=100, ncol=5))
 ```
