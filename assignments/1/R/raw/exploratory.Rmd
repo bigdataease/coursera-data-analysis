@@ -97,6 +97,21 @@ boxplot(loansData$Amount.Funded.By.Investors ~ loansData$State)
 
 Going to need some buckets...
 
+## Clean It Up
+
+```{r}
+# `%` to numeric
+loansData$Interest.Rate.numeric <- sapply(sub("%", "", loansData$Interest.Rate,), as.numeric)
+loansData$Debt.To.Income.Ratio.numeric <- sapply(sub("%", "", loansData$Debt.To.Income.Ratio,), as.numeric)
+
+# fix Employment.Length factor
+loansData$Employment.Length <- factor(loansData$Employment.Length,
+                                      levels(loansData$Employment.Length)[c(2:3,5:12,4,13,1)])
+
+# coerce FICO range into something quantitative:
+loansData$FICO.Range.floor <- sapply(sub("-\\d{3}", "", loansData$FICO.Range), as.numeric)
+```
+
 ## Partition by FICO
 ```{r}
 unique(loansData$FICO.Range)
@@ -331,3 +346,203 @@ set.seed(282147)
 hmSample <- loansData[sample(nrow(loansData), 100),]
 heatmap(matrix(c(hmSample$Amount.Requested, hmSample$Amount.Funded.By.Investors, hmSample$Interest.Rate.numeric, hmSample$Debt.To.Income.Ratio.numeric, hmSample$Monthly.Income), nrow=100, ncol=5))
 ```
+
+## Exploration (2)
+
+A. asks: "Turn the question around. Maybe look at covariates for FICO? If
+something predicts FICO, maybe you can make inferences about its predictive
+power for interest rates?"
+
+### Income vs. FICO
+
+Any relationships b/w Income and FICO score?
+```{r}
+plot(loansData$FICO.Range.floor,
+     loansData$Monthly.Income)
+
+# noisy! those some outliers; try again with a smaller range:
+FICO.by.Income <- data.frame(FICO.Range.floor = loansData[loansData$Monthly.Income <= 10000,]$FICO.Range.floor,
+                             Monthly.Income = loansData[loansData$Monthly.Income <= 10000,]$Monthly.Income)
+FICO.by.Income <- FICO.by.Income[!is.na(FICO.by.Income$Monthly.Income),]
+FICO.by.Income <- FICO.by.Income[!is.na(FICO.by.Income$FICO.Range.floor),]
+
+plot(FICO.by.Income$FICO.Range.floor,
+     FICO.by.Income$Monthly.Income)
+
+smoothScatter(FICO.by.Income$FICO.Range.floor,
+     FICO.by.Income$Monthly.Income)
+
+qqplot(FICO.by.Income$FICO.Range.floor,
+     FICO.by.Income$Monthly.Income)
+# admit it! you don't know how to interpret the qqplot
+
+set.seed(291333)
+plot(hclust(dist(sample(nrow(FICO.by.Income), 100))))
+# admit it! you don't really know what to do with the dendrogram, either
+```
+No clear/obvious trends (not to my eye...)
+
+### Inquiries vs. FICO
+```{r}
+plot(loansData$FICO.Range.floor,
+     loansData$Inquiries.in.the.Last.6.Months)
+smoothScatter(loansData$FICO.Range.floor,
+     loansData$Inquiries.in.the.Last.6.Months)
+
+# ...suggesting *some* relationship?
+# high inquiries trend toward lower scores (but not uniformly)
+# there are plenty of `0` inquiries with low FICO scores
+
+FICO.by.Inquiry <- data.frame(FICO.Range.floor = loansData[!is.na(loansData$FICO.Range.floor),]$FICO.Range.floor,
+                              Inquiries.in.the.Last.6.Months = loansData[!is.na(loansData$FICO.Range.floor),]$Inquiries.in.the.Last.6.Months)
+FICO.by.Inquiry <- FICO.by.Inquiry[!is.na(FICO.by.Inquiry$Inquiries.in.the.Last.6.Months),]
+
+set.seed(291351)
+plot(hclust(dist(sample(nrow(FICO.by.Inquiry), 100))))
+```
+Maybe something?
+
+### Debt:Income vs. FICO
+```{r}
+FICO.by.Debt.Ratio <- data.frame(FICO.Range.floor = loansData[!is.na(loansData$FICO.Range.floor),]$FICO.Range.floor,
+                                 Debt.To.Income.Ratio.numeric = loansData[!is.na(loansData$FICO.Range.floor),]$Debt.To.Income.Ratio.numeric)
+FICO.by.Debt.Ratio <- FICO.by.Debt.Ratio[!is.na(FICO.by.Debt.Ratio$Debt.To.Income.Ratio.numeric),]
+
+smoothScatter(FICO.by.Debt.Ratio$FICO.Range.floor,
+              FICO.by.Debt.Ratio$Debt.To.Income.Ratio.numeric)
+
+# save it for later:
+# hist(FICO.by.Debt.Ratio$FICO.Range.floor, breaks=38)
+
+# lower FICO scores partly explained by debt ratio?
+# maybe a little?
+```
+Maybe? A little?
+
+### Revolving Credit Balance vs. FICO
+```{r}
+FICO.by.Balance <- data.frame(FICO.Range.floor = loansData[!is.na(loansData$FICO.Range.floor),]$FICO.Range.floor,
+                              Revolving.CREDIT.Balance = loansData[!is.na(loansData$FICO.Range.floor),]$Revolving.CREDIT.Balance)
+FICO.by.Balance <- FICO.by.Balance[!is.na(FICO.by.Balance$Revolving.CREDIT.Balance),]
+
+smoothScatter(FICO.by.Balance$FICO.Range.floor,
+              FICO.by.Balance$Revolving.CREDIT.Balance)
+# maybe? it's a little noisy - some big outliers
+
+smoothScatter(FICO.by.Balance[FICO.by.Balance$Revolving.CREDIT.Balance <= 40000,]$FICO.Range.floor,
+              FICO.by.Balance[FICO.by.Balance$Revolving.CREDIT.Balance <= 40000,]$Revolving.CREDIT.Balance)
+# points to some small correlations b/w low FICO & revolving balances around $10k
+# but still: values are all over
+```
+Maybe? Doesn't seem like there's _much_ here.
+
+### Open Lines vs. FICO
+```{r}
+FICO.by.Credit.Lines <- data.frame(FICO.Range.floor = loansData[!is.na(loansData$FICO.Range.floor),]$FICO.Range.floor,
+                                   Open.CREDIT.Lines = loansData[!is.na(loansData$FICO.Range.floor),]$Open.CREDIT.Lines)
+FICO.by.Credit.Lines <- FICO.by.Credit.Lines[!is.na(FICO.by.Credit.Lines$Open.CREDIT.Lines),]
+
+smoothScatter(FICO.by.Credit.Lines$FICO.Range.floor,
+              FICO.by.Credit.Lines$Open.CREDIT.Lines)
+# well... having more than 5 open seems to hurt...
+```
+Inconclusive? Seems like "more open credit" _can_ mean "lower FICO" but it's noisy, and hard to say it conclusively or with confidence.
+
+### Employment Length vs. FICO
+```{r}
+FICO.by.Employment <- data.frame(FICO.Range.floor = loansData[!is.na(loansData$FICO.Range.floor),]$FICO.Range.floor,
+                                 Employment.Length = loansData[!is.na(loansData$FICO.Range.floor),]$Employment.Length)
+FICO.by.Employment <- FICO.by.Employment[!is.na(FICO.by.Employment$Employment.Length),]
+
+par(las=2)
+boxplot(FICO.by.Employment$FICO.Range.floor ~ FICO.by.Employment$Employment.Length)
+```
+
+## Exploration (3) - SVD
+
+What do we need to do for the SVD? (Strictly quantitative...)
+
+```{r}
+# copy
+loansData.for.SVD <- loansData
+
+# drop "strictly qualitative"
+drops <- c("Interest.Rate", "Loan.Purpose", "Debt.To.Income.Ratio", "State", "Home.Ownership", "FICO.Range")
+loansData.for.SVD <- loansData.for.SVD[,!(names(loansData.for.SVD) %in% drops)]
+
+# coerce Loan.Length
+loansData.for.SVD$Loan.Length <- sapply(sub(" months", "", loansData.for.SVD$Loan.Length), as.numeric)
+
+# coerce Employment.Length
+# "< 1" becomes 0; "10+" becomes 10; "n/a" becomes -1
+loansData.for.SVD$Employment.Length <- sub(" years", "", loansData.for.SVD$Employment.Length)
+loansData.for.SVD$Employment.Length <- sub("\\+", "", loansData.for.SVD$Employment.Length)
+loansData.for.SVD$Employment.Length <- sub("< 1 year", "0", loansData.for.SVD$Employment.Length)
+loansData.for.SVD$Employment.Length <- sub("1 year", "1", loansData.for.SVD$Employment.Length)
+loansData.for.SVD$Employment.Length <- sub("n/a", "-1", loansData.for.SVD$Employment.Length)
+loansData.for.SVD$Employment.Length <- sapply(loansData.for.SVD$Employment.Length, as.numeric)
+
+# clean it:
+loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD$Monthly.Income),]
+loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD$Open.CREDIT.Lines),]
+loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD$Revolving.CREDIT.Balance),]
+loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD$Inquiries.in.the.Last.6.Months),]
+loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD$Employment.Length),]
+loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD$Interest.Rate.numeric),]
+loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD$Debt.To.Income.Ratio.numeric),]
+loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD$FICO.Range.floor),]
+```
+
+### Heatmap?
+(Is this even worth it?)
+```{r}
+set.seed(2112138)
+hmSample <- loansData.for.SVD[sample(nrow(loansData.for.SVD), 100),]
+heatmap(data.matrix(hmSample))
+```
+(Doesn't look worth it.)
+
+### SVD
+```{r}
+svd1 <- svd(scale(loansData.for.SVD))
+par(mfrow=c(1,2))
+plot(svd1$d,xlab="Column",ylab="Singular value",pch=19)
+
+## the crux: (get the % variance explained)
+plot(svd1$d^2/sum(svd1$d^2),xlab="Column",ylab="Percent of variance explained",pch=19)
+```
+So `Loan.Amount` explains the most variance? What if we drop that?
+
+```{r}
+loansData.for.SVD <- loansData.for.SVD[,!(names(loansData.for.SVD) %in% c("Amount.Requested", "Amount.Funded.By.Investors"))]
+
+svd2 <- svd(scale(loansData.for.SVD))
+par(mfrow=c(1,2))
+plot(svd2$d,xlab="Column",ylab="Singular value",pch=19)
+
+## the crux: (get the % variance explained)
+plot(svd2$d^2/sum(svd2$d^2),xlab="Column",ylab="Percent of variance explained",pch=19)
+```
+
+`Loan.Length` and `Monthly.Income`?
+
+### Plot it another way... (Scatters again)
+1st reset `loansData.for.SVD` to be what it was.
+
+2nd: FICO by Interest.Rate, colored by Loan.Length
+
+```{r}
+par(mfrow=c(1,1))
+# we already know: as FICO goes down, Interest goes up:
+smoothScatter(loansData.for.SVD$FICO.Range.floor, loansData.for.SVD$Interest.Rate.numeric)
+
+# coerce months to years
+loansData.for.SVD$Loan.Length <- sapply(loansData.for.SVD$Loan.Length, function(x) { x / 12 })
+
+plot(loansData.for.SVD$FICO.Range.floor,
+     loansData.for.SVD$Interest.Rate.numeric,
+     col=loansData.for.SVD$Loan.Length,
+     pch=19, cex=0.5)
+```
+
+Ah-ha! Longer loans trend toward higher rates.
