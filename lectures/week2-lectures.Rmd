@@ -1,6 +1,8 @@
-# [Data Analysis] Week 2 Lectures
+[Data Analysis] Week 2 Lectures
+================================================================================
 
-## Structure of a Data Analysis (Part 1 & 2)
+Structure of a Data Analysis (Part 1 & 2)
+--------------------------------------------------------------------------------
 
 slides
   [1](https://dl.dropbox.com/u/7710864/courseraPublic/week2/001structureOfADataAnalysis1/index.html) +
@@ -95,7 +97,10 @@ hCluster <- hclust(dist(t(log10(trainSpam[,1:55] + 1))))
 plot(hCluster)
 ```
 
-## Organizing a Data Analysis
+
+
+Organizing a Data Analysis
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/003organizingADataAnalysis/index.html) |
 [transcript](https://dl.dropbox.com/u/7710864/courseraPublic/week2/003organizingADataAnalysis/index.html) |
@@ -150,7 +155,10 @@ A proposed sensible convention to follow for directory structures:
       * did you you use any libraries/packages? (credit them!)
       * cite references for important statistical techniques (that may fall outside "the usual" stats)
 
-## Getting Data (Part 1 & 2)
+
+
+Getting Data (Part 1 & 2)
+--------------------------------------------------------------------------------
 
 slides
   [1](https://dl.dropbox.com/u/7710864/courseraPublic/week2/004gettingData1/index.html) +
@@ -230,7 +238,10 @@ setwd('~/Desktop/coursera-data-analysis')
   * `RHadoop`
   * `foreign` → for getting data from SAS or SPSS etc.
 
-## Data Resources (where to go and get data) 
+
+
+Data Resources (where to go and get data) 
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/006dataResources/index.html) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=77_en&format=txt) |
@@ -280,7 +291,10 @@ setwd('~/Desktop/coursera-data-analysis')
   * `is.na()` → to look for missing values
   * `rowSums()` & `rowMeans()` & `colSums()` & `colMeans()`
 
-## Data Munging Basics
+
+
+Data Munging Basics
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/008dataMungingBasics/index.html) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=81_en&format=txt) |

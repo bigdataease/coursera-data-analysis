@@ -1,6 +1,8 @@
-# [Data Analysis] Week 1 Lecture Notes
+[Data Analysis] Week 1 Lecture Notes
+================================================================================
 
-## Course Introduction
+Course Introduction
+--------------------------------------------------------------------------------
 
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=7) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=7_en&format=txt)
@@ -9,7 +11,10 @@
   * [Simply Statistics blog](http://simplystatistics.org/)
 * (( going to be pretty comprehensive, but not enough time to go in-depth on it all ))
 
-## Getting Help
+
+
+Getting Help
+--------------------------------------------------------------------------------
 
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=9) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=9_en&format=txt) |
@@ -32,7 +37,10 @@
   * "half the hurdle" → what do you call "data analysis" in your given field?
     * e.g., data analysis? or econometrics? or biostatistics? 
 
-## What _is_ Data?
+
+
+What _is_ Data?
+--------------------------------------------------------------------------------
 
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=45) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=45_en&format=txt) |
@@ -57,7 +65,10 @@
   * ( but that's easy to dispute depending on any number of factors )
   * "so easy to collect so much data in so little time and for so little money"
 
-## Representing Data
+
+
+Representing Data
+--------------------------------------------------------------------------------
 
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=49) |
 [slides](https://dl.dropbox.com/u/7710864/004representingData/index.html)
@@ -130,7 +141,10 @@
     * Suppose : _Y ~ N(X, 1) and X ~ N(0, 1), then distribution of Y|X = 5_
     * (( conditioning can help reduce some of the variance b/c it holds one of the random variables constant, meaning that the function does NOT need to account for the variance of both (just the one) ))
 
-## Representing Data in R
+
+
+Representing Data in R
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/005representingDataR/index.html) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=51) |
@@ -169,7 +183,10 @@
 * Style guides are out there for R:
   * e.g., [Google's R style guide](http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html)
 
-## Simulation Basics
+
+
+Simulation Basics
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/006simulationBasics/index.html) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=53) |
@@ -206,7 +223,10 @@ sample(heights, size=10, replace=TRUE)
   * anyway : that is a way of saying "repeatably random" 
 * see also : [Peng's "Simulation in R" (video)](http://www.youtube.com/watch?v=tvv4IA8PEzw)
 
-## Types of Data Analysis Questions 
+
+
+Types of Data Analysis Questions
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/007typesOfQuestions/index.html) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=55) |
@@ -239,7 +259,10 @@ _"What kind of question are you trying to answer?"_ try categories:
   * try to "prove" that by manipulating variable(s) that you can predict changes in other variable(s)
     * (( complex relationships w/in systems ))
 
-## Sources of Data Sets
+
+
+Sources of Data Sets
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/008sourcesOfDataSets/index.html) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=57) |

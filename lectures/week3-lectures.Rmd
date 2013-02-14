@@ -1,6 +1,8 @@
-# [Data Analysis] Week 3 Lectures
+[Data Analysis] Week 3 Lectures
+================================================================================
 
-## Example Analysis Assignment
+Example Analysis Assignment
+--------------------------------------------------------------------------------
 
 [example file](https://d19vezwu8eufl6.cloudfront.net/dataanalysis/exampleProject.zip) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=83_en&format=txt) |
@@ -18,7 +20,8 @@
 
 
 
-## Exploratory Graphs (1 + 2)
+Exploratory Graphs (1 + 2)
+--------------------------------------------------------------------------------
 
 slides
   [1](https://dl.dropbox.com/u/7710864/courseraPublic/week3/001exploratoryGraphs1/index.html) +
@@ -244,7 +247,8 @@ points(lat, lon, col="blue", pch=19)
 
 
 
-## Expository Graphs
+Expository Graphs
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week3/003expositoryGraphs/index.html) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=89) |
@@ -413,7 +417,8 @@ dev.copy2pdf(file="twoPanelv2.pdf")
 
 
 
-## Hierarchical Clustering
+Hierarchical Clustering
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week3/004hierachicalClustering/index.html) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=91) |
@@ -538,7 +543,8 @@ heatmap(dataMatrix)
 
 
 
-## K-Means Clustering
+K-Means Clustering
+--------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week3/005kmeansClustering/index.html) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=93) |
@@ -608,7 +614,8 @@ image(t(dataMatrix)[,order(kmeansObj$cluster):1], yaxt="n")
 * [The Elements of Statistical Learning](http://www-stat.stanford.edu/~tibs/ElemStatLearn/)
 
 
-## Dimension Reduction
+Dimension Reduction
+--------------------------------------------------------------------------------
 
 "Principal components analysis and singular value decomposition"
 
@@ -699,12 +706,14 @@ plot(svd1$u[,1],40:1,,xlab="Row",ylab="First left singular vector",pch=19)
 plot(svd1$v[,1],xlab="Column",ylab="First right singular vector",pch=19)
 ```
 
-* d and variance explained
+* d and variance explained (**important!!**)
 
 ```{r}
 svd1 <- svd(scale(dataMatrixOrdered))
 par(mfrow=c(1,2))
 plot(svd1$d,xlab="Column",ylab="Singluar value",pch=19)
+
+## the crux: (get the % variance explained)
 plot(svd1$d^2/sum(svd1$d^2),xlab="Column",ylab="Percent of variance explained",pch=19)
 ```
 
@@ -752,6 +761,16 @@ for(i in 1:40){
 hh <- hclust(dist(dataMatrix)); dataMatrixOrdered <- dataMatrix[hh$order,]
 ```
 
+* Impute!
+```{r}
+library(impute)
+dataMatrix2 <- dataMatrixOrdered
+dataMatrix2[sample(1:100,size=40,replace=F)] <- NA
+dataMatrix2 <- impute.knn(dataMatrix2)$data
+svd1 <- svd(scale(dataMatrixOrdered)); svd2 <- svd(scale(dataMatrix2))
+par(mfrow=c(1,2)); plot(svd1$v[,1],pch=19); plot(svd2$v[,1],pch=19)
+```
+
 * ... (lots of "???")
 * noted: SVD cannot be performed on missing values (`NA`)
 * case study: SVD on "face data"
@@ -762,3 +781,25 @@ hh <- hclust(dist(dataMatrix)); dataMatrixOrdered <- dataMatrix[hh$order,]
 * [factor analysis](http://en.wikipedia.org/wiki/Factor_analysis)
 * [Independent component analysis](http://en.wikipedia.org/wiki/Independent_component_analysis)
 * [Latent semantic analysis](http://en.wikipedia.org/wiki/Latent_semantic_analysis)
+
+
+
+Supplemental
+--------------------------------------------------------------------------------
+
+*Brendan re: Clustering Dendrograms:*
+
+* `rect.hclust` to get boxes that better illustrate what's in your identified clusters
+
+*Dave H. re: SVD:*
+
+* (whiteboard explanation)
+* "but your axes don't even need to be the normal perpendicular kind" (imagine that)
+* and/but: (???)
+
+*conversation re: SVD and the assignment*
+
+* Kevin: used `as.factor` to convert qualitative to quantitative values
+* Kevin: omitted `FICO` from SVD
+* ...and followed on that
+* (compared with my approach: discard _all_ qualitative)
