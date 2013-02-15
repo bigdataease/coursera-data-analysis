@@ -775,7 +775,7 @@ Regression in the Real World
 * **Things to pay attn to:**
   * _confounders_
     * variable that is correlated with both dependent & independent variables
-    * sometimes detect w/ careful explorati/visualization
+    * sometimes detect w/ careful exploration/visualization
   * complicated interactions
   * skewness
   * _outliers_

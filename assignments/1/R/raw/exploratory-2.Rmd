@@ -85,10 +85,10 @@ First:
 ```{r}
 svd1 <- svd(scale(loansData.for.SVD))
 par(mfrow=c(1,2))
-plot(svd1$d,xlab="Column",ylab="Singular value",pch=19)
+plot(svd1$d, xlab="Column", ylab="Singular value", pch=19)
 
 ## the crux: (get the % variance explained)
-plot(svd1$d^2/sum(svd1$d^2),xlab="Column",ylab="Percent of variance explained",pch=19)
+plot(svd1$d^2/sum(svd1$d^2), xlab="Column", ylab="Percent of variance explained", pch=19)
 ```
 
 What's above 10%?
@@ -140,11 +140,39 @@ par(mfrow=c(1,1))
 plot(loansData$FICO.Range.floor,
      loansData$Interest.Rate,
      # coerce months to years (so they aren't the same color)
-     col=sapply(loansData$Loan.Length, function(x) { x / 12 }),
+     col=sapply(loansData$Loan.Length, function(x) { (x / 12) %% 4 }),
      pch=19, cex=0.5)
 ```
 
 Longer loans trend toward higher rates.
+
+## Amount.Requested?
+
+FICO by Interest.Rate, colored by Amount.Requested
+
+```{r}
+par(mfrow=c(1,1))
+plot(loansData$FICO.Range.floor,
+     loansData$Interest.Rate,
+     col=cut(loansData$Amount.Requested, breaks=3),
+     pch=19, cex=0.5)
+```
+
+Large loan requests indicate high interest rates.
+
+## Amount.Funded.By.Investors?
+
+FICO by Interest.Rate, colored by Amount.Funded.By.Investors
+
+```{r}
+par(mfrow=c(1,1))
+plot(loansData$FICO.Range.floor,
+     loansData$Interest.Rate,
+     col=cut(loansData$Amount.Funded.By.Investors, breaks=3),
+     pch=19, cex=0.5)
+```
+
+Large loans indicate high interest rates.
 
 ## Debt.To.Income.Ratio?
 
@@ -163,20 +191,39 @@ plot(loansData$FICO.Range.floor,
 FICO by Interest.Rate, colored by Monthly.Income
 
 ```{r}
+# how should this get broken down?
+hist(loansData$Monthly.Income, breaks=20)
+quantile(loansData$Monthly.Income, na.rm=TRUE)
+
+# dump the NAs, dump anything over $4k/mo.
+loansData.filtered.income <- loansData
+loansData.filtered.income <- loansData.filtered.income[!is.na(loansData.filtered.income$Monthly.Income),]
+loansData.filtered.income <- loansData.filtered.income[loansData.filtered.income$Monthly.Income < 4000,]
+
 par(mfrow=c(1,1))
-plot(loansData$FICO.Range.floor,
-     loansData$Interest.Rate,
+plot(loansData.filtered.income$FICO.Range.floor,
+     loansData.filtered.income$Interest.Rate,
      # the number of breaks doesn't seem to make much difference
      # ...not in how the colors turn out... 
-     col=cut(loansData$Monthly.Income, breaks=5),
+     col=cut(loansData.filtered.income$Monthly.Income, breaks=3),
      pch=19, cex=0.5)
 ```
 
-## Linear Model?
+Not really seeing any patterns.
+
+## ~~Linear Model~~ Regression
 ```{r}
-lmNoAdjust <- lm(loansData$FICO.Range.floor ~ loansData$Interest.Rate)
+lmNoAdjust <- lm(loansData$Interest.Rate ~ loansData$Amount.Requested + loansData$Loan.Length)
 
 plot(loansData$Interest.Rate, lmNoAdjust$residuals,
-     col=sapply(loansData$Loan.Length, function(x) { x / 12 }),
+     col=sapply(loansData$Loan.Length, function(x) { (x / 12) %% 4 }),
      pch=19, cex=0.5)
+
+plot(loansData$FICO.Range.floor,
+     loansData$Interest.Rate,
+     # coerce months to years (so they aren't the same color)
+     col=sapply(loansData$Loan.Length, function(x) { (x / 12) %% 4 }),
+     pch=19, cex=0.5)
+lines(loansData$FICO.Range.floor, lmNoAdjust$fitted.values, col="red", lwd=3)
+# again: WTF?
 ```
