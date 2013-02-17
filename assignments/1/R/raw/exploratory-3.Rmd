@@ -1,0 +1,161 @@
+[Coursera] Data Analysis Assignment #1
+================================================================================
+
+Prompt
+--------------------------------------------------------------------------------
+> The data above consist of a sample of 2,500 peer-to-peer loans issued through
+> the Lending Club (<https://www.lendingclub.com/home.action>). The interest
+> rate of these loans is determined by the Lending Club on the basis of
+> characteristics of the person asking for the loan such as their employment
+> history, credit history, and creditworthiness scores.
+>
+> The purpose of your analysis is to identify and quantify associations between
+> the interest rate of the loan and the other variables in the data set. In
+> particular, you should consider whether any of these variables have an
+> important association with interest rate after taking into account the
+> applicant's FICO score. For example, if two people have the same FICO score,
+> can the other variables explain a difference in interest rate between them?
+
+[Source.](https://class.coursera.org/dataanalysis-001/human_grading/view/courses/294/assessments/4/submissions)
+
+_Short version?_ **Given the same FICO score, can you explain the differences in interest rates?**
+
+Load Data
+--------------------------------------------------------------------------------
+```{r}
+setwd('~/Desktop/coursera-data-analysis/assignments/1')
+load('data/raw/loansData.rda')
+```
+
+Clean Data
+--------------------------------------------------------------------------------
+```{r}
+# `%` to numeric
+loansData$Interest.Rate <- sapply(sub("%", "", loansData$Interest.Rate,), as.numeric)
+loansData$Debt.To.Income.Ratio <- sapply(sub("%", "", loansData$Debt.To.Income.Ratio,), as.numeric)
+
+# Loan.Length
+loansData$Loan.Length <- sapply(sub(" months", "", loansData$Loan.Length,), as.numeric)
+
+# fix Employment.Length factor
+loansData$Employment.Length <- factor(loansData$Employment.Length,
+                                      levels(loansData$Employment.Length)[c(2:3,5:12,4,13,1)])
+
+# coerce Employment.Length
+# "< 1" becomes 0; "10+" becomes 10; "n/a" becomes -1
+loansData$Employment.Length.numeric <- sub(" years?", "", loansData$Employment.Length)
+loansData$Employment.Length.numeric <- sub("\\+", "", loansData$Employment.Length.numeric)
+loansData$Employment.Length.numeric <- sub("< 1", "0", loansData$Employment.Length.numeric)
+loansData$Employment.Length.numeric <- sub("n/a", "-1", loansData$Employment.Length.numeric)
+loansData$Employment.Length.numeric <- sapply(loansData$Employment.Length.numeric, as.numeric)
+
+# coerce FICO range into something quantitative:
+loansData$FICO.Range.floor <- sapply(sub("-\\d{3}", "", loansData$FICO.Range), as.numeric)
+```
+
+SVD
+--------------------------------------------------------------------------------
+### Prep for SVD
+```{r}
+loansData.for.SVD <- loansData
+
+# drop the columns we already coerced
+drops <- c("FICO.Range", "Employment.Length")
+loansData.for.SVD <- loansData.for.SVD[,!(names(loansData.for.SVD) %in% drops)]
+
+# convert factors to numerics
+converts <- c("Loan.Purpose", "State", "Home.Ownership")
+for (n in converts) {
+  loansData.for.SVD[[n]] <- as.numeric(loansData.for.SVD[[n]])
+}
+
+# get rid of `NA`
+for (n in names(loansData.for.SVD)) {
+  loansData.for.SVD <- loansData.for.SVD[!is.na(loansData.for.SVD[[n]]),]
+}
+
+# drop FICO (since we're holding it constant)
+# drop Interest.Rate (since that is effectively our dependent variable)
+drops <- c("FICO.Range.floor", "Interest.Rate")
+loansData.for.SVD <- loansData.for.SVD[,!(names(loansData.for.SVD) %in% drops)]
+```
+
+### Perform SVD
+```{r}
+svd1 <- svd(scale(loansData.for.SVD))
+par(mfrow=c(1,2))
+plot(svd1$d, xlab="Column", ylab="Singular value", pch=19)
+
+## the crux: (get the % variance explained)
+svd1Pct <- svd1$d^2/sum(svd1$d^2)
+plot(svd1Pct, xlab="Column", ylab="Percent of variance explained", pch=19)
+
+## What's above 10%?
+svd1Pct[svd1Pct >= 0.1]
+```
+
+What's above 10%?
+* "Amount.Requested" (24.04%)
+* "Amount.Funded.By.Investors" (12.29%)
+* "Loan.Length" (10.57%)
+
+Baseline: FICO by Interest.Rate
+--------------------------------------------------------------------------------
+```{r}
+par(mfrow=c(1,1))
+# we already know: as FICO goes down, Interest goes up:
+smoothScatter(loansData$FICO.Range.floor, loansData$Interest.Rate)
+```
+Telling us what we already know: lower FICO, higher interest rate.
+
+Amount.Requested
+--------------------------------------------------------------------------------
+FICO by Interest.Rate, colored by Amount.Requested
+```{r}
+par(mfrow=c(1,1))
+plot(loansData$FICO.Range.floor,
+     loansData$Interest.Rate,
+     col=cut(loansData$Amount.Requested, breaks=3),
+     pch=19, cex=0.5)
+```
+Large loan requests indicate high interest rates.
+
+Amount.Funded.By.Investors
+--------------------------------------------------------------------------------
+FICO by Interest.Rate, colored by Amount.Funded.By.Investors
+```{r}
+par(mfrow=c(1,1))
+plot(loansData$FICO.Range.floor,
+     loansData$Interest.Rate,
+     col=cut(loansData$Amount.Funded.By.Investors, breaks=3),
+     pch=19, cex=0.5)
+```
+Large loans indicate high interest rates.
+
+Loan.Length
+--------------------------------------------------------------------------------
+FICO by Interest.Rate, colored by Loan.Length
+```{r}
+par(mfrow=c(1,1))
+plot(loansData$FICO.Range.floor,
+     loansData$Interest.Rate,
+     # coerce months to years (so they aren't the same color)
+     col=sapply(loansData$Loan.Length, function(x) { (x / 12) %% 4 }),
+     pch=19, cex=0.5)
+```
+Longer loans trend toward higher rates.
+
+
+Regression
+--------------------------------------------------------------------------------
+```{r}
+lmNoAdjust <- lm(loansData$Interest.Rate ~ loansData$Amount.Requested + loansData$Amount.Funded.By.Investors + loansData$Loan.Length)
+
+plot(loansData$Interest.Rate, lmNoAdjust$residuals,
+     col=sapply(loansData$Loan.Length, function(x) { (x / 12) %% 4 }),
+     pch=19, cex=0.5)
+
+summary(lmNoAdjust)
+
+confint(lmNoAdjust)
+```

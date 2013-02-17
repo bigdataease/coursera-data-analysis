@@ -10,9 +10,13 @@ lectures/figure/
 
 quizzes/
 
+assignments/1/*.html
+assignments/1/*.md
+assignments/1/figures/
 assignments/1/R/raw/*.html
 assignments/1/R/raw/*.md
 assignments/1/R/raw/figure/
+assignments/1/assignment1.pdf
 
 # the example analysis: (we only want the zip, not the contents)
 example-data-analysis-assignment/exampleProject/
