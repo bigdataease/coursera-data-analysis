@@ -1,0 +1,342 @@
+[Data Analysis] Week 4 Lectures
+================================================================================
+
+ANOVA with Multiple Factors
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week5/001multipleFactors/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=111) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=111_en&format=txt)
+
+- Outcome is still quantitative
+  - ideally: symmetrically & normally distributed
+- You have multiple explanatory variables
+- **Goal is to identify contributions of different variables**
+- **case study:** Obama administration A/B testing w/ website elements
+
+### Our example data: (movie data)
+
+```{r}
+download.file("http://www.rossmanchance.com/iscam2/data/movies03RT.txt",
+              destfile="./data/movies.txt")
+movies <- read.table("./data/movies.txt",sep="\t",header=T,quote="")
+head(movies)
+```
+
+- using score as our outcome
+- other variables as covariates
+- (study slide 5 re: relating the diff. scores)
+
+```{r}
+# again: `outcome variable ~ covariate variable(s)`
+aovObject <- aov(movies$score ~ movies$rating)
+# `aov` here = "analysis of variance"
+
+aovObject
+
+aovObject$coeff
+```
+
+### Adding a second factor...
+
+- (see slide 8 for the equation)
+  - note how the '...' stands in for "the rest of the levels for this factor"
+  - "There are only 2 variables in this model. They have multiple levels."
+
+```{r}
+aovObject2 <- aov(movies$score ~ movies$rating + movies$genre)
+aovObject2
+```
+
+- side note: *What are residuals??*
+
+```{r}
+# ANOVA Summary
+summary(aovObject2)
+```
+
+- tells you...
+  - degrees of freedom, sum of squares, etc. (col. headers)
+  - F value (amount of variation explained by... (that variable in that row))
+    - HOWEVER / NOTE: in our example:
+      - `$rating` F value: variance explained by rating
+      - `$genre` F value: add'l variance explained by genre (which is not
+        already explained by `$rating`)
+
+### Order matters!
+
+- unless you have a balanced design, the order of the covariates matters!
+
+```{r}
+aovObject3 <- aov(movies$score ~ movies$genre + movies$rating)
+summary(aovObject3)
+```
+
+- and/but: should be obvious?
+  - i.e., see the explanation of the F values (above)
+  - (so... "Of course."?)
+- SO: REMINDER: take care when interpretting the F values etc.
+  - make sure you're paying attn to the order of factors/covariates etc.
+
+### Adding a Quantitative Variable
+
+- There are three variables in this model - box office is quantitative so only has one term.
+  - (see slide 13 for the equation)
+
+```{r}
+aovObject4 <- aov(movies$score ~ movies$genre + movies$rating + movies$box.office)
+summary(aovObject4)
+```
+
+### RE: Language
+
+- **Units** - one observation
+- **Treatments** - applied to units
+- **Factors** - controlled by experimenters
+- **Replicates** - multiple (independent) units with the same factors/treatments
+
+### Further resources
+
+- [Wikipedia on Experimental Design](http://en.wikipedia.org/wiki/Design_of_experiments)
+- [Wikipedia on ANOVA](http://en.wikipedia.org/wiki/Analysis_of_variance)
+- [Wikipedia on A/B Testing](http://en.wikipedia.org/wiki/A/B_testing)
+
+
+
+Binary Outcomes
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week5/002binaryOutcomes/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=113) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=113_en&format=txt)
+
+**Key ideas**
+- Frequently we care about outcomes that have two values
+  - Alive/dead
+  - Win/loss
+  - Success/Failure
+  - etc.
+- Called binary outcomes or 0/1 outcomes
+  - *see also:* "dichotomous variable"
+- Linear regression (like we've seen) may not be the best
+
+### Case study: B'more Ravens game data
+
+```{r}
+download.file("https://dl.dropbox.com/u/7710864/data/ravensData.rda",
+              destfile="./data/ravensData.rda", method="curl")
+load("./data/ravensData.rda")
+head(ravensData)
+```
+
+- `1` or `W` for a win; `0` or `L` for a loss
+- (see slide 5 for Linear Regression equation)
+
+$$ RW_i = b_0 + b_1 RS_i + e_i $$
+
+```{r}
+lmRavens <- lm(ravensData$ravenWinNum ~ ravensData$ravenScore)
+summary(lmRavens)
+```
+
+- (0.28503 is probability of winning with 0 points)
+  - "Something a little bit weird..."
+
+```{r}
+plot(ravensData$ravenScore,lmRavens$fitted,pch=19,col="blue",ylab="Prob Win",xlab="Raven Score")
+```
+
+- MORE WEIRD: a high score w/ a "win probability" > 1
+  - impossible!
+- other ways of looking at "binary data"
+  - see: slide 8
+  - binary outcome (0/1)
+  - probability (0, 1)
+  - odds (0, ∞)
+  - log odds (-∞, ∞)
+
+### Linear vs. logistic regression
+
+- basically just changing what we're looking at for the outcome...
+- instead of modeling the wins, we model the _probability_ of a win
+
+### Interpreting Logistic Regression
+
+$$ log(\frac{Pr(RW_i | RS_i, b_0, b_1)}{1 − Pr(RW_i | RS_i, b_0, b_1)}) = b_0 + b_1 RS_i $$
+
+- $b_0$ - Log odds of a Ravens win if they score zero points
+- $b_1$ - Log odds ratio of win probability for each point scored (compared to zero points)
+- $exp(b_1)$ - Odds ratio of win probability for each point scored (compared to zero points)
+
+### Explaining Odds
+
+- slides from Ken Rice
+- ratios : probability 1 vs. probability 2
+  - e.g., probability of death w/ a certain genetic marker = 90% (so odds = 9/1)
+- "Odds ratio is constant but probability can be different." (slide 14)
+- odds ratio of 1 = flat line on the graph
+- odds ratio of ∞ = straight vertical line on the graph
+
+### Ravens logistic regression
+```{r}
+logRegRavens <- glm(ravensData$ravenWinNum ~ ravensData$ravenScore,family="binomial")
+summary(logRegRavens)
+
+# Ravens fitted values
+plot(ravensData$ravenScore,logRegRavens$fitted,pch=19,col="blue",xlab="Score",ylab="Prob Ravens Win")
+```
+
+- `glm` = general linear model (more/less)
+- `family="binomial"` = what you need for logistic regression
+- graph of fitted values makes more sense this time, eh?
+
+```{r}
+# Odds ratios
+exp(logRegRavens$coeff)
+# and confidence intervals
+exp(confint(logRegRavens))
+# ANOVA for logistic regression
+anova(logRegRavens,test="Chisq")
+```
+
+- ANOVA on logistic regrssion: deviance residuals
+
+### Simpson's Paradox
+
+- http://en.wikipedia.org/wiki/Simpson's_paradox
+- important to consider all the important terms in the model
+
+### Interpreting Odds Ratios
+
+- odds are *not* probabilities
+- Odds ratio of 1 = no difference in odds
+- Log odds ratio of 0 = no difference in odds
+- Odds ratio < 0.5 or > 2 commonly a "moderate effect"
+- Relative risk $\frac{Pr(RW_i | RS_i = 10)}{Pr(RW_i | RS_i = 0)}$ often easier to interpret, harder to estimate
+- For small probabilities RR ≈ OR but they are not the same!
+
+
+
+Count Outcomes
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week5/003countOutcomes/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=115) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=115_en&format=txt)
+
+**Key ideas**
+- Many data take the form of counts
+  - Calls to a call center
+  - Number of flu cases in an area
+  - Number of cars that cross a bridge
+- Data may also be in the form of rates
+  - Percent of children passing a test
+  - Percent of hits to a website from a country
+- Linear regression with transformation is an option
+
+> "Could try to use linear regression to model these, but you could have some trouble."
+
+And/but: **still unclear _why_ linear regression doesn't work w/ counts/rates -- how would I know to use a Poisson model?**
+
+### Poisson distribution
+```{r}
+set.seed(3433); par(mfrow=c(1,2))
+poisData2 <- rpois(100,lambda=100); poisData1 <- rpois(100,lambda=50)
+hist(poisData1,col="blue",xlim=c(0,150)); hist(poisData2,col="blue",xlim=c(0,150))
+
+c(mean(poisData1),var(poisData1))
+c(mean(poisData2),var(poisData2))
+```
+- just one param : `lambda` -- that's the *rate*
+- rate determines the center & the spread (roughly)
+- for Poisson: mean & variance are the same thing
+  - and/or *almost* the same value
+
+### Case study: website data
+```{r}
+download.file("https://dl.dropbox.com/u/7710864/data/gaData.rda",
+              destfile="./data/gaData.rda",method="curl")
+load("./data/gaData.rda")
+gaData$julian <- julian(gaData$date)
+head(gaData)
+```
+- using Julian date b/c it's just # days since Jan. 1, 1970
+  - makes it a little easier to calculate certain things
+
+```{r}
+plot(gaData$julian,gaData$visits,pch=19,col="darkgrey",xlab="Julian",ylab="Visits")
+```
+- see slide 8 for linear regression model/equation
+
+```{r}
+plot(gaData$julian, gaData$visits,
+     pch=19, col="darkgrey",
+     xlab="Julian", ylab="Visits")
+lm1 <- lm(gaData$visits ~ gaData$julian)
+abline(lm1,col="red", lwd=3)
+```
+- slide 10: Poisson regression (& equations)
+  - Poisson : a.k.a., "log linear"
+- slide 11: Multiplicative differences
+
+```{r}
+# Poisson regression in R
+plot(gaData$julian, gaData$visits,
+     pch=19, col="darkgrey",
+     xlab="Julian", ylab="Visits")
+glm1 <- glm(gaData$visits ~ gaData$julian, family="poisson")
+abline(lm1,col="red",lwd=3)
+lines(gaData$julian, glm1$fitted, col="blue", lwd=3)
+```
+- noted: `family="poisson"` given as param to `glm`
+  - as opposed to "binomial" (or something else)
+
+### Model agnostic standard errors
+```{r}
+library(sandwich)
+confint.agnostic <- function (object, parm, level = 0.95, ...) {
+    cf <- coef(object); pnames <- names(cf)
+    if (missing(parm))
+        parm <- pnames
+    else if (is.numeric(parm))
+        parm <- pnames[parm]
+    a <- (1 - level)/2; a <- c(a, 1 - a)
+    pct <- stats:::format.perc(a, 3)
+    fac <- qnorm(a)
+    ci <- array(NA, dim = c(length(parm), 2L), dimnames = list(parm,
+                                                               pct))
+    ses <- sqrt(diag(sandwich::vcovHC(object)))[parm]
+    ci[] <- cf[parm] + ses %o% fac
+    ci
+}
+
+confint(glm1)
+confint.agnostic(glm1)
+```
+- "model agnostic confidence intervals"
+  - a little bit more conservative (compare `confint` vs. `confint.agnostic`)
+- source: <http://stackoverflow.com/questions/3817182/vcovhc-and-confidence-interval>
+
+```{r}
+glm2 <- glm(gaData$simplystats ~ julian(gaData$date),
+            offset=log(visits+1), family="poisson", data=gaData)
+plot(julian(gaData$date), glm2$fitted,
+     col="blue", pch=19,
+     xlab="Date", ylab="Fitted Counts")
+points(julian(gaData$date), glm1$fitted,
+       col="red", pch=19)
+
+# vs. #
+glm2 <- glm(gaData$simplystats ~ julian(gaData$date),
+            offset=log(visits+1), family="poisson", data=gaData)
+plot(julian(gaData$date),gaData$simplystats/(gaData$visits+1),
+     col="grey", xlab="Date",
+     ylab="Fitted Rates", pch=19)
+lines(julian(gaData$date), glm2$fitted/(gaData$visits+1),
+      col="blue", lwd=3)
+```
+
+
+
+Model Checking and Selection
+--------------------------------------------------------------------------------
