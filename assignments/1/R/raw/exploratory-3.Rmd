@@ -83,6 +83,7 @@ loansData.for.SVD <- loansData.for.SVD[,!(names(loansData.for.SVD) %in% drops)]
 ### Perform SVD
 ```{r}
 svd1 <- svd(scale(loansData.for.SVD))
+
 par(mfrow=c(1,2))
 plot(svd1$d, xlab="Column", ylab="Singular value", pch=19)
 

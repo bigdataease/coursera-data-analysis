@@ -13,7 +13,7 @@ Samsung Galaxy S3 case study / example
 ```{r}
 setwd('~/Desktop/coursera-data-analysis/lectures')
 load('samsungData.rda')
-names(samsungData)
+#names(samsungData)
 table(samsungData$activity)
 
 ###
@@ -33,30 +33,34 @@ myplclust(hclustering,lab.col=numericActivity)
 ### Plotting **max** acceleration for the first subject
 ### (see the difference?)
 par(mfrow=c(1,2))
-plot(samsungData[samsungData$subject==1,10],pch=19,col=numericActivity,ylab=names(samsungData)[10])
-plot(samsungData[samsungData$subject==1,11],pch=19,col=numericActivity,ylab=names(samsungData)[11])
+plot(samsungData[samsungData$subject==1,10],
+     pch=19, col=numericActivity,
+     ylab=names(samsungData)[10])
+plot(samsungData[samsungData$subject==1,11],
+     pch=19, col=numericActivity,
+     ylab=names(samsungData)[11])
 
 ### Clustering based on maximum acceleration
-source("http://dl.dropbox.com/u/7710864/courseraPublic/myplclust.R")
+#source("http://dl.dropbox.com/u/7710864/courseraPublic/myplclust.R")
 distanceMatrix <- dist(samsungData[samsungData$subject==1,10:12])
 hclustering <- hclust(distanceMatrix)
-myplclust(hclustering,lab.col=numericActivity)
+myplclust(hclustering, lab.col=numericActivity)
 
 ### Singular value decomposition
 svd1 = svd(scale(samsungData[samsungData$subject==1,-c(562,563)]))
 par(mfrow=c(1,2))
-plot(svd1$u[,1],col=numericActivity,pch=19)
-plot(svd1$u[,2],col=numericActivity,pch=19)
+plot(svd1$u[,1], col=numericActivity, pch=19)
+plot(svd1$u[,2], col=numericActivity, pch=19)
 
 ### Find maximum contributor
 ### "look at the right singular vector that corresponds with the left singular vector that gives that pattern"
-plot(svd1$v[,2],pch=19)
+plot(svd1$v[,2], pch=19)
 
 ### New clustering with maximum contributer
 maxContrib <- which.max(svd1$v[,2])
-distanceMatrix <- dist(samsungData[samsungData$subject==1,c(10:12,maxContrib)])
+distanceMatrix <- dist(samsungData[samsungData$subject==1, c(10:12,maxContrib)])
 hclustering <- hclust(distanceMatrix)
-myplclust(hclustering,lab.col=numericActivity) 
+myplclust(hclustering, lab.col=numericActivity) 
 
 ### New clustering with maximum contributer
 names(samsungData)[maxContrib]                          

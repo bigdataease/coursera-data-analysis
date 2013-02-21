@@ -12,7 +12,7 @@ Example Analysis Assignment
 
 * **prompt** - contains the question (naturally?)
 * **assignment** - the materials that should be submitted
-* **core** - has `finalcode` and `rawcode`
+* **code** - has `finalcode` and `rawcode`
   * note that `raw`... contains _all_ analyses performed (not just the ones that appear in the final)
 * **figures** - just the final figure
   * optionally (and/or: for yourself) consider keeping interesting exploratory figures
