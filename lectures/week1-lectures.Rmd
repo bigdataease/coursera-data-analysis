@@ -77,21 +77,21 @@ Representing Data
   * important to know how to write about it → b/c _The Point_ is communicating 
 * How do we write about data?
   * each data point gets a capital letter
-    * e.g., _H_ for height 
+    * e.g., $H$ for height 
     * sub-script numerals if you have more than one for that type
-  * _Y_ generally represents outcomes, _X_ for covariates
+  * $Y$ generally represents outcomes, $X$ for covariates
 * **Randomness**
-  * _X_ & _Y_ as "random variables" 
+  * $X$ & $Y$ as "random variables" 
   * a variable is random b/c it is an incompletely measured variable 
     * or it's a random draw from a population 
-  * _X = x_ → fixing _X_ (random quantity _X_) to be observed/fixed _x_ 
+  * $X = x$ → fixing $X$ (random quantity $X$) to be observed/fixed $x$
 * example : coin flip (canonical "random") 
   * and/but so : studies indicate that even the coin flip can be deterministic 
     * so when you're marking something as random it's b/c you don't have the data to make a claim about it in a deterministic fashion 
 * **Distributions**
-  * _Pr_ = probability (b/w 0 and 1, must add up to 1)
+  * $Pr$ = probability (b/w 0 and 1, must add up to 1)
   * our coin flip probability written as:
-    * _Pr(X = 1) = 0.5 and Pr(X = 0) = 0.5_
+    * $Pr(X = 1) = 0.5$ and $Pr(X = 0) = 0.5$
       * in other words: 50/50 chance of heads or tails
 * continuous vs. discrete distributions 
   * discrete → qualitative 
@@ -99,46 +99,46 @@ Representing Data
 * parameters 
   * "Distributions are defined by a set of fixed values called _parameters_."
   * usually represented w/ Greek letters 
-    * _N(μ,σ)_ or _Poisson(λ)_ 
-  * e.g., _X ~ N(μ,σ)_
-    * translation: X has the N(μ,σ) distribution 
+    * $N(\mu,\sigma)$ or $Poisson(\lambda)$
+  * e.g., $X ~ N(\mu,\sigma)$
+    * translation: $X$ has the $N(\mu,\sigma)$ distribution 
 * 3 most important parameters 
-  * _E[X]_ → expectation of X (measures the "center"; usually mean?) 
-  * _Var[X]_ → variance of X 
-  * _SD[X]_ → standard deviation 
+  * $E[X]$ → expectation of X (measures the "center"; usually mean?) 
+  * $Var[X]$ → variance of X 
+  * $SD[X]$ → standard deviation 
 * **Conditioning**
-  * _X|μ_ → X is a random variable with fixed parameter μ 
+  * $X|\mu$ → X is a random variable with fixed parameter $\mu$
 * example distribution : **Binomial** 
   * coin flips:
-  * _Bin(n, p)_
-  * _X ~ Bin(10, 0.5)_
+  * $Bin(n, p)$
+  * $X ~ Bin(10, 0.5)$
 * example distribution : **Normal**
-  * _N(μ,σ)_
-    * μ = mean
-    * σ = standard deviation
-  * _X ~ N(0, 1)_
+  * $N(\mu,\sigma)$
+    * $\mu$ = mean
+    * $\sigma$ = standard deviation
+  * $X ~ N(0, 1)$
   * ( "probability density function" )
 * example distribution : **Uniform**
   * "all values are equally likely" 
-  * _U(α, β)_
-    * _α, β_ = boundaries of which values we consider to be equally likely
-  * X ~ U(0, 1) 
+  * $U(\alpha, \beta)$
+    * $\alpha, \beta$ = boundaries of which values we consider to be equally likely
+  * $X ~ U(0, 1)$
 * **Changing parameters**
   * Normal distribution:
-    * _X ~ N(0, 1) , E[X] = μ = 0, Var[X] = σ² = 1_
+    * $X ~ N(0, 1) , E[X] = \mu = 0, Var[X] = \sigma^2 = 1$
       * vs. 
-    * _X ~ N(0, 5) , E[X] = μ = 0, Var[X] = σ² = 25_
+    * $X ~ N(0, 5) , E[X] = \mu = 0, Var[X] = \sigma^2 = 25$
       * (a fatter "bell curve" function)
       * vs. 
-    * _X ~ N(5, 1) , E[X] = μ = 5, Var[X] = σ² = 1_
+    * $X ~ N(5, 1) , E[X] = \mu = 5, Var[X] = \sigma^2 = 1$
       * (skewed)
   * Binomial:
-    * _X ~ Bin(10, 0.5), E[X] = n × p = 5, Var[X] = n × p (1 - p) = 2.5_
+    * $X ~ Bin(10, 0.5), E[X] = n \times p = 5, Var[X] = n \times p (1 - p) = 2.5$
       * vs.
-    * _X ~ Bin(10, 0.8), E[X] = n × p = 8, Var[X] = n × p (1 - p) = 1.6_
+    * $X ~ Bin(10, 0.8), E[X] = n \times p = 8, Var[X] = n \times p (1 - p) = 1.6$
       * (skewed)
   * CONDITION:
-    * Suppose : _Y ~ N(X, 1) and X ~ N(0, 1), then distribution of Y|X = 5_
+    * Suppose : $Y ~ N(X, 1)$ and $X ~ N(0, 1)$, then distribution of $Y|X = 5$
     * (( conditioning can help reduce some of the variance b/c it holds one of the random variables constant, meaning that the function does NOT need to account for the variance of both (just the one) ))
 
 

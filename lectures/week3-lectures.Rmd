@@ -445,11 +445,11 @@ Hierarchical Clustering
       * _Euclidean_ - looking (basically) for hypotenuse...
         * e.g., Baltimore lat, lon vs. D.C. lat, lon
           * figure the trigonometry out
-        * √((X₁ - X₂)² + (Y₁ - Y₂)² + ... + (Z₁ - Z₂)²)
+        * $\sqrt{(X_1 - X_2)^2 + (Y_1 - Y_2)^2 + ... + (Z_1 - Z_2)^2}$
     * continuous (correlation similarity)
     * binary (Manhattan distance)
       * _Manhattan distance_ - shortest path b/w 2 points "on a grid"
-      * |A₁ - A₂| + |B₁ - B₂| + ... + |Z₁ - Z₂|
+      * $|A_1 - A_2| + |B_1 - B_2| + ... + |Z_1 - Z_2|$
   * pick a distance/similarity that makes sense w/ _your_ data
 
 #### Example
@@ -692,7 +692,7 @@ plot(colMeans(dataMatrixOrdered),xlab="Column",ylab="Column Mean",pch=19)
 
 ### **SVD** - singular value decomposition
 * compresses the data by performing a matrix decomposition
-* _X = UVD^T_
+* $X = UVD^T$
   * _U_ = left singular vectors
   * _D_ = singular values
   * _V_ = right singular vectors
