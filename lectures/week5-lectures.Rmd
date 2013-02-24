@@ -49,6 +49,7 @@ aovObject2
 ```
 
 - side note: *What are residuals??*
+  - _(look back at Week 4 Supplement)_
 
 ```{r}
 # ANOVA Summary
@@ -238,6 +239,9 @@ Count Outcomes
 
 And/but: **still unclear _why_ linear regression doesn't work w/ counts/rates -- how would I know to use a Poisson model?**
 
+- (study group supplement) _Dave:_ linear is more appropriate for continuous values (floats!)
+  - Poisson: arrival rates; counts; ...integers!
+
 ### Poisson distribution
 ```{r}
 set.seed(3433); par(mfrow=c(1,2))
@@ -278,6 +282,8 @@ abline(lm1,col="red", lwd=3)
 - slide 10: Poisson regression (& equations)
   - Poisson : a.k.a., "log linear"
 - slide 11: Multiplicative differences
+  - if you increase the covariate by one unit
+    - then you take the prev value and multiply it by $b_1$
 
 ```{r}
 # Poisson regression in R
@@ -340,3 +346,248 @@ lines(julian(gaData$date), glm2$fitted/(gaData$visits+1),
 
 Model Checking and Selection
 --------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week5/004modelChecking/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=117) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=117_en&format=txt)
+
+- a little bit from "regressions in the real world"
+- Sometimes model checking/selection not allowed
+  - some debate about the best way to do it
+  - more art than science
+  - and/but : watch out : sometimes you can't "fudge it" (e.g., when submitting to the FDA)
+- Often it can lead to problems (i.e., if you do "too much of it")
+  - Overfitting
+  - Overtesting
+  - Biased inference
+- _But_ you don't want to miss something obvious
+  - so _not_ doing could lead to you missing something as well
+  - as usual: **use good judgment**
+
+### Linear regression - basic assumptions
+- Variance is constant
+  - for each observation, you have constant variance for ... stochastic variation
+- You are summarizing a linear trend
+- You have all the right terms in the model
+- There are no big outliers
+
+### Model checking - constant variance
+```{r}
+set.seed(3433)
+par(mfrow=c(1,2)) 
+data <- rnorm(100, mean=seq(0,3,length=100),
+              sd=seq(0.1,3,length=100))
+lm1 <- lm(data ~ seq(0,3, length=100))
+plot(seq(0,3,length=100), data,
+     pch=19, col="grey")
+abline(lm1, col="red", lwd=3)
+plot(seq(0, 3, length=100), lm1$residuals,,
+     pch=19,col="grey")
+abline(c(0,0), col="red", lwd=3)
+```
+- 1st graph:
+  - more variation as you go further to the right
+  - but the fit line goes mostly "through" the observations
+- 2nd graph:
+  - normalized (residuals) and you effectively "rotate" the plot
+  - (and can see the pattern more clearly)
+
+**What to do**
+- See if another variable explains the increased variance
+- Use the `vcovHC` {sandwich} variance estimators (if $n$ is big)
+  - remember from Poisson?
+  - also good for _heteroskedastic_ data (i.e., "changing variance")
+
+### Using the sandwich estimate
+```{r}
+library(sandwich)
+set.seed(3433)
+par(mfrow=c(1,2))
+data <- rnorm(100, mean=seq(0,3,length=100),
+              sd=seq(0.1,3,length=100))
+lm1 <- lm(data ~ seq(0,3,length=100))
+vcovHC(lm1)
+summary(lm1)$cov.unscaled
+```
+- random values...
+- fit a linear model
+- applying `vcovHC`
+  - get a variance/covariance matrix
+- if you use the estimates from the regular linear model, the variance may be _underestimated_
+  - you can be more confident in measured association than you should be
+
+### Model checking - linear trend
+```{r}
+set.seed(3433)
+par(mfrow=c(1,2)) 
+data <- rnorm(100, mean=seq(0,3,length=100)^3, sd=2)
+lm1 <- lm(data ~ seq(0,3,length=100))
+plot(seq(0,3,length=100), data,
+     pch=19,col="grey")
+abline(lm1,col="red",lwd=3)
+plot(seq(0,3,length=100),lm1$residuals,,pch=19,col="grey"); abline(c(0,0),col="red",lwd=3)
+```
+- if there isn't _necessarily_ a linear trend
+- note: graph 1: fit line only sort of matches the data
+  - (the actual trend is more curvilinear)
+- then look at the residuals... (clearly they don't fit)
+
+**What to do**
+- Use Poisson regression (if it looks exponential/multiplicative)
+- Use a data transformation (e.g. take the log)
+- Smooth the data/fit a nonlinear trend (next week's prediction lectures)
+- Use linear regression anyway
+  - Interpret as the linear trend between the variables
+  - Use the `vcovHC` {sandwich} variance estimators (if $n$ is big)
+
+### Model checking - missing covariate
+```{r}
+set.seed(3433)
+par(mfrow=c(1,3))
+z <- rep(c(-0.5,0.5),50)
+data <- rnorm(100,mean=(seq(0,3,length=100) + z),
+              sd=seq(0.1,3,length=100))
+lm1 <- lm(data ~ seq(0,3,length=100))
+plot(seq(0,3,length=100),data,
+     pch=19,col=((z>0)+3))
+abline(lm1,col="red",lwd=3)
+plot(seq(0,3,length=100),lm1$residuals,
+     pch=19,col=((z>0)+3))
+abline(c(0,0),col="red",lwd=3)
+boxplot(lm1$residuals ~ z,col = ((z>0)+3) )
+```
+- key: "here you're looking for some _other_ (unknown) artifact"
+
+**What to do**
+- Use exploratory analysis to identify other variables to include
+- Use the `vcovHC` {sandwich} variance estimators (if $n$ is big)
+- Report unexplained patterns in the data
+
+### Model checking - outliers
+```{r}
+set.seed(343)
+par(mfrow=c(1,2))
+betahat <- rep(NA,100)
+x <- seq(0,3,length=100)
+y <- rcauchy(100)
+lm1 <- lm(y ~ x)
+plot(x, y, pch=19, col="blue")
+abline(lm1, col="red", lwd=3)
+for(i in 1:length(data)) {
+  betahat[i] <- lm(y[-i] ~ x[-i])$coeff[2]
+}
+plot(betahat - lm1$coeff[2],
+     col="blue",pch=19)
+abline(c(0,0), col="red",lwd=3)
+```
+- goal #1: do you _really_ have outliers?
+- goal #2: identify how much influence the outliers have?
+  - remove the outlier(s)
+  - refit the line from your linear regression
+  - is the slope (roughly) the same? or quite different?
+  
+**What to do**
+- If outliers are experimental mistakes -remove and document them
+  - are they "real" outliers? can you throw them out in good conscience?
+- If they are real - consider reporting how sensitive your estimate is to the outliers
+- Consider using a robust linear model fit like `rlm` {MASS}
+
+### Robust linear modeling
+```{r}
+set.seed(343); x <- seq(0,3,length=100); y <- rcauchy(100); 
+lm1 <- lm(y ~ x)
+rlm1 <- rlm(y ~ x)
+lm1$coeff
+
+rlm1$coeff
+
+par(mfrow=c(1,2))
+plot(x,y,pch=19,col="grey")
+lines(x,lm1$fitted,col="blue",lwd=3)
+lines(x,rlm1$fitted,col="green",lwd=3)
+plot(x, y, pch=19, col="grey",
+     ylim=c(-5,5), main="Zoomed In")
+lines(x,lm1$fitted,col="blue",lwd=3)
+lines(x,rlm1$fitted,col="green",lwd=3)
+```
+- fit linear model and robust linear model
+  - blue line is from `lm`
+  - green line is from `rlm`
+- note how `lm` is more sensitive to the outliers
+- you can use `rlm` if you have a bunch of outliers you want to account for
+
+### Model checking - default plots
+```{r}
+set.seed(343)
+par(mfrow=c(1,2))
+x <- seq(0,3,length=100)
+y <- rnorm(100)
+lm1 <- lm(y ~ x)
+plot(lm1)
+```
+
+### Model checking - deviance
+- Commonly reported for GLM's
+- Usually compares the model where every point gets its own parameter to the model you are using
+- On its own it doesn't tell you what is wrong
+- In large samples the deviance may be big even for "conservative" models
+- You can not compare deviances for models with different sample sizes
+
+### $R^2$ may be a bad summary
+- [slide 17](https://dl.dropbox.com/u/7710864/courseraPublic/week5/004modelChecking/index.html#17)
+- note that all 4 graphed linear regressions have the same $R^2$
+  - but fit data dramatically different in each case
+
+### Model selection
+- Many times you have multiple variables to evaluate
+- Options for choosing variables
+  - Domain-specific knowledge
+    - _(do you already know something about the problem domain)_
+  - Exploratory analysis
+    - _you have data... dig in to it_ (problem: post-hoc!)
+  - Statistical selection
+    - _potentially controversial: using the data to pick the variables..._
+- There are many statistical selection options
+  - Step-wise
+  - AIC
+  - BIC
+  - Modern approaches: Lasso, Ridge-Regression, etc.
+- **Statistical selection may bias your inference**
+  - If possible, do selection on a held out sample
+
+### Error measures
+- $R^2$ alone isn't enough - more variables = bigger $R^2$
+  - "$R^2$ always gets bigger when you include more covariates"
+- [**Adjusted $R^2$**](http://en.wikipedia.org/wiki/Coefficient_of_determination#Adjusted_R2) is $R^2$ taking into account the number of estimated parameters
+- [AIC](http://en.wikipedia.org/wiki/Akaike_information_criterion) also penalizes models with more parameters
+- [BIC](http://en.wikipedia.org/wiki/Bayesian_information_criterion) does the same, but with a bigger penalty
+
+### Case study: Movie Data
+```{r}
+download.file("http://www.rossmanchance.com/iscam2/data/movies03RT.txt",
+              destfile="./data/movies.txt")
+movies <- read.table("./data/movies.txt",sep="\t",header=TRUE,quote="")
+head(movies)
+
+movies <- movies[,-1]
+lm1 <- lm(score ~ .,data=movies)
+aicFormula <- step(lm1)
+
+aicFormula
+```
+- (slides 20-25)
+
+```{r}
+### Model selection - regsubsets
+library(leaps)
+regSub <- regsubsets(score ~ .,data=movies)
+plot(regSub)
+```
+- <http://cran.r-project.org/web/packages/leaps/leaps.pdf>
+
+```{r}
+### Model selection - bic.glm
+library(BMA)
+bicglm1 <- bic.glm(score ~.,data=movies,glm.family="gaussian")
+print(bicglm1)
+```

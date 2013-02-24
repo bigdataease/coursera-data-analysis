@@ -788,3 +788,22 @@ Regression in the Real World
   - correlation & causation
 - Ideal data for regression?
   - oval shape (like Galton's)
+
+
+
+
+Study Group Supplementary Session
+--------------------------------------------------------------------------------
+
+**Dave explains residuals from a linear model:**
+
+$$ y = mx + b + e $$
+
+- Dave: "simplest linear model" (above)
+  - $mx$ = slow
+  - $b$ = intercept
+- residual = $r_i = y_i - y(hat)_i$
+  - $= y_i - (mx_i + b)$
+  - difference b/w the prediction made by the model and the _actual observed value_
+- _coefficients_ are the values that go into the model to make the predictions
+  - so: $m$ and $b$ in our "simplest model" (above)
