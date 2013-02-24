@@ -1,0 +1,7 @@
+*.html
+*.md
+figures/
+R/raw/*.html
+R/raw/*.md
+R/raw/figure/
+assignment1.pdf
