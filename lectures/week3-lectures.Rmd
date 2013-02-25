@@ -10,13 +10,13 @@ Example Analysis Assignment
 
 "How did I do this analysis?"
 
-* **prompt** - contains the question (naturally?)
-* **assignment** - the materials that should be submitted
-* **code** - has `finalcode` and `rawcode`
-  * note that `raw`... contains _all_ analyses performed (not just the ones that appear in the final)
-* **figures** - just the final figure
-  * optionally (and/or: for yourself) consider keeping interesting exploratory figures
-    * and/but - if you're using `Rmd` then you probably don't need to do this
+- **prompt** - contains the question (naturally?)
+- **assignment** - the materials that should be submitted
+- **code** - has `finalcode` and `rawcode`
+  - note that `raw`... contains _all_ analyses performed (not just the ones that appear in the final)
+- **figures** - just the final figure
+  - optionally (and/or: for yourself) consider keeping interesting exploratory figures
+    - and/but - if you're using `Rmd` then you probably don't need to do this
 
 
 
@@ -33,21 +33,21 @@ transcripts
   [1](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=85_en&format=txt) +
   [2](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=87_en&format=txt)
 
-* "Why do we use graphs?"
-  * _communication!_
-  * see patterns that you can't see w/ numbers alone
-  * understand properties of the data
-  * suggest modeling strategies
-* characteristics of _exploratory_ graphs
-  * make many of them, and quickly
-  * (clean it up later)
-* (( illustrating how 1 set of data could be visualized _n_ different ways... ))
-* "position vs. length"
-  * ask: "What is the main take-away from the graph? Is it easy to 'see what you're saying'?"
-  * (is the graph easy to read?)
-* "position vs. angle"
-  * ("why statisticians don't like pie charts")
-* whenever possible: try to use **position** as the basis for graphical comparisons
+- "Why do we use graphs?"
+  - _communication!_
+  - see patterns that you can't see w/ numbers alone
+  - understand properties of the data
+  - suggest modeling strategies
+- characteristics of _exploratory_ graphs
+  - make many of them, and quickly
+  - (clean it up later)
+- (( illustrating how 1 set of data could be visualized _n_ different ways... ))
+- "position vs. length"
+  - ask: "What is the main take-away from the graph? Is it easy to 'see what you're saying'?"
+  - (is the graph easy to read?)
+- "position vs. angle"
+  - ("why statisticians don't like pie charts")
+- whenever possible: try to use **position** as the basis for graphical comparisons
 
 ### example plots
 (using the American Community Survey data from last week's quiz)
@@ -57,14 +57,14 @@ pData <- read.csv("../quizzes/ss06pid.csv")
 ```
 
 #### Boxplot
-* for a quantitative variable
-* goal: get an idea of the distribution of the data
-* observe:
-  * **median** (thick line in the middle)
-  * **75th** & **25th percentile** (upper & lower bounds of the box)
-  * **whiskers** - 1.5x the value of 75th & 25th percentiles, respectively
-  * also: outliers appear as dots
-* `varwidth` = size the width based on the number of observations (for that factor)
+- for a quantitative variable
+- goal: get an idea of the distribution of the data
+- observe:
+  - **median** (thick line in the middle)
+  - **75th** & **25th percentile** (upper & lower bounds of the box)
+  - **whiskers** - 1.5x the value of 75th & 25th percentiles, respectively
+  - also: outliers appear as dots
+- `varwidth` = size the width based on the number of observations (for that factor)
 
 ```{r}
 boxplot(pData$AGEP, col="blue")
@@ -77,34 +77,34 @@ boxplot(pData$AGEP ~ as.factor(pData$DDRS), col=c("blue", "orange"), names=c("ye
 ```
 
 #### Barplot
-* height of the bar = data value
-  * "number of observations per class"
-* continuous data?
-  * break it down into chunks and look at the values that way
+- height of the bar = data value
+  - "number of observations per class"
+- continuous data?
+  - break it down into chunks and look at the values that way
 
 ```{r}
 barplot(table(pData$CIT), col="blue")
 ```
 
 #### Histograms
-* important params: breaks, freq, col, xlab, ylab, xlim, ylim, main
-* "sort of like boxplots"
-  * goal : quanity a univariate distribution of data
-* still chunking the distribution and summing them
-  * (similar to the barplot example?)
-  * and/but - more fine-grained
-* helps to show the shape of the distribution
-  * (in that regard: more resolution on the data than w/ a boxplot)
-* you can set the number of breaks
+- important params: breaks, freq, col, xlab, ylab, xlim, ylim, main
+- "sort of like boxplots"
+  - goal : quanity a univariate distribution of data
+- still chunking the distribution and summing them
+  - (similar to the barplot example?)
+  - and/but - more fine-grained
+- helps to show the shape of the distribution
+  - (in that regard: more resolution on the data than w/ a boxplot)
+- you can set the number of breaks
 
 ```{r}
 hist(pData$AGEP, col="blue", breaks=100)
 ```
 
 #### Density Plots
-* like a histogram but smoothed out
-* warning: could introduce errors at the boundaries
-  * careful when interpretting!
+- like a histogram but smoothed out
+- warning: could introduce errors at the boundaries
+  - careful when interpretting!
 
 ```{r}
 dens <- density(pData$AGEP)
@@ -119,15 +119,15 @@ lines(densMales, lwd=3, col="orange")
 ```
 
 #### Scatterplots
-* most widely used plot for exploratory analysis
-* `x` & `y` are critical variables
-  * (list of several other important params)
-  * `?par` for more
-* remember: each point represents 1 observation
-* interesting: scatterplots can help illuminate weird patterns quickly
-  * and/or outliers become glaringly obvious
-* "size matters"
-  * pay attn to scale on axis & size of dots
+- most widely used plot for exploratory analysis
+- `x` & `y` are critical variables
+  - (list of several other important params)
+  - `?par` for more
+- remember: each point represents 1 observation
+- interesting: scatterplots can help illuminate weird patterns quickly
+  - and/or outliers become glaringly obvious
+- "size matters"
+  - pay attn to scale on axis & size of dots
 
 ```{r}
 plot(pData$JWMNP, pData$WAGP, pch=19, col="blue")
@@ -181,8 +181,8 @@ plot(hbo)
 ```
 
 #### QQ Plots
-* "Sort of like a scatter plot but with a very particular purpose..."
-* plots quantiles of `x` vs. quantiles of `y`
+- "Sort of like a scatter plot but with a very particular purpose..."
+- plots quantiles of `x` vs. quantiles of `y`
 
 ```{r}
 x <- rnorm(20)
@@ -192,9 +192,9 @@ abline(c(0,1))
 ```
 
 #### Matplot and spaghetti
-* takes each column and plots it as one line
-  * each column (in the matrix) becomes one specific line
-* compare trends/trajectories over time
+- takes each column and plots it as one line
+  - each column (in the matrix) becomes one specific line
+- compare trends/trajectories over time
 
 ```{r}
 X <- matrix(rnorm(20*5), nrow=20)
@@ -202,9 +202,9 @@ matplot(X, type="b")
 ```
 
 #### Heatmaps
-* "sort of like a 2D histogram"
-* goal: visualize the whole matrix of data
-* color --> intensity
+- "sort of like a 2D histogram"
+- goal: visualize the whole matrix of data
+- color --> intensity
 
 ```{r}
 image(1:10, 161:236, as.matrix(pData[1:10, 161:236]))
@@ -216,9 +216,9 @@ image(161:236, 1:10, newMatrix)
 ```
 
 #### Maps (very basics)
-* very basics
-  * too much to cover
-* use lat/lon values w/ these
+- very basics
+  - too much to cover
+- use lat/lon values w/ these
 
 ```{r}
 # let's get a map
@@ -232,18 +232,18 @@ points(lat, lon, col="blue", pch=19)
 ```
 
 #### Missing values and plots
-* can use plots to help understand what values are missing
-* gaps in the plot? check the data for `NA`!
-* and/but/also : try using the `boxplot`
-  * relationships b/w missing values and... values?
+- can use plots to help understand what values are missing
+- gaps in the plot? check the data for `NA`!
+- and/but/also : try using the `boxplot`
+  - relationships b/w missing values and... values?
 
 ### Further Resources
-* [R Graph Gallery](http://gallery.r-enthusiasts.com/)
-* [ggplot2](http://cran.r-project.org/web/packages/ggplot2/index.html)
-  * [basic introduction](http://www.r-bloggers.com/basic-introduction-to-ggplot2/)
-* [lattice](http://cran.r-project.org/web/packages/lattice/index.html)
-  * [introduction](http://lmdvr.r-forge.r-project.org/figures/figures.html)
-* [R bloggers](http://www.r-bloggers.com/)
+- [R Graph Gallery](http://gallery.r-enthusiasts.com/)
+- [ggplot2](http://cran.r-project.org/web/packages/ggplot2/index.html)
+  - [basic introduction](http://www.r-bloggers.com/basic-introduction-to-ggplot2/)
+- [lattice](http://cran.r-project.org/web/packages/lattice/index.html)
+  - [introduction](http://lmdvr.r-forge.r-project.org/figures/figures.html)
+- [R bloggers](http://www.r-bloggers.com/)
 
 
 
@@ -254,13 +254,13 @@ Expository Graphs
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=89) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=89_en&format=txt)
 
-* expository graphs are for communicating results to others
-* characteristics
-  * goal: communicate
-  * information density = good
-  * color/size are for communication (not just aesthetics)
-  * needs good axes, titles, legends etc.
-  * (again: COMMUNICATE CLEARLY!)
+- expository graphs are for communicating results to others
+- characteristics
+  - goal: communicate
+  - information density = good
+  - color/size are for communication (not just aesthetics)
+  - needs good axes, titles, legends etc.
+  - (again: COMMUNICATE CLEARLY!)
 
 ### example plots
 (again: using the American Community Survey data from last week's quiz)
@@ -270,9 +270,9 @@ pData <- read.csv("../quizzes/ss06pid.csv")
 ```
 
 #### Axes
-* axes need to be clear
-* `xlab` + `ylab` for the axis label
-* `cex.lab` + `cex.axis` to adjust axis size
+- axes need to be clear
+- `xlab` + `ylab` for the axis label
+- `cex.lab` + `cex.axis` to adjust axis size
 
 ```{r}
 plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=0.5,
@@ -281,12 +281,12 @@ plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=0.5,
 ```
 
 #### Legends
-* legends to clearly communicate what's on the plot
-* `legend` to add the legend
-* 1st 2 params: `x` + `y` (position)
-  * but the values correspond to the _scales_ of the `x` + `y` axes, respectively (so: not pixels)
-* reminder: _YOU_ are on the hook to make sure that the dots (etc.) in your legend match what's in your plot
-  * R isn't going to do it for you
+- legends to clearly communicate what's on the plot
+- `legend` to add the legend
+- 1st 2 params: `x` + `y` (position)
+  - but the values correspond to the _scales_ of the `x` + `y` axes, respectively (so: not pixels)
+- reminder: _YOU_ are on the hook to make sure that the dots (etc.) in your legend match what's in your plot
+  - R isn't going to do it for you
 
 ```{r}
 plot(pData$JWMNP, pData$WAGP, pch=19, col="blue", cex=0.5,
@@ -300,8 +300,8 @@ legend(100, 200000, legend=c("men", "women"), col=c("black", "red"),
 ```
 
 #### Titles
-* titles: communicate the type of plot or conclusion of the plot
-* the param is `main` for most plot types
+- titles: communicate the type of plot or conclusion of the plot
+- the param is `main` for most plot types
 
 ```{r}
 plot(pData$JWMNP, pData$WAGP, pch=19, cex=0.5, col=pData$SEX,
@@ -312,10 +312,10 @@ legend(100, 200000, legend=c("men", "women"), col=c("black", "red"),
 ```
 
 #### Multiple panels
-* if you have related plots and one to present them together
-  * "to help tell the story"
-* `par` is the key here
-* don't overdo it! (too many becomes hard to see)
+- if you have related plots and one to present them together
+  - "to help tell the story"
+- `par` is the key here
+- don't overdo it! (too many becomes hard to see)
 
 ```{r}
 par(mfrow=c(1,2))
@@ -327,9 +327,9 @@ legend(100, 200000, legend=c("men", "women"), col=c("black", "red"),
 ```
 
 #### Adding text
-* `mtext` to add some text
-  * look in the function's API to see the valid values for the `side` param
-* and/but : allows you to add some arbitrary text
+- `mtext` to add some text
+  - look in the function's API to see the valid values for the `side` param
+- and/but : allows you to add some arbitrary text
 
 ```{r}
 par(mfrow=c(1,2))
@@ -343,8 +343,8 @@ mtext(text="(b)", side=3, line=1)
 ```
 
 #### Figure captions
-* "a little bit pedantic"
-* make sure to add a figure caption to explain it; something like:
+- "a little bit pedantic"
+- make sure to add a figure caption to explain it; something like:
 
 > **Figure 1. Distribution of commute time and relationship to wage earned by sex (a)** and some expository text
 > that goes on to explain (a) and then **(b)** we have some expository text about (b), assuming our figure has
@@ -354,17 +354,17 @@ mtext(text="(b)", side=3, line=1)
 What else about your audience do you need to consider before "finishing" your figures?
 
 #### Colorblindness
-* check it: [vischeck.com](http://www.vischeck.com)
+- check it: [vischeck.com](http://www.vischeck.com)
 
 ### Graphical workflow
-* start with rough plot (exploratory!)
-* refine it (expository!)
-* save it...
-* `?Devices` for info
+- start with rough plot (exploratory!)
+- refine it (expository!)
+- save it...
+- `?Devices` for info
 
 #### PDF
-* `pdf(file="", heigh="", width="")`
-  * `height` + `width` given in inches
+- `pdf(file="", heigh="", width="")`
+  - `height` + `width` given in inches
 
 ```{r}
 # open it:
@@ -385,12 +385,12 @@ dev.off()
 ```
 
 #### PNG
-* almost identical to the `pdf` device commands
-  * but this time: `height` + `width` are in pixels this time
-* (skip the sample code this time ... it's basically the same as `pdf`)
+- almost identical to the `pdf` device commands
+  - but this time: `height` + `width` are in pixels this time
+- (skip the sample code this time ... it's basically the same as `pdf`)
 
 #### dev.copy2pdf
-* `dev.copy2pdf` - more/less allows you to work interactively first
+- `dev.copy2pdf` - more/less allows you to work interactively first
 
 ```{r}
 # do your regular business...
@@ -401,19 +401,19 @@ dev.copy2pdf(file="twoPanelv2.pdf")
 ```
 
 ### Some things to avoid
-* too much information
-* too little
-* unnecessary 3D
-* poor captions
+- too much information
+- too little
+- unnecessary 3D
+- poor captions
 
 ### Further resources
 
-* [How to display data badly](http://www.jstor.org/discover/10.2307/2683253?uid=3739704&uid=2&uid=4&uid=3739256&sid=21101619120151)
-* [The visual display of quantitative information](http://www.amazon.com/exec/obidos/ASIN/0961392142/7210-20)
-* [Creating more effective graphs](http://www.amazon.com/exec/obidos/ASIN/047127402X/7210-20)
-* [R Graphics Cookbook](http://www.amazon.com/R-Graphics-Cookbook-Winston-Chang/dp/1449316956)
-* [ggplot2: Elegant Graphics for Data Analysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403)
-* [Flowing Data](http://flowingdata.com/)
+- [How to display data badly](http://www.jstor.org/discover/10.2307/2683253?uid=3739704&uid=2&uid=4&uid=3739256&sid=21101619120151)
+- [The visual display of quantitative information](http://www.amazon.com/exec/obidos/ASIN/0961392142/7210-20)
+- [Creating more effective graphs](http://www.amazon.com/exec/obidos/ASIN/047127402X/7210-20)
+- [R Graphics Cookbook](http://www.amazon.com/R-Graphics-Cookbook-Winston-Chang/dp/1449316956)
+- [ggplot2: Elegant Graphics for Data Analysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403)
+- [Flowing Data](http://flowingdata.com/)
 
 
 
@@ -424,33 +424,33 @@ Hierarchical Clustering
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=91) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=91_en&format=txt)
 
-* exploratory analysis technique
-* **clustering** in general
-  * organizing things "close" into groups
-  * definition of "close"?
-* clustering = very important
-  * used often in academics _and_ business, science, tech. etc.
+- exploratory analysis technique
+- **clustering** in general
+  - organizing things "close" into groups
+  - definition of "close"?
+- clustering = very important
+  - used often in academics _and_ business, science, tech. etc.
 
 ### Hierarchical Clustering
-* agglomerative / "bottom up"
-  * find the 2 observations closest into each other
-    * then merge into a single "super observation"
-  * repeat!
-* requires a defined distance
-* requires a "merging" approach
-* produces: a **dendrogram**
-* **"How do we define close?"**
-  * distance or similarity
-    * continuous (Euclidean distance)
-      * _Euclidean_ - looking (basically) for hypotenuse...
-        * e.g., Baltimore lat, lon vs. D.C. lat, lon
-          * figure the trigonometry out
-        * $\sqrt{(X_1 - X_2)^2 + (Y_1 - Y_2)^2 + ... + (Z_1 - Z_2)^2}$
-    * continuous (correlation similarity)
-    * binary (Manhattan distance)
-      * _Manhattan distance_ - shortest path b/w 2 points "on a grid"
-      * $|A_1 - A_2| + |B_1 - B_2| + ... + |Z_1 - Z_2|$
-  * pick a distance/similarity that makes sense w/ _your_ data
+- agglomerative / "bottom up"
+  - find the 2 observations closest into each other
+    - then merge into a single "super observation"
+  - repeat!
+- requires a defined distance
+- requires a "merging" approach
+- produces: a **dendrogram**
+- **"How do we define close?"**
+  - distance or similarity
+    - continuous (Euclidean distance)
+      - _Euclidean_ - looking (basically) for hypotenuse...
+        - e.g., Baltimore lat, lon vs. D.C. lat, lon
+          - figure the trigonometry out
+        - $\sqrt{(X_1 - X_2)^2 + (Y_1 - Y_2)^2 + ... + (Z_1 - Z_2)^2}$
+    - continuous (correlation similarity)
+    - binary (Manhattan distance)
+      - _Manhattan distance_ - shortest path b/w 2 points "on a grid"
+      - $|A_1 - A_2| + |B_1 - B_2| + ... + |Z_1 - Z_2|$
+  - pick a distance/similarity that makes sense w/ _your_ data
 
 #### Example
 
@@ -514,12 +514,12 @@ myplclust(hClustering, lab=rep(1:3, each=4), lab.col=rep(1:3, each=4))
 _Even_ prettier ones available... (see "R Gallery")
 
 #### Merging
-* complete
-* average
-* experiment : try out different ones -- which make sense?
+- complete
+- average
+- experiment : try out different ones -- which make sense?
 
 #### Visualizing the clusters
-* try `heatmap`
+- try `heatmap`
 ```{r}
 dataFrame <- data.frame(x=x, y=y)
 set.seed(143)
@@ -528,18 +528,18 @@ heatmap(dataMatrix)
 ```
 
 ### A few more notes
-* _can_ give an idea of relationships w/in the data
-* picture may be unstable
-  * what happens if you change a few points?
-  * what happens w/ diff. missing values?
-  * what happens if you pick a diff. distance?
-  * what happens if you change your merge strategy?
-  * what happens if you change the scale of points for one variable?
-* and/but : deterministic! (functional?)
-  * put same data in w/ same params: get same clustering out
-* where to cut? (not always obvious)
-* clustering: primarily for exploration
-  * not too much explanatory power (but can lead you there)
+- _can_ give an idea of relationships w/in the data
+- picture may be unstable
+  - what happens if you change a few points?
+  - what happens w/ diff. missing values?
+  - what happens if you pick a diff. distance?
+  - what happens if you change your merge strategy?
+  - what happens if you change the scale of points for one variable?
+- and/but : deterministic! (functional?)
+  - put same data in w/ same params: get same clustering out
+- where to cut? (not always obvious)
+- clustering: primarily for exploration
+  - not too much explanatory power (but can lead you there)
 
 
 
@@ -550,20 +550,20 @@ K-Means Clustering
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=93) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=93_en&format=txt)
 
-* clustering: defining things that are close together
-  * and then grouping those things that fit that definition of "close"
-* remember: "define close in an appropriate way"
-* Euclidean distance is the primary means of performing K-Means clustering
-* mainly for quantitative variables
-* **defined:** partitioning approach (_NOT_ agglomerative)
-  * fix a number of clusters
-  * get "centroids"
-  * assign observations to closest centroid
-  * recalculate centroids
-  * **req'd:**
-    * defined distance metric
-    * defined # of clusters
-    * an initial guess
+- clustering: defining things that are close together
+  - and then grouping those things that fit that definition of "close"
+- remember: "define close in an appropriate way"
+- Euclidean distance is the primary means of performing K-Means clustering
+- mainly for quantitative variables
+- **defined:** partitioning approach (_NOT_ agglomerative)
+  - fix a number of clusters
+  - get "centroids"
+  - assign observations to closest centroid
+  - recalculate centroids
+  - **req'd:**
+    - defined distance metric
+    - defined # of clusters
+    - an initial guess
 
 ### Example
 
@@ -575,10 +575,10 @@ plot(x,y,col="blue",pch=19,cex=2)
 text(x+0.05,y+0.05,labels=as.character(1:12))
 ```
 
-* assign initial centroids
-* assign observations to centroids
-* repeat! recalculate!
-  * (to adjust the centroids to be more reflective of the data)
+- assign initial centroids
+- assign observations to centroids
+- repeat! recalculate!
+  - (to adjust the centroids to be more reflective of the data)
 
 ```{r}
 dataFrame <- data.frame(x, y)
@@ -588,9 +588,9 @@ names(kmeansObj)
 kmeansObj$cluster
 ```
 
-* noted: K-Means is **not** deterministic!
-  * given same inputs, you can wind up w/ different centroids
-  * combat this w/ `nstart` param
+- noted: K-Means is **not** deterministic!
+  - given same inputs, you can wind up w/ different centroids
+  - combat this w/ `nstart` param
 
 ```{r}
 par(mar=rep(0.2,4))
@@ -609,9 +609,9 @@ image(t(dataMatrix)[,order(kmeansObj$cluster):1], yaxt="n")
 ```
 
 ### Notes & further resources
-* [Determining the number of clusters in a data set](http://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set)
-* [Rafa's "Distances and Clustering" (video)](http://www.youtube.com/watch?v=wQhVWUcXM0A)
-* [The Elements of Statistical Learning](http://www-stat.stanford.edu/~tibs/ElemStatLearn/)
+- [Determining the number of clusters in a data set](http://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set)
+- [Rafa's "Distances and Clustering" (video)](http://www.youtube.com/watch?v=wQhVWUcXM0A)
+- [The Elements of Statistical Learning](http://www-stat.stanford.edu/~tibs/ElemStatLearn/)
 
 
 Dimension Reduction
@@ -623,10 +623,10 @@ Dimension Reduction
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=95) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=95_en&format=txt)
 
-* 2 dimension reduction techniques: **"Principal components analysis** and **singular value decomposition**
-  * used to take a large set of variables
-  * ...& compress them into a smaller # that's easier to interpret
-* starting example: matrix data
+- 2 dimension reduction techniques: **"Principal components analysis** and **singular value decomposition**
+  - used to take a large set of variables
+  - ...& compress them into a smaller # that's easier to interpret
+- starting example: matrix data
 
 ```{r}
 set.seed(12345)
@@ -635,15 +635,15 @@ dataMatrix <- matrix(rnorm(400), nrow=40)
 image(1:10, 1:40, t(dataMatrix)[,nrow(dataMatrix):1])
 ```
 
-* "See? No apparent patterns."
-  * even when you cluster them:
+- "See? No apparent patterns."
+  - even when you cluster them:
 
 ```{r}
 par(mar=rep(0.2, 4))
 heatmap(dataMatrix)
 ```
 
-* "What if we _add a pattern_?"
+- "What if we _add a pattern_?"
 
 ```{r}
 set.seed(678910)
@@ -657,22 +657,22 @@ for(i in 1:40) {
 }
 ```
 
-* Look again:
+- Look again:
 
 ```{r}
 par(mar=rep(0.2, 4))
 image(1:10, 1:40, t(dataMatrix)[,nrow(dataMatrix):1])
 ```
 
-* Perform a clustering:
+- Perform a clustering:
 
 ```{r}
 par(mar=rep(0.2, 4))
 heatmap(dataMatrix)
 ```
 
-* (something starts to emerge?)
-* looking for patterns in the rows
+- (something starts to emerge?)
+- looking for patterns in the rows
 
 ```{r}
 hh <- hclust(dist(dataMatrix)); dataMatrixOrdered <- dataMatrix[hh$order,]
@@ -682,21 +682,21 @@ plot(rowMeans(dataMatrixOrdered),40:1,,xlab="Row",ylab="Row Mean",pch=19)
 plot(colMeans(dataMatrixOrdered),xlab="Column",ylab="Column Mean",pch=19)
 ```
 
-* "It turns out..." 2 related problems
-  * find a new set of multivariate variables that are uncorrelated and explain
+- "It turns out..." 2 related problems
+  - find a new set of multivariate variables that are uncorrelated and explain
     as much variance as possible.
-    * _statistical_ goal
-  * put all variables together in one matrix, find the best matrix created with
+    - _statistical_ goal
+  - put all variables together in one matrix, find the best matrix created with
     fewer variables (lower rank) that explains the original data.
-    * _data compression_ goal
+    - _data compression_ goal
 
 ### **SVD** - singular value decomposition
-* compresses the data by performing a matrix decomposition
-* $X = UVD^T$
-  * _U_ = left singular vectors
-  * _D_ = singular values
-  * _V_ = right singular vectors
-* components of the SVD: (u and v)
+- compresses the data by performing a matrix decomposition
+- $X = UVD^T$
+  - _U_ = left singular vectors
+  - _D_ = singular values
+  - _V_ = right singular vectors
+- components of the SVD: (u and v)
 
 ```{r}
 svd1 <- svd(scale(dataMatrixOrdered))
@@ -706,7 +706,7 @@ plot(svd1$u[,1],40:1,,xlab="Row",ylab="First left singular vector",pch=19)
 plot(svd1$v[,1],xlab="Column",ylab="First right singular vector",pch=19)
 ```
 
-* d and variance explained (**important!!**)
+- d and variance explained (**important!!**)
 
 ```{r}
 svd1 <- svd(scale(dataMatrixOrdered))
@@ -717,11 +717,11 @@ plot(svd1$d,xlab="Column",ylab="Singluar value",pch=19)
 plot(svd1$d^2/sum(svd1$d^2),xlab="Column",ylab="Percent of variance explained",pch=19)
 ```
 
-* relationship to principal components
-  * SVD should be equivalent to the PCA
-  * "exactly the same"
-    * PCA's rotation matrix
-    * 1st right singular vector in SVD
+- relationship to principal components
+  - SVD should be equivalent to the PCA
+  - "exactly the same"
+    - PCA's rotation matrix
+    - 1st right singular vector in SVD
 
 ```{r}
 svd1 <- svd(scale(dataMatrixOrdered))
@@ -730,7 +730,7 @@ plot(pca1$rotation[,1],svd1$v[,1],pch=19,xlab="Principal Component 1",ylab="Righ
 abline(c(0,1))
 ```
 
-* Components of the SVD - variance explained
+- Components of the SVD - variance explained
 
 ```{r}
 constantMatrix <- dataMatrixOrdered*0
@@ -742,7 +742,7 @@ plot(svd1$d,xlab="Column",ylab="Singluar value",pch=19)
 plot(svd1$d^2/sum(svd1$d^2),xlab="Column",ylab="Percent of variance explained",pch=19)
 ```
 
-* "What if we add a second pattern?"
+- "What if we add a second pattern?"
 
 ```{r}
 set.seed(678910)
@@ -761,7 +761,7 @@ for(i in 1:40){
 hh <- hclust(dist(dataMatrix)); dataMatrixOrdered <- dataMatrix[hh$order,]
 ```
 
-* Impute!
+- Impute!
 ```{r}
 library(impute)
 dataMatrix2 <- dataMatrixOrdered
@@ -771,35 +771,35 @@ svd1 <- svd(scale(dataMatrixOrdered)); svd2 <- svd(scale(dataMatrix2))
 par(mfrow=c(1,2)); plot(svd1$v[,1],pch=19); plot(svd2$v[,1],pch=19)
 ```
 
-* ... (lots of "???")
-* noted: SVD cannot be performed on missing values (`NA`)
-* case study: SVD on "face data"
-  * perform SVD --> look at % variance explained
-  * (starts to look like a way to compress the face image)
+- ... (lots of "???")
+- noted: SVD cannot be performed on missing values (`NA`)
+- case study: SVD on "face data"
+  - perform SVD --> look at % variance explained
+  - (starts to look like a way to compress the face image)
 
 ### alternatives
-* [factor analysis](http://en.wikipedia.org/wiki/Factor_analysis)
-* [Independent component analysis](http://en.wikipedia.org/wiki/Independent_component_analysis)
-* [Latent semantic analysis](http://en.wikipedia.org/wiki/Latent_semantic_analysis)
+- [factor analysis](http://en.wikipedia.org/wiki/Factor_analysis)
+- [Independent component analysis](http://en.wikipedia.org/wiki/Independent_component_analysis)
+- [Latent semantic analysis](http://en.wikipedia.org/wiki/Latent_semantic_analysis)
 
 
 
 Supplemental
 --------------------------------------------------------------------------------
 
-*Brendan re: Clustering Dendrograms:*
+-Brendan re: Clustering Dendrograms:*
 
-* `rect.hclust` to get boxes that better illustrate what's in your identified clusters
+- `rect.hclust` to get boxes that better illustrate what's in your identified clusters
 
-*Dave H. re: SVD:*
+-Dave H. re: SVD:*
 
-* (whiteboard explanation)
-* "but your axes don't even need to be the normal perpendicular kind" (imagine that)
-* and/but: (???)
+- (whiteboard explanation)
+- "but your axes don't even need to be the normal perpendicular kind" (imagine that)
+- and/but: (???)
 
-*conversation re: SVD and the assignment*
+-conversation re: SVD and the assignment*
 
-* Kevin: used `as.factor` to convert qualitative to quantitative values
-* Kevin: omitted `FICO` from SVD
-* ...and followed on that
-* (compared with my approach: discard _all_ qualitative)
+- Kevin: used `as.factor` to convert qualitative to quantitative values
+- Kevin: omitted `FICO` from SVD
+- ...and followed on that
+- (compared with my approach: discard _all_ qualitative)

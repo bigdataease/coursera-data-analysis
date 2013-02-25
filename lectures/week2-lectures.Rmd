@@ -19,62 +19,62 @@ videos
 → start w/ these definitions for steps 
 
 1. **define question(s)** → scientific or business question you want to answer w/ data
-   * usually starts with a general question ("Can I automatically detect if an email is spam?")
-   * make the question more specific ("Can I use quantitative methods to analyze email and see if it is spam?")
+   - usually starts with a general question ("Can I automatically detect if an email is spam?")
+   - make the question more specific ("Can I use quantitative methods to analyze email and see if it is spam?")
 2. **define ideal data set** → "if time/money were no object"
-   * what kind of analysis? (descriptive? inferential? [see prev. lectures])
-     * select type of sample (census? random sample?)
-   * let the type of analysis guide the type of census/sample 
+   - what kind of analysis? (descriptive? inferential? [see prev. lectures])
+     - select type of sample (census? random sample?)
+   - let the type of analysis guide the type of census/sample 
 3. **determine what data you can access**
-   * do the data exist? can you tap into it? can you buy it?
-   * is this a sample that you need to conduct/gather yourself?
+   - do the data exist? can you tap into it? can you buy it?
+   - is this a sample that you need to conduct/gather yourself?
 4. **obtain data**
-   * try to obtain raw data 
-   * reference the source
-     * load from the internet? URL + date/time of access
+   - try to obtain raw data 
+   - reference the source
+     - load from the internet? URL + date/time of access
 5. **clean data** → remove "too much" data; filter or fix data that's missing or otherwise "damaged"
-   * raw data needs to be processed
-     * if it was pre-processed: get info. about how it was processed
-   * _understand_ the source of the data (census? sample? etc.)
-   * do you need to reformat? subsample?
-   * _determine if the data are good enough_
-   * "There's nothing worse than an analysis that's correctly performed, but on the wrong data set."
+   - raw data needs to be processed
+     - if it was pre-processed: get info. about how it was processed
+   - _understand_ the source of the data (census? sample? etc.)
+   - do you need to reformat? subsample?
+   - _determine if the data are good enough_
+   - "There's nothing worse than an analysis that's correctly performed, but on the wrong data set."
 6. **exploratory analysis**
-   * ...explore the data: what does it have? what guesses can we make about it?
-   * (_literally_ "just explore" the data)
+   - ...explore the data: what does it have? what guesses can we make about it?
+   - (_literally_ "just explore" the data)
 7. **statistical prediction/modeling** → 
-   * should be informed by exploratory analysis 
-     * _but_ stick to your question! (don't make this all ad-hoc/post-hoc)
-   * here is where you need to start thinking about prior assumptions
-     * (have you changed anything about your data?) 
-   * "get a measure of uncertainty" 
-      * calculate the predictive values 
-      * apply that model to the test set 
-   * (e.g., determine your error rate ("error rate" → measure of uncertainty)
+   - should be informed by exploratory analysis 
+     - _but_ stick to your question! (don't make this all ad-hoc/post-hoc)
+   - here is where you need to start thinking about prior assumptions
+     - (have you changed anything about your data?) 
+   - "get a measure of uncertainty" 
+      - calculate the predictive values 
+      - apply that model to the test set 
+   - (e.g., determine your error rate ("error rate" → measure of uncertainty)
 8. **interpret results** → plain language
-   * use appropriate language (descriptive analysis? then say you "described" -- don't imply more explanatory power than you have) 
-   * explain the associations you observed in your data set 
-     * use units that can be understood by non-technical audience 
+   - use appropriate language (descriptive analysis? then say you "described" -- don't imply more explanatory power than you have) 
+   - explain the associations you observed in your data set 
+     - use units that can be understood by non-technical audience 
 9. **challenge results** → potential failings of the model?
-   * challenge questions: 
-     * was it the right question?
-     * was it the right data source?
-     * did we process the data correctly?
-     * did we do the right analysis?
-     * did we come to sensible conclusions?
-   * challenge your measures of uncertainty 
-     * and/or → any other "uncertainties" you didn't have to start with?
+   - challenge questions: 
+     - was it the right question?
+     - was it the right data source?
+     - did we process the data correctly?
+     - did we do the right analysis?
+     - did we come to sensible conclusions?
+   - challenge your measures of uncertainty 
+     - and/or → any other "uncertainties" you didn't have to start with?
 10. **synthesize** / write up
-    * "lead with the question"
-    * summarize the analysis
-    * don't include every analysis
-      * just the ones you need to "tell your story"
-      * and/or the ones that substantiate a claim
-      * ...or refute a challenge
-    * include "pretty" figures 
+    - "lead with the question"
+    - summarize the analysis
+    - don't include every analysis
+      - just the ones you need to "tell your story"
+      - and/or the ones that substantiate a claim
+      - ...or refute a challenge
+    - include "pretty" figures 
 11. **create reproducible code**
-    * you want other people to be able to run the code, reproduce your results 
-    * Rmarkdown FTW
+    - you want other people to be able to run the code, reproduce your results 
+    - Rmarkdown FTW
 
 ### Some "follow along" exercises
 
@@ -110,50 +110,50 @@ Organizing a Data Analysis
 
 A proposed sensible convention to follow for directory structures:
 
-* **`data`**
-  * **`raw`**
-    * keep a copy of the data you've retrieved (URL? when?)
-    * doesn't matter how messy -- raw for a reason
-  * **`processed`**
-    * tidy (should be easy to work with the processed files)
-    * important that it's easy to see which script did the processing
-* **`figures`**
-  * **`exploratory`**
-    * the "fun figures" -- the ones that aren't important b/c you're just playing ("seeing what you can see")
-  * **`final`**
-    * clearly labeled
-    * easy to read
-    * "polished" versions of the exploratory figures that you identified as most relevant 
-* **`R`** (`src/R`?)
-  * **`raw`**
-    * less well commented (and/but → the comments are to help yourself)
-    * have multiple versions if needed
-    * (( why not track versions in VCS? ))
-    * many will be discarded and/or whittled down...
-  * **`final`**
-    * clear comments (these are the ones you're going to share)
-    * include processing details
-    * only include scripts that are relevant to your final results (final analysis)
-  * **R Markdown** (optional)
-    * an alternative (??) to "final"
-    * include your comments/analysis ... *and* the R code
-* **`text`**
-  * **`readme`** (obviated by R Markdown)
-    * ("not necessary if you're using R Markdown")
-    * should contain step-by-step instructions for analysis
-  * **analysis**
-    * include:
-      * title
-      * introduction/motivation
-      * methods (what stats did you use?)
-      * results (including measures of uncertainty)
-      * conclusions
-    * actual data analysis report itself
-    * remember: don't include every analysis that you did
-      * just the most relevant ones
-    * include references → e.g., citations, acknowledgments
-      * did you you use any libraries/packages? (credit them!)
-      * cite references for important statistical techniques (that may fall outside "the usual" stats)
+- **`data`**
+  - **`raw`**
+    - keep a copy of the data you've retrieved (URL? when?)
+    - doesn't matter how messy -- raw for a reason
+  - **`processed`**
+    - tidy (should be easy to work with the processed files)
+    - important that it's easy to see which script did the processing
+- **`figures`**
+  - **`exploratory`**
+    - the "fun figures" -- the ones that aren't important b/c you're just playing ("seeing what you can see")
+  - **`final`**
+    - clearly labeled
+    - easy to read
+    - "polished" versions of the exploratory figures that you identified as most relevant 
+- **`R`** (`src/R`?)
+  - **`raw`**
+    - less well commented (and/but → the comments are to help yourself)
+    - have multiple versions if needed
+    - (( why not track versions in VCS? ))
+    - many will be discarded and/or whittled down...
+  - **`final`**
+    - clear comments (these are the ones you're going to share)
+    - include processing details
+    - only include scripts that are relevant to your final results (final analysis)
+  - **R Markdown** (optional)
+    - an alternative (??) to "final"
+    - include your comments/analysis ... *and* the R code
+- **`text`**
+  - **`readme`** (obviated by R Markdown)
+    - ("not necessary if you're using R Markdown")
+    - should contain step-by-step instructions for analysis
+  - **analysis**
+    - include:
+      - title
+      - introduction/motivation
+      - methods (what stats did you use?)
+      - results (including measures of uncertainty)
+      - conclusions
+    - actual data analysis report itself
+    - remember: don't include every analysis that you did
+      - just the most relevant ones
+    - include references → e.g., citations, acknowledgments
+      - did you you use any libraries/packages? (credit them!)
+      - cite references for important statistical techniques (that may fall outside "the usual" stats)
 
 
 
@@ -170,73 +170,73 @@ videos
   [1](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=73) +
   [2](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=75)
 
-* (( most of it in the week2-lectures.Rmd file... ))
-* get/set your working directory:
-  * relative & absolute paths
+- (( most of it in the week2-lectures.Rmd file... ))
+- get/set your working directory:
+  - relative & absolute paths
 ```{r}
 getwd()
 setwd('~/Desktop/coursera-data-analysis')
 ```
-* types of data files... (examples)
-  * tab-delimited
-  * comma-separated
-  * Excel
-  * JSON
-  * HTML/XML
-  * Databases (advanced)
-* where can you get data? (examples)
-  * colleagues
-  * from the web
-  * ...or API
-  * page scraping
-* `download.file(url, [destination.file], [method])` → downloads a file from a URL
-  * (( example / case study → data.baltimorecity.gov traffic camera data )) 
-  * side note : you'll need to use `method="curl"` if you have run into an `https`
-  * `list.files('./directory')`
-* `read.table()` and `read.csv()`
-  * `read.table()` reads the file into memory -- so careful that you don't run out of RAM in the process
-  * (( back to the camera data case study ))
-  * `read.csv()` is a convenience function that wraps `read.table()` with some defaults already set 
-* Excel → `read.xlsx()`
-  * but you need `xlsx` package
-  * `read.xlsx2()`
-* also → instead of specifying the file → `file.choose()`
-  * → and now you're prompted to specify the file (w/ the Finder window) 
-* // // onward to 2nd video // //
-* "you can make connections with..." (function names line up w/ the connection type)
-  * `file`
-  * `url` 
-  * `gzfile`
-  * `bzfile`
-  * `?connections` → for help on connections
-  * **remember to close connections!**
-* `readLines()` → 
-  * `file()` to open the connection (file returns a connection)
-    * `read.csv(connection)`
-    * `close(connection)`
-    * and/but → not much use? you could just give the file name to `read.csv()`
-  * ditto above w/ `url()`
-  * `RJSONIO` (library)
-    * `fromJSON(connection)` → more/less automatically converted into an R list 
-    * (( don't expect to deal w/ much JSON in this class ))
-* `write.table()` →
-  * try to start w/ a data frame & pass that to `write.table()`
-* `save()` + `save.image()`
-  * saves to a special "R binary" 
-* `load()`
-  * bring in an "R binary" to auto-magically load & re-create your workspace
-  * side note : `rm(list=ls())` → "like rm -rf for your R workspace"
-* `paste()` + `paste0()` → (( a string concat function ))
-* getting data off of web pages... 
-  * readlines from a URL connection...
-  * XML package → `htmlTreeParse()`
-   * "pretty advanced data scraping" (just general interest for the purposes of this lecture/class) 
-* other interesting packages 
-  * `httr` → for http connections
-  * `RMySQL`
-  * `bigmemory` → for data that is too big for your memory 
-  * `RHadoop`
-  * `foreign` → for getting data from SAS or SPSS etc.
+- types of data files... (examples)
+  - tab-delimited
+  - comma-separated
+  - Excel
+  - JSON
+  - HTML/XML
+  - Databases (advanced)
+- where can you get data? (examples)
+  - colleagues
+  - from the web
+  - ...or API
+  - page scraping
+- `download.file(url, [destination.file], [method])` → downloads a file from a URL
+  - (( example / case study → data.baltimorecity.gov traffic camera data )) 
+  - side note : you'll need to use `method="curl"` if you have run into an `https`
+  - `list.files('./directory')`
+- `read.table()` and `read.csv()`
+  - `read.table()` reads the file into memory -- so careful that you don't run out of RAM in the process
+  - (( back to the camera data case study ))
+  - `read.csv()` is a convenience function that wraps `read.table()` with some defaults already set 
+- Excel → `read.xlsx()`
+  - but you need `xlsx` package
+  - `read.xlsx2()`
+- also → instead of specifying the file → `file.choose()`
+  - → and now you're prompted to specify the file (w/ the Finder window) 
+- // // onward to 2nd video // //
+- "you can make connections with..." (function names line up w/ the connection type)
+  - `file`
+  - `url` 
+  - `gzfile`
+  - `bzfile`
+  - `?connections` → for help on connections
+  - **remember to close connections!**
+- `readLines()` → 
+  - `file()` to open the connection (file returns a connection)
+    - `read.csv(connection)`
+    - `close(connection)`
+    - and/but → not much use? you could just give the file name to `read.csv()`
+  - ditto above w/ `url()`
+  - `RJSONIO` (library)
+    - `fromJSON(connection)` → more/less automatically converted into an R list 
+    - (( don't expect to deal w/ much JSON in this class ))
+- `write.table()` →
+  - try to start w/ a data frame & pass that to `write.table()`
+- `save()` + `save.image()`
+  - saves to a special "R binary" 
+- `load()`
+  - bring in an "R binary" to auto-magically load & re-create your workspace
+  - side note : `rm(list=ls())` → "like rm -rf for your R workspace"
+- `paste()` + `paste0()` → (( a string concat function ))
+- getting data off of web pages... 
+  - readlines from a URL connection...
+  - XML package → `htmlTreeParse()`
+   - "pretty advanced data scraping" (just general interest for the purposes of this lecture/class) 
+- other interesting packages 
+  - `httr` → for http connections
+  - `RMySQL`
+  - `bigmemory` → for data that is too big for your memory 
+  - `RHadoop`
+  - `foreign` → for getting data from SAS or SPSS etc.
 
 
 
@@ -247,14 +247,14 @@ Data Resources (where to go and get data)
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=77_en&format=txt) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=77)
 
-* [www.data.gov](http://www.data.gov) → public govt. data
-  * (( other examples ))
-  * France... UK...
-  * [gapminder.org](http://gapminder.org) → data about public health / global health 
-  * [asdfree.com](http://asdfree.com)
-  * [infochimps.com](http://infochimps.com)
-  * [kaggle.com](http://kaggle.com) → competitions!
-* (( survey of APIs... e.g., Twitter API ))
+- [www.data.gov](http://www.data.gov) → public govt. data
+  - (( other examples ))
+  - France... UK...
+  - [gapminder.org](http://gapminder.org) → data about public health / global health 
+  - [asdfree.com](http://asdfree.com)
+  - [infochimps.com](http://infochimps.com)
+  - [kaggle.com](http://kaggle.com) → competitions!
+- (( survey of APIs... e.g., Twitter API ))
 
 ## Summarizing Data 
 
@@ -262,34 +262,34 @@ Data Resources (where to go and get data)
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=79_en&format=txt) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=79)
 
-* "Why summarize?"
-  * data often too big to look at the whole thing
-  * first steps:
-    * summarize: any problems?
-      * missing values → values outside the expected range → mislabeled data 
-    * summarize: any patterns?
-* case study : Earthquake data 
-  * (( TODO → look at the slides & follow along w/ the example ))
-  * techniques ... commands to run:
-    * `dim()` → get dimensions
-    * `names()` → get the variable names
-    * `nrow()` & `ncol()` → 
-    * `quantile()` → summarize w/ the quantiles 
-    * `summary()` → ...a summary
-    * `sapply(myData[1,], class)` → determine whether the data in a given column are of the right kind
-    * `unique()` → summarize qualitative variables (what are your categories in a given variable?)
-    * `length()` → like unique, but just the sum of the unique values 
-    * `table(myData$Src)` → lists each unique value & the frequency for that unique value 
-      * also: `table(myData$Src, myData$Version)` → cell of `Src` x `Version` (sweet) 
-    * `any(myData$Lat[1:10] > 40)` → "Are any of the 1st 10 latitudes greater than 40?"
-    * `all(myData$Lat[1:10] > 40)` → "Are all of the 1st 10 latitudes greater than 40?"
-    * `subset()` w/ `&` (and) operator → e.g.,
-      * `myData[myData$Lat > 0 & myData$Lon > 0, c("Lat", "Lon")]`
-      * variation on that: `subset()` w/ `|` (or) operator 
-* case study : peer review 
-  * (( TODO → look at the slides & follow along w/ the example )) 
-  * `is.na()` → to look for missing values
-  * `rowSums()` & `rowMeans()` & `colSums()` & `colMeans()`
+- "Why summarize?"
+  - data often too big to look at the whole thing
+  - first steps:
+    - summarize: any problems?
+      - missing values → values outside the expected range → mislabeled data 
+    - summarize: any patterns?
+- case study : Earthquake data 
+  - (( TODO → look at the slides & follow along w/ the example ))
+  - techniques ... commands to run:
+    - `dim()` → get dimensions
+    - `names()` → get the variable names
+    - `nrow()` & `ncol()` → 
+    - `quantile()` → summarize w/ the quantiles 
+    - `summary()` → ...a summary
+    - `sapply(myData[1,], class)` → determine whether the data in a given column are of the right kind
+    - `unique()` → summarize qualitative variables (what are your categories in a given variable?)
+    - `length()` → like unique, but just the sum of the unique values 
+    - `table(myData$Src)` → lists each unique value & the frequency for that unique value 
+      - also: `table(myData$Src, myData$Version)` → cell of `Src` x `Version` (sweet) 
+    - `any(myData$Lat[1:10] > 40)` → "Are any of the 1st 10 latitudes greater than 40?"
+    - `all(myData$Lat[1:10] > 40)` → "Are all of the 1st 10 latitudes greater than 40?"
+    - `subset()` w/ `&` (and) operator → e.g.,
+      - `myData[myData$Lat > 0 & myData$Lon > 0, c("Lat", "Lon")]`
+      - variation on that: `subset()` w/ `|` (or) operator 
+- case study : peer review 
+  - (( TODO → look at the slides & follow along w/ the example )) 
+  - `is.na()` → to look for missing values
+  - `rowSums()` & `rowMeans()` & `colSums()` & `colMeans()`
 
 
 
@@ -299,50 +299,50 @@ Data Munging Basics
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week2/008dataMungingBasics/index.html) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=81_en&format=txt) |
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=81)
-* RECALL : **["Tidy Data"](http://vita.had.co.nz/papers/tidy-data.html)** → this is where you want to end up → **_Tidy Data_ is:**
-  * Variables in columns
-  * Observations in rows
-  * Tables hold elements of one kind only
-  * (_addendum_) Plus:
-    * col names are easy to use (informative)
-    * row names are easy...
-    * obvious mistakes are removed
-    * variable names are internally consistent 
-    * appropriate transformed variables have been added 
-      * (e.g., if you have "sex = male" and "sex = man" → normalize on just one)
-* common munging operations:
-  * **fix variable names** → fix character vectors 
-    * `tolower()` & `toupper()`
-       * e.g., `tolower(names(cameraData))`
-    * `strsplit()` → `strsplit(names(cameraData), "\\.")`
-      * (( slides have a good example combining w/ `sapply`) 
-    * `sub()` & `gsub()`
-      * e.g., `sub("_", "", names(reviews))` → "substitute the empty string for every underscore you find in the names in the reviews data"
-        * `gsub` → "global sub" 
-  * **quantitative variables as ranges**
-    * `cut()` → e.g., `cut(reviews$time_left, seq(0, 3600, by=600))`
-      * can be useful : move continuous values into buckets (then just consider the buckets)
-      * (( gives you a "factor" variable instead of a quantitative variable ))
-    * alternative → `cut2()` (from `Hmisc` library)
-      * automatically breaks it up (by quantile?) 
-    * NOTED : good idea → use cut to make the ranges, but don't throw them away -- add them to your data frame:
-      * `reviews$timeRanges <- cut2(reviews$time_left, g=6)`
-  * create new var names
-  * **merge data sets**
-    * `merge()` → examples:
-      * `mergedData <- merge(reviews, solutions, all=TRUE)`
-      * `mergedData2 <- merge(reviews, solutions, by.x="solution_id", by.y="id", all=TRUE)`
-  * **reshape data** → e.g., sorting 
-    * `sort()` → e.g., `sort(mergedData$reviewer_id)[1:10]`
-    * `order()` → e.g., `order(mergedData$reviewer_id)[1:10]`
-      * reorder a data frame: `mergedData[order(mergedData$reviewer_id),]`
-      * reorder by multiple variables: `mergedData[order(mergedData$reviewer_id, mergedData$id),]`
-    * "changing the shape"
-      * `melt()` (in reshape package) → `melt(misShaped, id.vars="people", variable.name="treatment", value.name="value")`
-  * deal w/ missing data
-  * deal w/ outliers
-  * take transforms of data
-  * check on or remove inconsistent values
-* REMEMBER : record your steps! ("Show your work!")
-* **90% of your effort will be spent in the munging operations**
-  * no glory here, but that's where the work is
+- RECALL : **["Tidy Data"](http://vita.had.co.nz/papers/tidy-data.html)** → this is where you want to end up → **_Tidy Data_ is:**
+  - Variables in columns
+  - Observations in rows
+  - Tables hold elements of one kind only
+  - (_addendum_) Plus:
+    - col names are easy to use (informative)
+    - row names are easy...
+    - obvious mistakes are removed
+    - variable names are internally consistent 
+    - appropriate transformed variables have been added 
+      - (e.g., if you have "sex = male" and "sex = man" → normalize on just one)
+- common munging operations:
+  - **fix variable names** → fix character vectors 
+    - `tolower()` & `toupper()`
+       - e.g., `tolower(names(cameraData))`
+    - `strsplit()` → `strsplit(names(cameraData), "\\.")`
+      - (( slides have a good example combining w/ `sapply`) 
+    - `sub()` & `gsub()`
+      - e.g., `sub("_", "", names(reviews))` → "substitute the empty string for every underscore you find in the names in the reviews data"
+        - `gsub` → "global sub" 
+  - **quantitative variables as ranges**
+    - `cut()` → e.g., `cut(reviews$time_left, seq(0, 3600, by=600))`
+      - can be useful : move continuous values into buckets (then just consider the buckets)
+      - (( gives you a "factor" variable instead of a quantitative variable ))
+    - alternative → `cut2()` (from `Hmisc` library)
+      - automatically breaks it up (by quantile?) 
+    - NOTED : good idea → use cut to make the ranges, but don't throw them away -- add them to your data frame:
+      - `reviews$timeRanges <- cut2(reviews$time_left, g=6)`
+  - create new var names
+  - **merge data sets**
+    - `merge()` → examples:
+      - `mergedData <- merge(reviews, solutions, all=TRUE)`
+      - `mergedData2 <- merge(reviews, solutions, by.x="solution_id", by.y="id", all=TRUE)`
+  - **reshape data** → e.g., sorting 
+    - `sort()` → e.g., `sort(mergedData$reviewer_id)[1:10]`
+    - `order()` → e.g., `order(mergedData$reviewer_id)[1:10]`
+      - reorder a data frame: `mergedData[order(mergedData$reviewer_id),]`
+      - reorder by multiple variables: `mergedData[order(mergedData$reviewer_id, mergedData$id),]`
+    - "changing the shape"
+      - `melt()` (in reshape package) → `melt(misShaped, id.vars="people", variable.name="treatment", value.name="value")`
+  - deal w/ missing data
+  - deal w/ outliers
+  - take transforms of data
+  - check on or remove inconsistent values
+- REMEMBER : record your steps! ("Show your work!")
+- **90% of your effort will be spent in the munging operations**
+  - no glory here, but that's where the work is

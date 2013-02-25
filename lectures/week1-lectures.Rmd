@@ -7,9 +7,9 @@ Course Introduction
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=7) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=7_en&format=txt)
 
-* Jeff Leeks - professor, biostatistics at JHU 
-  * [Simply Statistics blog](http://simplystatistics.org/)
-* (( going to be pretty comprehensive, but not enough time to go in-depth on it all ))
+- Jeff Leeks - professor, biostatistics at JHU 
+  - [Simply Statistics blog](http://simplystatistics.org/)
+- (( going to be pretty comprehensive, but not enough time to go in-depth on it all ))
 
 
 
@@ -20,22 +20,22 @@ Getting Help
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=9_en&format=txt) |
 [slides](https://dl.dropbox.com/u/7710864/002gettingHelp/index.html)
 
-* *where to get help?*
-  * message boards are one place... to ask questions 
-* *where to look for answers?*
-  * ( before asking the question to the boards... )
-  * R questions?
-    * [Roger Peng's video lecture series](http://www.youtube.com/watch?v=ZFaWxxzouCY&list=PLjTlxb-wKvXNSDfcKPFH2gzHGyjpeCZmJ&index=3)
-    * search Roger's R class forums 
-    * [R mailing list](http://www.r-project.org/mail.html)
-    * search for R on Stack Overflow 
-   * stats questions?
-     * forums...
-     * [CrossValidated](http://stats.stackexchange.com/) 
-* *"Googling..."*
-  * CrossValidated for general data analysis questions 
-  * "half the hurdle" → what do you call "data analysis" in your given field?
-    * e.g., data analysis? or econometrics? or biostatistics? 
+- *where to get help?*
+  - message boards are one place... to ask questions 
+- *where to look for answers?*
+  - ( before asking the question to the boards... )
+  - R questions?
+    - [Roger Peng's video lecture series](http://www.youtube.com/watch?v=ZFaWxxzouCY&list=PLjTlxb-wKvXNSDfcKPFH2gzHGyjpeCZmJ&index=3)
+    - search Roger's R class forums 
+    - [R mailing list](http://www.r-project.org/mail.html)
+    - search for R on Stack Overflow 
+   - stats questions?
+     - forums...
+     - [CrossValidated](http://stats.stackexchange.com/) 
+- *"Googling..."*
+  - CrossValidated for general data analysis questions 
+  - "half the hurdle" → what do you call "data analysis" in your given field?
+    - e.g., data analysis? or econometrics? or biostatistics? 
 
 
 
@@ -46,24 +46,24 @@ What _is_ Data?
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=45_en&format=txt) |
 [slides](https://dl.dropbox.com/u/7710864/003whatIsData/index.html)
 
-* (( start w/ the Wikipedia definition )) → and/but break it down 
-  * Data are values of qualitative or quantitative variables, belonging to a set of items.
-* **set of items** → population or sample 
-* **variables** → characteristic of what you're measuring 
-  * qualitative (categorical) or quantitative (numerical) 
-* **raw data** → "original source" 
-  * usually hard to manipulate 
-* **processed data** → data that is ready for analysis 
-  * (after you've sliced/diced it)
-  * e.g., normalizing values; dealing with outliers; transforming sentinel values; eliminating values that are of no interest...
-* ( example of pipeline b/w raw and processed data )
-  * the gene sequencing case study (what is the "raw data"? the image? the intensity values? the "raw" summary?)
-* processed data → what does it look like?
-  * clean columns, clean rows (tables, data frames) 
-* "What is big data?"
-  * "Any data that is too big to analyze with a single computer."
-  * ( but that's easy to dispute depending on any number of factors )
-  * "so easy to collect so much data in so little time and for so little money"
+- (( start w/ the Wikipedia definition )) → and/but break it down 
+  - Data are values of qualitative or quantitative variables, belonging to a set of items.
+- **set of items** → population or sample 
+- **variables** → characteristic of what you're measuring 
+  - qualitative (categorical) or quantitative (numerical) 
+- **raw data** → "original source" 
+  - usually hard to manipulate 
+- **processed data** → data that is ready for analysis 
+  - (after you've sliced/diced it)
+  - e.g., normalizing values; dealing with outliers; transforming sentinel values; eliminating values that are of no interest...
+- ( example of pipeline b/w raw and processed data )
+  - the gene sequencing case study (what is the "raw data"? the image? the intensity values? the "raw" summary?)
+- processed data → what does it look like?
+  - clean columns, clean rows (tables, data frames) 
+- "What is big data?"
+  - "Any data that is too big to analyze with a single computer."
+  - ( but that's easy to dispute depending on any number of factors )
+  - "so easy to collect so much data in so little time and for so little money"
 
 
 
@@ -73,73 +73,73 @@ Representing Data
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=49) |
 [slides](https://dl.dropbox.com/u/7710864/004representingData/index.html)
 
-* "How do we represent data?" 
-  * important to know how to write about it → b/c _The Point_ is communicating 
-* How do we write about data?
-  * each data point gets a capital letter
-    * e.g., $H$ for height 
-    * sub-script numerals if you have more than one for that type
-  * $Y$ generally represents outcomes, $X$ for covariates
-* **Randomness**
-  * $X$ & $Y$ as "random variables" 
-  * a variable is random b/c it is an incompletely measured variable 
-    * or it's a random draw from a population 
-  * $X = x$ → fixing $X$ (random quantity $X$) to be observed/fixed $x$
-* example : coin flip (canonical "random") 
-  * and/but so : studies indicate that even the coin flip can be deterministic 
-    * so when you're marking something as random it's b/c you don't have the data to make a claim about it in a deterministic fashion 
-* **Distributions**
-  * $Pr$ = probability (b/w 0 and 1, must add up to 1)
-  * our coin flip probability written as:
-    * $Pr(X = 1) = 0.5$ and $Pr(X = 0) = 0.5$
-      * in other words: 50/50 chance of heads or tails
-* continuous vs. discrete distributions 
-  * discrete → qualitative 
-  * continuous → quantitative (ranges) 
-* parameters 
-  * "Distributions are defined by a set of fixed values called _parameters_."
-  * usually represented w/ Greek letters 
-    * $N(\mu,\sigma)$ or $Poisson(\lambda)$
-  * e.g., $X ~ N(\mu,\sigma)$
-    * translation: $X$ has the $N(\mu,\sigma)$ distribution 
-* 3 most important parameters 
-  * $E[X]$ → expectation of X (measures the "center"; usually mean?) 
-  * $Var[X]$ → variance of X 
-  * $SD[X]$ → standard deviation 
-* **Conditioning**
-  * $X|\mu$ → X is a random variable with fixed parameter $\mu$
-* example distribution : **Binomial** 
-  * coin flips:
-  * $Bin(n, p)$
-  * $X ~ Bin(10, 0.5)$
-* example distribution : **Normal**
-  * $N(\mu,\sigma)$
-    * $\mu$ = mean
-    * $\sigma$ = standard deviation
-  * $X ~ N(0, 1)$
-  * ( "probability density function" )
-* example distribution : **Uniform**
-  * "all values are equally likely" 
-  * $U(\alpha, \beta)$
-    * $\alpha, \beta$ = boundaries of which values we consider to be equally likely
-  * $X ~ U(0, 1)$
-* **Changing parameters**
-  * Normal distribution:
-    * $X ~ N(0, 1) , E[X] = \mu = 0, Var[X] = \sigma^2 = 1$
-      * vs. 
-    * $X ~ N(0, 5) , E[X] = \mu = 0, Var[X] = \sigma^2 = 25$
-      * (a fatter "bell curve" function)
-      * vs. 
-    * $X ~ N(5, 1) , E[X] = \mu = 5, Var[X] = \sigma^2 = 1$
-      * (skewed)
-  * Binomial:
-    * $X ~ Bin(10, 0.5), E[X] = n \times p = 5, Var[X] = n \times p (1 - p) = 2.5$
-      * vs.
-    * $X ~ Bin(10, 0.8), E[X] = n \times p = 8, Var[X] = n \times p (1 - p) = 1.6$
-      * (skewed)
-  * CONDITION:
-    * Suppose : $Y ~ N(X, 1)$ and $X ~ N(0, 1)$, then distribution of $Y|X = 5$
-    * (( conditioning can help reduce some of the variance b/c it holds one of the random variables constant, meaning that the function does NOT need to account for the variance of both (just the one) ))
+- "How do we represent data?" 
+  - important to know how to write about it → b/c _The Point_ is communicating 
+- How do we write about data?
+  - each data point gets a capital letter
+    - e.g., $H$ for height 
+    - sub-script numerals if you have more than one for that type
+  - $Y$ generally represents outcomes, $X$ for covariates
+- **Randomness**
+  - $X$ & $Y$ as "random variables" 
+  - a variable is random b/c it is an incompletely measured variable 
+    - or it's a random draw from a population 
+  - $X = x$ → fixing $X$ (random quantity $X$) to be observed/fixed $x$
+- example : coin flip (canonical "random") 
+  - and/but so : studies indicate that even the coin flip can be deterministic 
+    - so when you're marking something as random it's b/c you don't have the data to make a claim about it in a deterministic fashion 
+- **Distributions**
+  - $Pr$ = probability (b/w 0 and 1, must add up to 1)
+  - our coin flip probability written as:
+    - $Pr(X = 1) = 0.5$ and $Pr(X = 0) = 0.5$
+      - in other words: 50/50 chance of heads or tails
+- continuous vs. discrete distributions 
+  - discrete → qualitative 
+  - continuous → quantitative (ranges) 
+- parameters 
+  - "Distributions are defined by a set of fixed values called _parameters_."
+  - usually represented w/ Greek letters 
+    - $N(\mu,\sigma)$ or $Poisson(\lambda)$
+  - e.g., $X ~ N(\mu,\sigma)$
+    - translation: $X$ has the $N(\mu,\sigma)$ distribution 
+- 3 most important parameters 
+  - $E[X]$ → expectation of X (measures the "center"; usually mean?) 
+  - $Var[X]$ → variance of X 
+  - $SD[X]$ → standard deviation 
+- **Conditioning**
+  - $X|\mu$ → X is a random variable with fixed parameter $\mu$
+- example distribution : **Binomial** 
+  - coin flips:
+  - $Bin(n, p)$
+  - $X ~ Bin(10, 0.5)$
+- example distribution : **Normal**
+  - $N(\mu,\sigma)$
+    - $\mu$ = mean
+    - $\sigma$ = standard deviation
+  - $X ~ N(0, 1)$
+  - ( "probability density function" )
+- example distribution : **Uniform**
+  - "all values are equally likely" 
+  - $U(\alpha, \beta)$
+    - $\alpha, \beta$ = boundaries of which values we consider to be equally likely
+  - $X ~ U(0, 1)$
+- **Changing parameters**
+  - Normal distribution:
+    - $X ~ N(0, 1) , E[X] = \mu = 0, Var[X] = \sigma^2 = 1$
+      - vs. 
+    - $X ~ N(0, 5) , E[X] = \mu = 0, Var[X] = \sigma^2 = 25$
+      - (a fatter "bell curve" function)
+      - vs. 
+    - $X ~ N(5, 1) , E[X] = \mu = 5, Var[X] = \sigma^2 = 1$
+      - (skewed)
+  - Binomial:
+    - $X ~ Bin(10, 0.5), E[X] = n \times p = 5, Var[X] = n \times p (1 - p) = 2.5$
+      - vs.
+    - $X ~ Bin(10, 0.8), E[X] = n \times p = 8, Var[X] = n \times p (1 - p) = 1.6$
+      - (skewed)
+  - CONDITION:
+    - Suppose : $Y ~ N(X, 1)$ and $X ~ N(0, 1)$, then distribution of $Y|X = 5$
+    - (( conditioning can help reduce some of the variance b/c it holds one of the random variables constant, meaning that the function does NOT need to account for the variance of both (just the one) ))
 
 
 
@@ -150,38 +150,38 @@ Representing Data in R
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=51) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=51_en&format=txt)
 
-* (( more/less an intro to R and its core concepts ))
-  * recommended video: [Peng's "Lecture 2a: Data Types" (video)](http://www.youtube.com/watch?v=5AQM-yUX9zg)
-* data types:
-  * `character` ("Jeff") 
-  * `numeric` (1) 
-  * `integer` (1L) 
-  * `logical` (`TRUE` or `FALSE`) 
-  * `vectors` (get familiar w/ these...; homogenous types)
-  * `lists` (like vectors, but heterogeneous)
-  * `matrices` (you know... like from math class)
-  * data frames (get familiar w/ these → most of our data will be in data frames)
-    * think : "like a spreadsheet" (columns & row)
-  * **factors** → "Qualitative variables that can be included in models"
-    * `as.factor`
-    * very important!! 
-  * missing values (`NA`)
-* subsetting 
-  * bracket notation
-    * `vector[i]` → where i is an index
-    * `vector[c(1:5)]` → where you give the brackets a vector of the indices (plural) you want to get back out 
-  * bracket notation for specific rows, columns in a data frame 
-    * `dataframe[1, 2:5]`
-      * `[row(s), column(s)]`
-  * `$dollarSignOperator` 
-    * `my.data$columnName`
-  * more bracket notation → with an expression for filtering
-    * `my.data[heights < 190, ]`
-* variable naming conventions 
-  * acceptable: camelCase, with_underscores
-  * idiomatic: with.dots 
-* Style guides are out there for R:
-  * e.g., [Google's R style guide](http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html)
+- (( more/less an intro to R and its core concepts ))
+  - recommended video: [Peng's "Lecture 2a: Data Types" (video)](http://www.youtube.com/watch?v=5AQM-yUX9zg)
+- data types:
+  - `character` ("Jeff") 
+  - `numeric` (1) 
+  - `integer` (1L) 
+  - `logical` (`TRUE` or `FALSE`) 
+  - `vectors` (get familiar w/ these...; homogenous types)
+  - `lists` (like vectors, but heterogeneous)
+  - `matrices` (you know... like from math class)
+  - data frames (get familiar w/ these → most of our data will be in data frames)
+    - think : "like a spreadsheet" (columns & row)
+  - **factors** → "Qualitative variables that can be included in models"
+    - `as.factor`
+    - very important!! 
+  - missing values (`NA`)
+- subsetting 
+  - bracket notation
+    - `vector[i]` → where i is an index
+    - `vector[c(1:5)]` → where you give the brackets a vector of the indices (plural) you want to get back out 
+  - bracket notation for specific rows, columns in a data frame 
+    - `dataframe[1, 2:5]`
+      - `[row(s), column(s)]`
+  - `$dollarSignOperator` 
+    - `my.data$columnName`
+  - more bracket notation → with an expression for filtering
+    - `my.data[heights < 190, ]`
+- variable naming conventions 
+  - acceptable: camelCase, with_underscores
+  - idiomatic: with.dots 
+- Style guides are out there for R:
+  - e.g., [Google's R style guide](http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html)
 
 
 
@@ -192,36 +192,36 @@ Simulation Basics
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=53) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=53_en&format=txt)
 
-* basics of simulation →
-  * primarily (at beginning of class) for generating idealized data sets 
-* 3 categories:
-  * distributions
-    * all functions start with `r`
-  * densities
-    * all functions start with `d`
-  * sampling
-* "r functions" 
-  * to generate data → example:
+- basics of simulation →
+  - primarily (at beginning of class) for generating idealized data sets 
+- 3 categories:
+  - distributions
+    - all functions start with `r`
+  - densities
+    - all functions start with `d`
+  - sampling
+- "r functions" 
+  - to generate data → example:
 ```{r}
 coin.flips <- rbinom(10, size=10, prob=0.5)
 ```
-* "d functions"
-  * to generate data → example:
-  * (see also : `dbinom`) 
+- "d functions"
+  - to generate data → example:
+  - (see also : `dbinom`) 
 ```{r}
 x <- seq(from=-5, to=5, length=10)
 normal.density <- dnorm(x, mean=0, sd=1)
 round(normal.density, 2)
 ```
-* sample → to sample from data we already have
-  * see also : prob arg for probabilities (takes a vector of probabilities (remember: probabilities must sum to 1))
+- sample → to sample from data we already have
+  - see also : prob arg for probabilities (takes a vector of probabilities (remember: probabilities must sum to 1))
 ```{r}
 heights <- rnorm(100, mean=188, sd=3)
 sample(heights, size=10, replace=TRUE)
 ```
-* `set.seed(12345) # or whatever int you want for an arg`
-  * anyway : that is a way of saying "repeatably random" 
-* see also : [Peng's "Simulation in R" (video)](http://www.youtube.com/watch?v=tvv4IA8PEzw)
+- `set.seed(12345) # or whatever int you want for an arg`
+  - anyway : that is a way of saying "repeatably random" 
+- see also : [Peng's "Simulation in R" (video)](http://www.youtube.com/watch?v=tvv4IA8PEzw)
 
 
 
@@ -234,30 +234,30 @@ Types of Data Analysis Questions
 
 _"What kind of question are you trying to answer?"_ try categories:
 
-* **descriptive** → describe something 
-  * usually on a "census" or population 
-* **exploratory** → goal : find relationships that you didn't necessarily know about
-  * ok to do on a census, but more commonly on a smaller data set 
-  * this type of analysis is usually where you need to remember "correlation does not equal causation"
-    * (( you are looking for clues here about where to look next )) 
-* **inferential** → goal : use a small sample to imply something about a larger population 
-  * must: estimate the qty. you care about & the quantify the uncertainty you have about that estimate 
-  * case study: look at air pollution in 500 counties across the USA, make inferences about air pollution throughout the USA
-* **predictive** → goal : use the data on some objects to predict values for another object
-  * REMEMBER : just because "x predicts y" does not mean that "x _causes_ y"
-  * prediction is very hard 
-  * case study : [Nate Silver's 538 blog](http://fivethirtyeight.blogs.nytimes.com/)
-  * case study : [Forbes.com: How Target Figured Out A Teen Girl Was Pregnant Before Her Father Did](http://www.forbes.com/sites/kashmirhill/2012/02/16/how-target-figured-out-a-teen-girl-was-pregnant-before-her-father-did/)
-* **causal** → goal : find out what happens to one variable when you make another variable change 
-  * randomized studies more/less required 
-  * usually ID'd as "average effects" 
-  * "the gold standard" 
-  * controlling variables & "doing experiments" so be go beyond "x _predicts_ y"
-    * ( however : again : even with "causal" studies, it can be difficult to prove a causal relationship )
-* **mechanistic** → goal : Understand the exact changes in variables that lead to changes in other variables for individual objects.
-  * incredibly hard 
-  * try to "prove" that by manipulating variable(s) that you can predict changes in other variable(s)
-    * (( complex relationships w/in systems ))
+- **descriptive** → describe something 
+  - usually on a "census" or population 
+- **exploratory** → goal : find relationships that you didn't necessarily know about
+  - ok to do on a census, but more commonly on a smaller data set 
+  - this type of analysis is usually where you need to remember "correlation does not equal causation"
+    - (( you are looking for clues here about where to look next )) 
+- **inferential** → goal : use a small sample to imply something about a larger population 
+  - must: estimate the qty. you care about & the quantify the uncertainty you have about that estimate 
+  - case study: look at air pollution in 500 counties across the USA, make inferences about air pollution throughout the USA
+- **predictive** → goal : use the data on some objects to predict values for another object
+  - REMEMBER : just because "x predicts y" does not mean that "x _causes_ y"
+  - prediction is very hard 
+  - case study : [Nate Silver's 538 blog](http://fivethirtyeight.blogs.nytimes.com/)
+  - case study : [Forbes.com: How Target Figured Out A Teen Girl Was Pregnant Before Her Father Did](http://www.forbes.com/sites/kashmirhill/2012/02/16/how-target-figured-out-a-teen-girl-was-pregnant-before-her-father-did/)
+- **causal** → goal : find out what happens to one variable when you make another variable change 
+  - randomized studies more/less required 
+  - usually ID'd as "average effects" 
+  - "the gold standard" 
+  - controlling variables & "doing experiments" so be go beyond "x _predicts_ y"
+    - ( however : again : even with "causal" studies, it can be difficult to prove a causal relationship )
+- **mechanistic** → goal : Understand the exact changes in variables that lead to changes in other variables for individual objects.
+  - incredibly hard 
+  - try to "prove" that by manipulating variable(s) that you can predict changes in other variable(s)
+    - (( complex relationships w/in systems ))
 
 
 
@@ -268,25 +268,25 @@ Sources of Data Sets
 [video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=57) |
 [transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=57_en&format=txt)
 
-* data are defined by how they are collected:
-* **census** → usually for descriptive studies 
-  * census → population → measure all variables across each individual in the population 
-* **observational study** → ...inferential
-  * random sample from your target population
-    * based on that sample, extrapolate about the population 
-* **convenience sample** → all types (may be biases)
-  * a sample, but not random (e.g., you can't travel too far to get your subjects)
-* **randomized trial** → mandatory for causal studies 
-  * get your sample, assign different treatments to different groups 
-    * note: hold all other variables constant 
-* (main above, other below)
-* **prediction study**
-  * need 2 data sets → training set (build predictive model) + test set (evaluate predictive model)
-  * result of 1st set: build the predictive model
-  * 2nd time around : use your predictive model and see if you can validate it 
-* **studies over time** (_cross-sectional_, _longitudinal_)
-  * cross-sectional: pick a time point, and measure your sample at that time point (!????)
-  * longitudinal: assign individuals from your sample, and follow them over a period of time (measuring your variables again and again and again...)
-* **retrospective** (_inferential_) 
-  * do an "exposure" → "fast forward" to the end, and take your measurements then 
-  * noted : it's inferential (not predictive, not causal)
+- data are defined by how they are collected:
+- **census** → usually for descriptive studies 
+  - census → population → measure all variables across each individual in the population 
+- **observational study** → ...inferential
+  - random sample from your target population
+    - based on that sample, extrapolate about the population 
+- **convenience sample** → all types (may be biases)
+  - a sample, but not random (e.g., you can't travel too far to get your subjects)
+- **randomized trial** → mandatory for causal studies 
+  - get your sample, assign different treatments to different groups 
+    - note: hold all other variables constant 
+- (main above, other below)
+- **prediction study**
+  - need 2 data sets → training set (build predictive model) + test set (evaluate predictive model)
+  - result of 1st set: build the predictive model
+  - 2nd time around : use your predictive model and see if you can validate it 
+- **studies over time** (_cross-sectional_, _longitudinal_)
+  - cross-sectional: pick a time point, and measure your sample at that time point (!????)
+  - longitudinal: assign individuals from your sample, and follow them over a period of time (measuring your variables again and again and again...)
+- **retrospective** (_inferential_) 
+  - do an "exposure" → "fast forward" to the end, and take your measurements then 
+  - noted : it's inferential (not predictive, not causal)
