@@ -1,4 +1,4 @@
-[Data Analysis] Week 4 Lectures
+[Data Analysis] Week 5 Lectures
 ================================================================================
 
 ANOVA with Multiple Factors
@@ -591,3 +591,50 @@ library(BMA)
 bicglm1 <- bic.glm(score ~.,data=movies,glm.family="gaussian")
 print(bicglm1)
 ```
+
+
+
+Weekly Study Group Supplement
+--------------------------------------------------------------------------------
+
+### Dave on Poisson models
+
+**Me + Peter:** "So how _do_ you arrive at the correct answer for question 3 and/or 4 in the week 5 quize?"
+
+Dave (short version): **"You take the exponential of the coefficient."**
+
+Esp. w/r/t/ Question 3+4 on the Week 5 Quiz:
+
+Recall: our model (for Question 3) is this:
+
+$$ satellite = e^{b_0 + b_1 \times width} $$
+
+Which decomposes as follows:
+
+$$ satellite = e^{b_0} e^{b_1width} e^{b_1} $$
+
+Dave:
+
+> Poisson model is fitting a linear model to the natural log ($log_e$) of your
+dependent variable/outcome (number of satellites).
+
+Dave: "Better explanation:"
+
+> e is like a speed limit (like c, the speed of light) saying how fast you can
+> possibly grow using a continuous process.
+
+([Source: "An Intuitive Guide To Exponential Functions & e"](http://betterexplained.com/articles/an-intuitive-guide-to-exponential-functions-e/))
+
+- Further:
+  - $b_0$ == coefficient[1]
+  - $b_1$ == coefficient[2]
+
+- **Important:** make a closer study of _logarithms_
+  - "What are they even good for?"
+  - comparing things across orders of magnitude (city populations, incomes)
+  - e.g., $log_10 100 = 2$ and/or $log_2 4 = 2$
+  - "natural log" = $log_e x$
+- **Important:** make a closer study of $e$
+  - $e = 2.714...$
+  - <http://en.wikipedia.org/wiki/E_(mathematical_constant)>
+  - <http://betterexplained.com/articles/an-intuitive-guide-to-exponential-functions-e/>

@@ -1,0 +1,199 @@
+[Data Analysis] Week 6 Lectures
+================================================================================
+
+Prediction Study Design
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week6/001predictionStudyDesign/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=123)
+
+"How to design and evaluate predictive functions."
+
+**Key ideas**
+- Motivation
+  - why would you do prediction?
+- Steps in predictive studies
+- Choosing the right data
+  - even if you have "a bunch of data", you won't necessarily be able to make strong predctions
+- Error measures
+- Study design
+  - careful not to fool yourself (re: that you made an accurate/strong prediction)
+
+**Why predict?**
+
+- glory! fame!
+- money! riches!
+- just for fun!
+- to save lives!
+
+### Steps in building a prediction
+1. Find the right data
+   - (do you even have data that you can use for preduction?)
+   - are the indicators obvious? or are they hard to trust?
+     - know when to quit (don't keep trying if it looks like you can't actually
+       make good predictions from the data you have)
+   - what actually makes a "good prediction"? (what does "good prediction" mean?)
+   - **"know the benchmark"** - what are you trying to beat?
+     - Probability of perfect classification is approximately: $(\frac{1}{2})^{test\ set\ sample\ size}$
+     - key point: big enough test set to distinguish your model's predictions from "just chance"
+2. Define your error rate
+   - **critical!** (too often skipped)
+   - typically used for binary classification: ![Define your error rate](https://dl.dropbox.com/u/7710864/courseraPublic/week6/001predictionStudyDesign/assets/img/sensspec.png)
+   - **False Positive** = (Type I error)
+   - **False Negative** = (Type II error)
+   - important: **Sensitivity** and **Specificity** can help define avg. quality of a particular test
+   - getting more specific w/ that framework: ![Why your choice matters](https://dl.dropbox.com/u/7710864/courseraPublic/week6/001predictionStudyDesign/assets/img/sensspecex.png)
+     - pay attn: good-looking Sensitivity and great-looking Specificity scores _but..._
+     - Positive predictive value is _quite low_ (10%)
+   - some other common error measures:
+     - Mean squared error (or root mean squared error)
+       - better for continuous values (sensitive to outliers)
+     - Median absolute deviation
+       - also better for continuous values (more robust than mean squared error)
+     - sensitivity (recall) & specificity
+     - accuracy
+       - for binary data
+       - weights false positives & negatives equally
+     - concordance
+       - for multiple predictors
+       - how well do they coordinate in making predictions
+3. Split data into:
+   - Training
+   - Testing
+   - Validation (optional)
+   - _remember:_ don't _overfit_ your data
+4. On the training set pick features
+5. On the training set pick prediction function
+6. On the training set cross-validate
+7. If no validation - apply 1x to test set
+8. If validation - apply to test set and refine
+9. If validation - apply 1x to validation
+
+### Defining true/false positives
+(Typically applied for binary outcomes)
+
+- generally: **Positive** = identified and **Negative** = rejected
+- **True positive** = correctly identified
+  - it _is_ interesting, and your model identifed it as interesting
+- **False positive** = incorrectly identified
+  - it _is not_ interesting, and your model identifed it as interesting
+- **True negative** = correctly rejected
+  - it _is not_ interesting, and your model identifed it as _not_ interesting
+- **False negative** = incorrectly rejected
+  - it _is_ interesting, and your model identifed it as _not_ interesting
+
+### Study design
+- _All_ data
+  - split into _training_ set and _hold out_ set
+- training set: available to everyone
+- hold out set: not available to people building predictive models
+  - _probe_ - models built against training set could be run against probe to test veracity
+  - _quiz_ - like probe, but reserved for model validators
+  - _test_ - for final analysis of predictive models
+
+
+
+Cross-Validation
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week6/002crossValidation/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=125)
+
+**Key ideas**
+- Sub-sampling the training data
+  - focus on the training sample - then sub-sample even further
+- Avoiding overfitting
+  - reminder: do _not_ tune your model too strongly toward your sample data
+- Making predictions generalizable
+
+### Steps in building a prediction
+
+4. On the training set **pick features**
+5. On the training set **pick prediction function**
+6. On the training set **cross-validate**
+
+**GOAL** of _cross-validation_: estimate how well your predictive function will work on the "test" data
+
+### Overfitting
+```{r}
+set.seed(12345)
+x <- rnorm(10); y <- rnorm(10)
+z <- rbinom(10,size=1,prob=0.5)
+plot(x,y,pch=19,col=(z+3))
+```
+
+#### Classifier
+If $-0.2 < y < 0.6$ call blue, otherwise green
+
+```{r}
+par(mfrow=c(1,2))
+zhat <- (-0.2 < y) & (y < 0.6)
+plot(x,y,pch=19,col=(z+3))
+plot(x,y,pch=19,col=(zhat+3))
+```
+
+"Model is perfect! even though green and blue are unrelated" (i.e., you really _shouldn't_ be able to build a model)
+
+#### New data
+If $-0.2 < y < 0.6$ call blue, otherwise green
+
+```{r}
+set.seed(1233)
+xnew <- rnorm(10)
+ynew <- rnorm(10)
+znew <- rbinom(10,size=1,prob=0.5)
+par(mfrow=c(1,2))
+zhatnew <- (-0.2 < ynew) & (ynew < 0.6)
+plot(xnew,ynew,pch=19,col=(z+3)); plot(xnew,ynew,pch=19,col=(zhatnew+3))
+```
+
+_See:_ The model makes bad predictions, b/c it was (effectively) assuming/illustrating a relationship that wasn't really there. (It was "too tuned" or _over-fitted_.)
+
+**Key ideas**
+1. Accuracy on the training set (resubstitution accuracy) is _optimistic_
+2. A better estimate comes from an _independent set_ (test set accuracy)
+3. But we can't use the test set when building the model or it becomes part of the training set
+4. So we estimate the test set accuracy with the training set.
+
+### Cross-validation
+_Approach:_
+1. Use the training set
+2. Split it into training/test sets
+3. Build a model on the training set
+4. Evaluate on the test set
+5. Repeat and average the estimated errors
+
+_Used for:_
+1. Picking variables to include in a model
+   - (**feature selection**)
+2. Picking the type of prediction function to use
+3. Picking the parameters in the prediction function
+4. Comparing different predictors
+
+#### Approaches/Methods
+
+- random sub-sampling: ![Random subsampling](https://dl.dropbox.com/u/7710864/courseraPublic/week6/002crossValidation/assets/img/random.png)
+  - take random "stripes" of data & split: training & test samples
+  - advantages: balance size of training & test sets
+  - disadvantages: possible to have elements that are repeated across sets
+- K-fold: ![K-fold](https://dl.dropbox.com/u/7710864/courseraPublic/week6/002crossValidation/assets/img/kfold.png)
+  - example (above) = "3-fold..."
+  - take a chunk & withhold as testing; train on the rest
+    - repeat w/ next (third); repeat w/ next third...
+  - extreme example of K-fold: "leave one out sampling": ![Leave one out sampling](https://dl.dropbox.com/u/7710864/courseraPublic/week6/002crossValidation/assets/img/loocv.png)
+
+#### Example
+```{r}
+y1 <- y[1:5]
+x1 <- x[1:5]
+z1 <- z[1:5]
+y2 <- y[6:10]
+x2 <- x[6:10]
+z2 <- z[6:10]
+zhat2 <- (y2 < 1) & (y2 > -0.5)
+par(mfrow=c(1,3))
+plot(x1,y1,col=(z1+3),pch=19)
+plot(x2,y2,col=(z2+3),pch=19)
+plot(x2,y2,col=(zhat2+3),pch=19)
+```
+(Should help us to avoid being "overly optimistic")
