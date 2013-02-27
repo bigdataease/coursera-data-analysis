@@ -5,7 +5,8 @@ Prediction Study Design
 --------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week6/001predictionStudyDesign/index.html) |
-[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=123)
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=123) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=123_en&format=txt)
 
 "How to design and evaluate predictive functions."
 
@@ -97,7 +98,8 @@ Cross-Validation
 --------------------------------------------------------------------------------
 
 [slides](https://dl.dropbox.com/u/7710864/courseraPublic/week6/002crossValidation/index.html) |
-[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=125)
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=125) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=125_en&format=txt)
 
 **Key ideas**
 - Sub-sampling the training data
@@ -181,6 +183,7 @@ _Used for:_
   - take a chunk & withhold as testing; train on the rest
     - repeat w/ next (third); repeat w/ next third...
   - extreme example of K-fold: "leave one out sampling": ![Leave one out sampling](https://dl.dropbox.com/u/7710864/courseraPublic/week6/002crossValidation/assets/img/loocv.png)
+  - "LEAVE ONE OUT" = less biased, but less stable
 
 #### Example
 ```{r}
@@ -197,3 +200,252 @@ plot(x2,y2,col=(z2+3),pch=19)
 plot(x2,y2,col=(zhat2+3),pch=19)
 ```
 (Should help us to avoid being "overly optimistic")
+
+
+
+Predicting with Regression
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week6/003predictingRegression/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=119) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=119_en&format=txt)
+
+**Key ideas**
+- Use a standard regression model
+  - `lm`
+  - `glm`
+- Predict new values with the coefficients
+- Useful when the linear model is (nearly) correct
+- Pros:
+  - Easy to implement
+  - Easy to interpret
+  - (relatively) easy to get measures of error (confidence intervals, etc.)
+- Cons:
+  - Often poor performance in nonlinear settings
+
+### Case Study: Old Faithful Eruptions
+```{r}
+data(faithful)
+dim(faithful)
+
+## splitting the set into a training set:
+set.seed(333)
+trainSamples <- sample(1:272,size=(272/2),replace=F)
+trainFaith <- faithful[trainSamples,]
+testFaith <- faithful[-trainSamples,]
+head(trainFaith)
+
+# graph it:
+plot(trainFaith$waiting,trainFaith$eruptions,pch=19,col="blue",xlab="Waiting",ylab="Duration")
+# note the clusters?
+```
+
+#### Fit a linear model
+$$ ED_i = b_0 + b_1 WT_i + e_i $$
+```{r}
+lm1 <- lm(eruptions ~ waiting,data=trainFaith)
+summary(lm1)
+
+### Model fit
+plot(trainFaith$waiting, trainFaith$eruptions,
+     pch=19, col="blue", xlab="Waiting", ylab="Duration")
+lines(trainFaith$waiting, lm1$fitted, lwd=3)
+```
+
+#### Predict a new value
+"That's exactly how it works..."
+
+$$ \hat{ED} = \hat{b}_0 + \hat{b}_1 WT $$
+
+- predicted value (of eruption duration, $\hat{ED$) equal to output of the model; so...
+- estimated intercept plus ($\hat{b}_0$)
+- estimated slope times ($\hat{b}_1$)
+- the coefficient (wait time, $WT$)
+```{r}
+# calculated it manually:
+coef(lm1)[1] + coef(lm1)[2]*80
+
+# or use R's `predict` to do the math for you
+newdata <- data.frame(waiting=80)
+predict(lm1, newdata)
+
+### Plot predictions - training and test
+par(mfrow=c(1,2))
+plot(trainFaith$waiting, trainFaith$eruptions,
+     pch=19, col="blue", xlab="Waiting", ylab="Duration")
+lines(trainFaith$waiting, predict(lm1), lwd=3)
+plot(testFaith$waiting, testFaith$eruptions,
+     pch=19, col="blue", xlab="Waiting", ylab="Duration")
+lines(testFaith$waiting, predict(lm1,newdata=testFaith), lwd=3)
+
+### Get training set/test set errors
+# Calculate root mean squared error (RMSE) on training
+sqrt(sum((lm1$fitted-trainFaith$eruptions)^2))
+# Calculate RMSE on test
+sqrt(sum((predict(lm1,newdata=testFaith)-testFaith$eruptions)^2))
+# note how the RMSE is slightly higher when calculated from the test set (vs. the training set)
+# that's to be expected (for obvious reasons)
+
+### Prediction intervals
+pred1 <- predict(lm1, newdata=testFaith, interval="prediction")
+ord <- order(testFaith$waiting)
+plot(testFaith$waiting, testFaith$eruptions,
+     pch=19, col="blue")
+matlines(testFaith$waiting[ord], pred1[ord,], type="l", ,
+         col=c(1,2,2), lty = c(1,1,1), lwd=3)
+```
+
+### Case Study: (Binary Data) B'more Ravens
+Wins & Losses in the 2012-2013 season...
+```{r}
+download.file("https://dl.dropbox.com/u/7710864/data/ravensData.rda",
+              destfile="./data/ravensData.rda", method="curl")
+load("./data/ravensData.rda")
+head(ravensData)
+```
+
+#### Fit a logistic regression
+$$ logit(E[RW_i|RS_i]) = b_0 + b_1 RS_i $$
+```{r}
+glm1 <- glm(ravenWinNum ~ ravenScore,
+            family="binomial", data=ravensData)
+par(mfrow=c(1,2))
+boxplot(predict(glm1) ~ ravensData$ravenWinNum, col="blue")
+boxplot(predict(glm1,type="response") ~ ravensData$ravenWinNum, col="blue")
+
+# output of that regression model is the probability that the Ravens will win...
+
+### Choosing a cutoff (re-substitution)
+xx <- seq(0,1,length=10)
+err <- rep(NA,10)
+# loop through each cut-off and plot the number of errors -- where was your lowest number of errors? that's your best cut-off value!
+for(i in 1:length(xx)) {
+  err[i] <- sum((predict(glm1, type="response") > xx[i]) != ravensData$ravenWinNum)
+}
+plot(xx, err, pch=19, xlab="Cutoff", ylab="Error")
+
+### Comparing models with cross validation
+library(boot)
+cost <- function(win, pred = 0) mean(abs(win-pred) > 0.5)
+glm1 <- glm(ravenWinNum ~ ravenScore, family="binomial", data=ravensData)
+glm2 <- glm(ravenWinNum ~ ravenScore, family="gaussian", data=ravensData)
+cv1 <- cv.glm(ravensData,glm1,cost,K=3)
+cv2 <- cv.glm(ravensData,glm2,cost,K=3)
+
+cv1$delta
+
+cv2$delta
+```
+
+(slide 17: notes & further reading)
+
+
+
+Predicting with Trees
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week6/004predictingTrees/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=121) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=121_en&format=txt)
+
+> "Trees allow you to predict with functions that can capture non-linearities
+> much more easily than linear models can."
+
+**Key ideas**
+- Iteratively split variables into groups
+- Split where maximally predictive
+- Evaluate "homogeneity" within each branch
+- Fitting multiple trees often works better (forests)
+- Pros:
+  - Easy to implement
+  - Easy to interpret
+  - Better performance in nonlinear settings
+- Cons:
+  - Without pruning/cross-validation can lead to overfitting
+  - Harder to estimate uncertainty
+  - Results may be variable
+
+### Example Tree
+
+### Basic algorithm
+1. Start with all variables in one group
+2. Find the variable/split that best separates the outcomes
+3. Divide the data into two groups ("leaves") on that split ("node")
+4. Within each split, find the best variable/split that separates the outcomes
+5. Continue until the groups are too small or sufficiently "pure"
+
+### Measures of impurity
+- MATH! ([slide 5](https://dl.dropbox.com/u/7710864/courseraPublic/week6/004predictingTrees/index.html#5))
+- Misclassification error
+- Gini index
+- Cross-entropy or deviance
+
+### Example: Iris Data
+```{r}
+data(iris)
+names(iris)
+
+table(iris$Species)
+
+### Iris petal widths/sepal width
+plot(iris$Petal.Width, iris$Sepal.Width,
+     pch=19, col=as.numeric(iris$Species))
+legend(1, 4.5, legend=unique(iris$Species),
+       col=unique(as.numeric(iris$Species)), pch=19)
+
+# An alternative is library(rpart)
+library(tree)
+# `tree` (looks a bit like `lm`, eh?)
+tree1 <- tree(Species ~ Sepal.Width + Petal.Width, data=iris)
+summary(tree1)
+
+### Plot tree
+plot(tree1)
+text(tree1)
+
+### Another way of looking at a CART model
+plot(iris$Petal.Width, iris$Sepal.Width,
+     pch=19, col=as.numeric(iris$Species))
+partition.tree(tree1, label="Species", add=TRUE)
+legend(1.75, 4.5, legend=unique(iris$Species),
+       col=unique(as.numeric(iris$Species)), pch=19)
+
+### Predicting new values
+set.seed(32313)
+newdata <- data.frame(Petal.Width = runif(20,0,2.5), Sepal.Width = runif(20,2,4.5))
+pred1 <- predict(tree1,newdata)
+pred1
+
+### Overlaying new values
+pred1 <- predict(tree1,newdata,type="class")
+plot(newdata$Petal.Width,newdata$Sepal.Width,col=as.numeric(pred1),pch=19)
+partition.tree(tree1,"Species",add=TRUE)
+```
+
+### Pruning trees example: Cars
+```{r}
+data(Cars93, package="MASS")
+head(Cars93)
+
+### Build a tree
+treeCars <- tree(DriveTrain ~ MPG.city + MPG.highway + AirBags + 
+                   EngineSize + Width + Length + Weight + Price + Cylinders + 
+                   Horsepower + Wheelbase,data=Cars93)
+plot(treeCars)
+text(treeCars)
+
+### Plot errors
+# `cv.tree` for 'cross-validate tree'
+par(mfrow=c(1,2))
+plot(cv.tree(treeCars,FUN=prune.tree,method="misclass"))
+plot(cv.tree(treeCars))
+
+### Prune the tree
+pruneTree <- prune.tree(treeCars,best=4)
+plot(pruneTree)
+text(pruneTree)
+
+### Show resubstitution error
+table(Cars93$DriveTrain,predict(pruneTree,type="class"))
+table(Cars93$DriveTrain,predict(treeCars,type="class"))
+```
