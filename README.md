@@ -25,3 +25,7 @@ The general layout here:
   have anyone cheating, after all.)
 * `example-data-analysis-assignment` - Leek's example data analysis project; basically
   a reference implementation for the student projects.
+
+### "Why didn't someone tell me...?"
+
+Fork Jeff Leek's notes: <https://github.com/jtleek/dataanalysis/>

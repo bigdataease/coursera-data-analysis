@@ -173,7 +173,6 @@ _Used for:_
 4. Comparing different predictors
 
 #### Approaches/Methods
-
 - random sub-sampling: ![Random subsampling](https://dl.dropbox.com/u/7710864/courseraPublic/week6/002crossValidation/assets/img/random.png)
   - take random "stripes" of data & split: training & test samples
   - advantages: balance size of training & test sets
