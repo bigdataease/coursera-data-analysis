@@ -1,6 +1,13 @@
 [Data Analysis] Week 6 Lectures
 ================================================================================
 
+**Preflight:**
+```{r preflight}
+setwd("~/Desktop/coursera-data-analysis/lectures/")
+```
+
+----
+
 Prediction Study Design
 --------------------------------------------------------------------------------
 
@@ -47,17 +54,17 @@ Prediction Study Design
      - pay attn: good-looking Sensitivity and great-looking Specificity scores _but..._
      - Positive predictive value is _quite low_ (10%)
    - some other common error measures:
-     - Mean squared error (or root mean squared error)
-       - better for continuous values (sensitive to outliers)
-     - Median absolute deviation
-       - also better for continuous values (more robust than mean squared error)
+     - Mean squared error (or root mean squared error)  
+       better for continuous values (sensitive to outliers)
+     - Median absolute deviation  
+       also better for continuous values (more robust than mean squared error)
      - sensitivity (recall) & specificity
-     - accuracy
-       - for binary data
-       - weights false positives & negatives equally
-     - concordance
-       - for multiple predictors
-       - how well do they coordinate in making predictions
+     - accuracy  
+       for binary data  
+       weights false positives & negatives equally
+     - concordance  
+       for multiple predictors  
+       how well do they coordinate in making predictions
 3. Split data into:
    - Training
    - Testing
@@ -93,6 +100,8 @@ Prediction Study Design
   - _test_ - for final analysis of predictive models
 
 
+
+----
 
 Cross-Validation
 --------------------------------------------------------------------------------
@@ -183,6 +192,7 @@ _Used for:_
     - repeat w/ next (third); repeat w/ next third...
   - extreme example of K-fold: "leave one out sampling": ![Leave one out sampling](https://dl.dropbox.com/u/7710864/courseraPublic/week6/002crossValidation/assets/img/loocv.png)
   - "LEAVE ONE OUT" = less biased, but less stable
+  - _Ed. note: "bias" is a fancy way of saying over-fitting?_
 
 #### Example
 ```{r}
@@ -201,6 +211,8 @@ plot(x2,y2,col=(zhat2+3),pch=19)
 (Should help us to avoid being "overly optimistic")
 
 
+
+----
 
 Predicting with Regression
 --------------------------------------------------------------------------------
@@ -256,7 +268,7 @@ lines(trainFaith$waiting, lm1$fitted, lwd=3)
 
 $$ \hat{ED} = \hat{b}_0 + \hat{b}_1 WT $$
 
-- predicted value (of eruption duration, $\hat{ED$) equal to output of the model; so...
+- predicted value (of eruption duration, $\hat{ED}$) equal to output of the model; so...
 - estimated intercept plus ($\hat{b}_0$)
 - estimated slope times ($\hat{b}_1$)
 - the coefficient (wait time, $WT$)
@@ -288,6 +300,7 @@ sqrt(sum((predict(lm1,newdata=testFaith)-testFaith$eruptions)^2))
 ### Prediction intervals
 pred1 <- predict(lm1, newdata=testFaith, interval="prediction")
 ord <- order(testFaith$waiting)
+par(mfrow=c(1,1))
 plot(testFaith$waiting, testFaith$eruptions,
      pch=19, col="blue")
 matlines(testFaith$waiting[ord], pred1[ord,], type="l", ,
@@ -339,6 +352,8 @@ cv2$delta
 (slide 17: notes & further reading)
 
 
+
+----
 
 Predicting with Trees
 --------------------------------------------------------------------------------
@@ -440,8 +455,10 @@ plot(cv.tree(treeCars,FUN=prune.tree,method="misclass"))
 plot(cv.tree(treeCars))
 
 ### Prune the tree
+par(mfrow=c(1,1))
 pruneTree <- prune.tree(treeCars,best=4)
 plot(pruneTree)
+title(main="Pruning the Tree...")
 text(pruneTree)
 
 ### Show resubstitution error

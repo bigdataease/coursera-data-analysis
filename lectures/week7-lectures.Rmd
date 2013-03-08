@@ -1,5 +1,12 @@
-[Data Analysis] Week 7d Lectures
+[Data Analysis] Week 7 Lectures
 ================================================================================
+
+**Preflight:**
+```{r preflight}
+setwd("~/Desktop/coursera-data-analysis/lectures")
+```
+
+----
 
 Smoothing
 --------------------------------------------------------------------------------
@@ -18,9 +25,9 @@ Smoothing
 
 ### CD4 Data
 ```{r cd4Data, cache=TRUE}
-download.file("https://spark-public.s3.amazonaws.com/dataanalysis/cd4.data",
-              destfile="./data/cd4.data",method="curl")
-cd4Data <- read.table("./data/cd4.data", 
+#download.file("https://spark-public.s3.amazonaws.com/dataanalysis/cd4.data",
+#              destfile="data/cd4.data",method="curl")
+cd4Data <- read.table("data/cd4.data", 
                       col.names=c("time", "cd4", "age", "packs", "drugs", "sex",
                                   "cesd", "id"))
 cd4Data <- cd4Data[order(cd4Data$time),]
@@ -213,6 +220,8 @@ points(cd4Data$time,lm1$fitted,col="blue",pch=19,cex=0.5)
 
 
 
+----
+
 Bootstrap
 --------------------------------------------------------------------------------
 
@@ -366,6 +375,8 @@ __Further resources__:
 - [Confidence limits on phylogenies](http://www.jstor.org/discover/10.2307/2408678?uid=3739704&uid=2&uid=4&uid=3739256&sid=21101897412687)
 
 
+
+----
 
 Bootstrap for Prediction
 --------------------------------------------------------------------------------
@@ -561,6 +572,8 @@ __Further resources__:
 
 
 
+----
+
 Combining Predictors
 --------------------------------------------------------------------------------
 
@@ -639,7 +652,7 @@ rmse(combine2,testData$y)
 #install_github("medley","mewo2")
 library(medley)
 library(e1071)
-library(randomForests)
+library(randomForest)
 x <- trainData[,-1]
 y <- trainData$y
 newx <- testData[,-1]
