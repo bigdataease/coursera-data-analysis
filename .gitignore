@@ -8,7 +8,12 @@ lectures/*.md
 lectures/*.pdf
 lectures/figure/
 
-quizzes/
+quizzes/*.html
+quizzes/*.md
+quizzes/*.txt
+quizzes/*.csv
+quizzes/*.pdf
+quizzes/figure/
 
 # the example analysis: (we only want the zip, not the contents)
 example-data-analysis-assignment/exampleProject/
