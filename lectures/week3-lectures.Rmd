@@ -20,6 +20,8 @@ Example Analysis Assignment
 
 
 
+----
+
 Exploratory Graphs (1 + 2)
 --------------------------------------------------------------------------------
 
@@ -247,6 +249,8 @@ points(lat, lon, col="blue", pch=19)
 
 
 
+----
+
 Expository Graphs
 --------------------------------------------------------------------------------
 
@@ -417,6 +421,8 @@ dev.copy2pdf(file="twoPanelv2.pdf")
 
 
 
+----
+
 Hierarchical Clustering
 --------------------------------------------------------------------------------
 
@@ -543,6 +549,8 @@ heatmap(dataMatrix)
 
 
 
+----
+
 K-Means Clustering
 --------------------------------------------------------------------------------
 
@@ -613,6 +621,8 @@ image(t(dataMatrix)[,order(kmeansObj$cluster):1], yaxt="n")
 - [Rafa's "Distances and Clustering" (video)](http://www.youtube.com/watch?v=wQhVWUcXM0A)
 - [The Elements of Statistical Learning](http://www-stat.stanford.edu/~tibs/ElemStatLearn/)
 
+
+----
 
 Dimension Reduction
 --------------------------------------------------------------------------------
@@ -693,9 +703,9 @@ plot(colMeans(dataMatrixOrdered),xlab="Column",ylab="Column Mean",pch=19)
 ### **SVD** - singular value decomposition
 - compresses the data by performing a matrix decomposition
 - $X = UVD^T$
-  - _U_ = left singular vectors
-  - _D_ = singular values
-  - _V_ = right singular vectors
+  - $U$ = left singular vectors
+  - $D$ = singular values
+  - $V$ = right singular vectors
 - components of the SVD: (u and v)
 
 ```{r}
@@ -783,6 +793,8 @@ par(mfrow=c(1,2)); plot(svd1$v[,1],pch=19); plot(svd2$v[,1],pch=19)
 - [Latent semantic analysis](http://en.wikipedia.org/wiki/Latent_semantic_analysis)
 
 
+
+----
 
 Supplemental
 --------------------------------------------------------------------------------

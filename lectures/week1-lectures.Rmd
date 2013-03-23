@@ -13,6 +13,8 @@ Course Introduction
 
 
 
+----
+
 Getting Help
 --------------------------------------------------------------------------------
 
@@ -38,6 +40,8 @@ Getting Help
     - e.g., data analysis? or econometrics? or biostatistics? 
 
 
+
+----
 
 What _is_ Data?
 --------------------------------------------------------------------------------
@@ -66,6 +70,8 @@ What _is_ Data?
   - "so easy to collect so much data in so little time and for so little money"
 
 
+
+----
 
 Representing Data
 --------------------------------------------------------------------------------
@@ -143,6 +149,8 @@ Representing Data
 
 
 
+----
+
 Representing Data in R
 --------------------------------------------------------------------------------
 
@@ -185,6 +193,8 @@ Representing Data in R
 
 
 
+----
+
 Simulation Basics
 --------------------------------------------------------------------------------
 
@@ -225,6 +235,8 @@ sample(heights, size=10, replace=TRUE)
 
 
 
+----
+
 Types of Data Analysis Questions
 --------------------------------------------------------------------------------
 
@@ -260,6 +272,8 @@ _"What kind of question are you trying to answer?"_ try categories:
     - (( complex relationships w/in systems ))
 
 
+
+----
 
 Sources of Data Sets
 --------------------------------------------------------------------------------

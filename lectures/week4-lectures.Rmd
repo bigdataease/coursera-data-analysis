@@ -1,6 +1,13 @@
 [Data Analysis] Week 4 Lectures
 ================================================================================
 
+**Preflight:**
+```{r preflight}
+setwd("~/Desktop/coursera-data-analysis/lectures/")
+```
+
+----
+
 Clustering Example
 --------------------------------------------------------------------------------
 
@@ -11,7 +18,6 @@ Clustering Example
 Samsung Galaxy S3 case study / example
 
 ```{r}
-setwd('~/Desktop/coursera-data-analysis/lectures')
 load('samsungData.rda')
 #names(samsungData)
 table(samsungData$activity)
@@ -92,6 +98,8 @@ plot(kClust$center[6,1:10],pch=19,ylab="Cluster Center",xlab="")
 ```
 
 
+
+----
 
 Basic Least Squares
 --------------------------------------------------------------------------------
@@ -207,6 +215,8 @@ abline(c(0,0),col="red",lwd=3)
 ```
 
 
+
+----
 
 Inference Basics
 --------------------------------------------------------------------------------
@@ -414,6 +424,8 @@ confint(sampleLm4,level=0.95)
 
 
 
+----
+
 P-values
 --------------------------------------------------------------------------------
 
@@ -542,6 +554,8 @@ in guiding "where to from here" etc.
 
 
 
+----
+
 Regression with Factor Variables
 --------------------------------------------------------------------------------
 
@@ -561,8 +575,8 @@ Example: movie ratings
 Go get some RottenTomatoes.com movie ratings:
 
 ```{r}
-download.file("http://www.rossmanchance.com/iscam2/data/movies03RT.txt",destfile="./data/movies.txt")
-movies <- read.table("./data/movies.txt",sep="\t",header=T,quote="")
+download.file("http://www.rossmanchance.com/iscam2/data/movies03RT.txt",destfile="data/movies.txt")
+movies <- read.table("data/movies.txt",sep="\t",header=T,quote="")
 head(movies)
 ```
 
@@ -661,6 +675,8 @@ TukeyHSD(lm1)
 
 
 
+----
+
 Multiple Variable Regression
 --------------------------------------------------------------------------------
 
@@ -678,8 +694,8 @@ Multiple Variable Regression
 Example data: Millenium Development Goal 1 + WHO childhood hunger
 
 ```{r}
-download.file("http://apps.who.int/gho/athena/data/GHO/WHOSIS_000008.csv?profile=text&filter=COUNTRY:*;SEX:*","./data/hunger.csv",method="curl")
-hunger <- read.csv("./data/hunger.csv")
+download.file("http://apps.who.int/gho/athena/data/GHO/WHOSIS_000008.csv?profile=text&filter=COUNTRY:*;SEX:*","data/hunger.csv",method="curl")
+hunger <- read.csv("data/hunger.csv")
 hunger <- hunger[hunger$Sex!="Both sexes",]
 head(hunger)
 ```
@@ -749,6 +765,8 @@ summary(lmBoth)
 
 
 
+----
+
 Regression in the Real World
 --------------------------------------------------------------------------------
 
@@ -791,6 +809,8 @@ Regression in the Real World
 
 
 
+
+----
 
 Study Group Supplementary Session
 --------------------------------------------------------------------------------

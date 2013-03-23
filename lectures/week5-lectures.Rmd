@@ -1,6 +1,13 @@
 [Data Analysis] Week 5 Lectures
 ================================================================================
 
+**Preflight:**
+```{r preflight}
+setwd("~/Desktop/coursera-data-analysis/lectures/")
+```
+
+----
+
 ANOVA with Multiple Factors
 --------------------------------------------------------------------------------
 
@@ -18,8 +25,8 @@ ANOVA with Multiple Factors
 
 ```{r}
 download.file("http://www.rossmanchance.com/iscam2/data/movies03RT.txt",
-              destfile="./data/movies.txt")
-movies <- read.table("./data/movies.txt",sep="\t",header=T,quote="")
+              destfile="data/movies.txt")
+movies <- read.table("data/movies.txt",sep="\t",header=T,quote="")
 head(movies)
 ```
 
@@ -104,6 +111,8 @@ summary(aovObject4)
 
 
 
+----
+
 Binary Outcomes
 --------------------------------------------------------------------------------
 
@@ -124,9 +133,9 @@ Binary Outcomes
 ### Case study: B'more Ravens game data
 
 ```{r}
-download.file("https://dl.dropbox.com/u/7710864/data/ravensData.rda",
-              destfile="./data/ravensData.rda", method="curl")
-load("./data/ravensData.rda")
+#download.file("https://dl.dropbox.com/u/7710864/data/ravensData.rda",
+#              destfile="data/ravensData.rda", method="curl")
+load("data/ravensData.rda")
 head(ravensData)
 ```
 
@@ -218,6 +227,8 @@ anova(logRegRavens,test="Chisq")
 
 
 
+----
+
 Count Outcomes
 --------------------------------------------------------------------------------
 
@@ -259,8 +270,8 @@ c(mean(poisData2),var(poisData2))
 ### Case study: website data
 ```{r}
 download.file("https://dl.dropbox.com/u/7710864/data/gaData.rda",
-              destfile="./data/gaData.rda",method="curl")
-load("./data/gaData.rda")
+              destfile="data/gaData.rda",method="curl")
+load("data/gaData.rda")
 gaData$julian <- julian(gaData$date)
 head(gaData)
 ```
@@ -344,6 +355,8 @@ lines(julian(gaData$date), glm2$fitted/(gaData$visits+1),
 
 
 
+----
+
 Model Checking and Selection
 --------------------------------------------------------------------------------
 
@@ -396,7 +409,7 @@ abline(c(0,0), col="red", lwd=3)
 - See if another variable explains the increased variance
 - Use the `vcovHC` {sandwich} variance estimators (if $n$ is big)
   - remember from Poisson?
-  - also good for _heteroskedastic_ data (i.e., "changing variance")
+  - also good for **_heteroskedastic_** data (i.e., "changing variance")
 
 ### Using the sandwich estimate
 ```{r}
@@ -565,8 +578,8 @@ plot(lm1)
 ### Case study: Movie Data
 ```{r}
 download.file("http://www.rossmanchance.com/iscam2/data/movies03RT.txt",
-              destfile="./data/movies.txt")
-movies <- read.table("./data/movies.txt",sep="\t",header=TRUE,quote="")
+              destfile="data/movies.txt")
+movies <- read.table("data/movies.txt",sep="\t",header=TRUE,quote="")
 head(movies)
 
 movies <- movies[,-1]
@@ -593,6 +606,8 @@ print(bicglm1)
 ```
 
 
+
+----
 
 Weekly Study Group Supplement
 --------------------------------------------------------------------------------

@@ -99,6 +99,8 @@ plot(hCluster)
 
 
 
+----
+
 Organizing a Data Analysis
 --------------------------------------------------------------------------------
 
@@ -156,6 +158,8 @@ A proposed sensible convention to follow for directory structures:
       - cite references for important statistical techniques (that may fall outside "the usual" stats)
 
 
+
+----
 
 Getting Data (Part 1 & 2)
 --------------------------------------------------------------------------------
@@ -240,6 +244,8 @@ setwd('~/Desktop/coursera-data-analysis')
 
 
 
+----
+
 Data Resources (where to go and get data) 
 --------------------------------------------------------------------------------
 
@@ -292,6 +298,8 @@ Data Resources (where to go and get data)
   - `rowSums()` & `rowMeans()` & `colSums()` & `colMeans()`
 
 
+
+----
 
 Data Munging Basics
 --------------------------------------------------------------------------------

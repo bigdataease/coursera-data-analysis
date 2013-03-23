@@ -1,0 +1,12 @@
+*.html
+*.md
+!README.md
+figures/
+R/raw/*.html
+R/raw/*.md
+R/raw/figure/
+
+# RDA: https://spark-public.s3.amazonaws.com/dataanalysis/samsungData.rda
+# original: http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
+# ignore:
+data/raw/samsungData.rda

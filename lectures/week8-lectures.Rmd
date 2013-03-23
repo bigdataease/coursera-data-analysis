@@ -1,0 +1,410 @@
+[Data Analysis] Week 8 Lectures
+================================================================================
+
+**Preflight:**
+```{r preflight}
+setwd("~/Desktop/coursera-data-analysis/lectures/")
+```
+
+----
+
+Multiple Testing
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week8/001multipleTesting/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=135) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=135_en&format=txt)
+
+**Key ideas:**
+
+> "Make sure you're not fooling yourself."
+
+- Hypothesis testing/significance analysis is commonly overused
+- Correcting for multiple testing avoids false positives or discoveries
+- Two key components
+  - Error measure
+  - Correction
+
+
+### Three eras of statistics
+__The age of Quetelet and his successors, in which huge census-level data sets
+were brought to bear on simple but important questions__: Are there more male
+than female births? Is the rate of insanity rising?
+
+The classical period of Pearson, Fisher, Neyman, Hotelling, and their successors,
+intellectual giants who __developed a theory of optimal inference capable of
+wringing every drop of information out of a scientific experiment__. The
+questions dealt with still tended to be simple Is treatment A better than
+treatment B? 
+
+__The era of scientific mass production__, in which new technologies typified by
+the microarray allow a single team of scientists to produce data sets of a size
+Quetelet would envy. But now the flood of data is accompanied by a deluge of
+questions, perhaps thousands of estimates or hypothesis tests that the
+statistician is charged with answering together; not at all what the classical
+masters had in mind. Which variables matter among the thousands measured? How do
+you relate unrelated information?
+
+<http://www-stat.stanford.edu/~ckirby/brad/papers/2010LSIexcerpt.pdf>
+
+### Reasons for multiple testing
+![Reasons for multiple testing](https://dl.dropbox.com/u/7710864/courseraPublic/week8/001multipleTesting/assets/img/datasources.png)
+
+- next gen. sequencing machines
+- patient imaging
+- electronic medical records
+- personal data (e.g., FitBit)
+
+### Why correct for multiple tests?
+![Why correct for multiple tests? (1 of 2)](https://dl.dropbox.com/u/7710864/courseraPublic/week8/001multipleTesting/assets/img/jellybeans1.png)
+
+![Why correct for multiple tests? (2 of 2)](https://dl.dropbox.com/u/7710864/courseraPublic/week8/001multipleTesting/assets/img/jellybeans2.png)
+
+<http://xkcd.com/882/>
+
+### Types of errors
+
+> P-values and hypothesis tests are _not_ interchangeable ideas...
+
+Suppose you are testing a hypothesis that a parameter $\beta$ equals zero versus
+the alternative that it does not equal zero. These are the possible outcomes. 
+
+
+                    | $\beta=0$   | $\beta\neq0$   |  Hypotheses
+--------------------|-------------|----------------|---------
+Claim $\beta=0$     |      $U$    |      $T$       |  $m-R$
+Claim $\beta\neq 0$ |      $V$    |      $S$       |  $R$
+    Claims          |     $m_0$   |      $m-m_0$   |  $m$
+
+
+- __Type I error or false positive ($V$)__ Say that the parameter does not equal
+  zero when it does
+
+- __Type II error or false negative ($T$)__ Say that the parameter equals zero
+  when it doesn't 
+
+**note:** $\beta=0$ = when there is *no* relationship b/w variables
+
+### Error rates
+- __False positive rate__ - The rate at which false results ($\beta = 0$) are
+  called significant: $E\left[\frac{V}{m_0}\right]$*
+
+- __Family wise error rate (FWER)__ - The probability of at least one false
+  positive ${\rm Pr}(V \geq 1)$
+
+- __False discovery rate (FDR)__ - The rate at which claims of significance are
+  false $E\left[\frac{V}{R}\right]$
+
+- The false positive rate is closely related to the type I error rate: 
+  <http://en.wikipedia.org/wiki/False_positive_rate>
+
+### Controlling the false positive rate
+If P-values are correctly calculated calling all $P < \alpha$ significant will
+control the false positive rate at level $\alpha$ on average. 
+
+<redtext>Problem</redtext>: Suppose that you perform 10,000 tests and
+$\beta = 0$ for all of them. 
+
+Suppose that you call all $P < 0.05$ significant. 
+
+The expected number of false positives is: $10,000 \times 0.05 = 500$  false
+positives. 
+
+__How do we avoid so many false positives?__
+
+### Controlling family-wise error rate (FWER)
+The [Bonferroni correction](http://en.wikipedia.org/wiki/Bonferroni_correction)
+is the oldest multiple testing correction. 
+
+#### Basic idea:
+- Suppose you do $m$ tests
+- You want to control FWER at level $\alpha$ so $Pr(V \geq 1) < \alpha$
+- Calculate P-values normally
+- Set $\alpha_{fwer} = \alpha/m$
+- Call all $P$-values less than $\alpha_{fwer}$ significant
+
+__Pros__: Easy to calculate, conservative  
+__Cons__: May be very conservative
+
+### Controlling false discovery rate (FDR)
+This is the most popular correction when performing _lots_ of tests say in
+genomics, imagining, astronomy, or other signal-processing disciplines. 
+
+#### Basic idea:
+- Suppose you do $m$ tests
+- You want to control FDR at level $\alpha$ so $E\left[\frac{V}{R}\right]$
+- Calculate P-values normally
+- Order the P-values from smallest to largest $P_{(1)},...,P_{(m)}$
+- Call any $P_{(i)} \leq \alpha \times \frac{i}{m}$ significant
+
+__Pros__: Still pretty easy to calculate, less conservative (maybe much less)  
+__Cons__: Allows for more false positives, may behave strangely under dependence
+
+### Example with 10 P-values
+![Example with 10 P-values](https://dl.dropbox.com/u/7710864/courseraPublic/week8/001multipleTesting/assets/img/example10pvals.png)
+
+Controlling all error rates at $\alpha = 0.20$
+
+### Adjusted P-values
+- One approach is to adjust the threshold $\alpha$
+- A different approach is to calculate "adjusted p-values"
+- They _are not p-values_ anymore
+- But they can be used directly without adjusting $\alpha$
+
+#### Example: 
+- Suppose P-values are $P_1,\ldots,P_m$
+- You could adjust them by taking $P_i^{fwer} = \max{m \times P_i,1}$ for each P-value.
+- Then if you call all $P_i^{fwer} < \alpha$ significant you will control the FWER. 
+
+### Case study I: no true positives
+```{r createPvals,cache=TRUE}
+set.seed(1010093)
+pValues <- rep(NA,1000)
+for(i in 1:1000){
+  y <- rnorm(20)
+  x <- rnorm(20)
+  pValues[i] <- summary(lm(y ~ x))$coeff[2,4]
+}
+
+# Controls false positive rate
+sum(pValues < 0.05)
+
+### (cont'd)
+
+# Controls FWER 
+sum(p.adjust(pValues,method="bonferroni") < 0.05)
+# Controls FDR 
+sum(p.adjust(pValues,method="BH") < 0.05)
+```
+
+### Case study II: 50% true positives
+```{r createPvals2,cache=TRUE}
+set.seed(1010093)
+pValues <- rep(NA,1000)
+for(i in 1:1000){
+  x <- rnorm(20)
+  # First 500 beta=0, last 500 beta=2
+  if (i <= 500) {
+    y <- rnorm(20)
+  } else {
+    y <- rnorm(20,mean=2*x)
+  }
+  pValues[i] <- summary(lm(y ~ x))$coeff[2,4]
+}
+trueStatus <- rep(c("zero","not zero"),each=500)
+table(pValues < 0.05, trueStatus)
+
+### (cont'd)
+
+# Controls FWER 
+table(p.adjust(pValues,method="bonferroni") < 0.05,trueStatus)
+# Controls FDR 
+table(p.adjust(pValues,method="BH") < 0.05,trueStatus)
+
+### (cont'd)
+### __P-values versus adjusted P-values__
+
+par(mfrow=c(1,2))
+plot(pValues,p.adjust(pValues,method="bonferroni"),pch=19)
+plot(pValues,p.adjust(pValues,method="BH"),pch=19)
+```
+
+### Notes and resources
+
+#### Notes:
+- Multiple testing is an entire subfield
+- A basic Bonferroni/BH correction is usually enough
+- If there is strong dependence between tests there may be problems
+  - Consider method="BY"
+
+#### Further resources:
+- [Multiple testing procedures with applications to genomics](http://www.amazon.com/Multiple-Procedures-Applications-Genomics-Statistics/dp/0387493166/ref=sr_1_2/102-3292576-129059?ie=UTF8&s=books&qid=1187394873&sr=1-2)
+- [Statistical significance for genome-wide studies](http://www.pnas.org/content/100/16/9440.full)
+- [Introduction to multiple testing](http://ies.ed.gov/ncee/pubs/20084018/app_b.asp)
+
+
+
+----
+
+Simulation for Model Checking
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week8/002simulationForModelChecking/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=137) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=137_en&format=txt)
+
+**Basic ideas:**
+
+- Way back in the first week we talked about simulating data from distributions
+  in R using the _rfoo_ functions. 
+- In general simulations are way more flexible/useful
+  - For bootstrapping as we saw in week 7
+  - For evaluating models
+  - For testing different hypotheses
+  - For sensitivity analysis
+  - "...or for prediction"
+- At minimum it is useful to simulate
+  - A best case scenario
+  - A few examples where you know your approach won't work
+    - helps you to understand the boundaries of your model(s)
+  - [The importance of simulating the extremes](http://simplystatistics.org/2013/03/06/the-importance-of-simulating-the-extremes/)
+  
+### Simulating data from a model
+Suppose that you have a regression model:
+
+$$ Y_i = b_0 + b_1 X_i  + e_i$$
+
+Here is an example of generating data from this model where $X_i$ and $e_i$ are
+normal:
+
+```{r}
+set.seed(44333)
+x <- rnorm(50)
+e <- rnorm(50)
+b0 <- 1
+b1 <- 2
+y <- b0 + b1*x + e
+```
+
+### Violating assumptions
+```{r simulate1}
+set.seed(44333)
+x <- rnorm(50)
+e <- rnorm(50)
+e2 <- rcauchy(50)
+b0 <- 1
+b1 <- 2
+y <- b0 + b1*x + e
+y2 <-  b0 + b1*x + e2
+
+### (cont'd)
+par(mfrow=c(1,2))
+plot(lm(y ~ x)$fitted,lm(y~x)$residuals,pch=19,xlab="fitted",ylab="residuals")
+plot(lm(y2 ~ x)$fitted,lm(y2~x)$residuals,pch=19,xlab="fitted",ylab="residuals")
+```
+
+### Repeated simulations
+```{r simulate2,fig.height=4,fig.width=8,cache=TRUE}
+set.seed(44333)
+betaNorm <- betaCauch <- rep(NA,1000)
+for(i in 1:1000) {
+  x <- rnorm(50)
+  e <- rnorm(50)
+  e2 <- rcauchy(50)
+  b0 <- 1
+  b1 <- 2
+  
+  y <-  b0 + b1*x + e
+  y2 <- b0 + b1*x + e2
+  
+  betaNorm[i] <- lm(y ~ x)$coeff[2]
+  betaCauch[i] <- lm(y2 ~ x)$coeff[2]
+}
+
+quantile(betaNorm)
+quantile(betaCauch)
+```
+
+### Monte Carlo Error
+```{r,dependson="simulate2",fig.height=4,fig.width=8,cache=TRUE}
+boxplot(betaNorm,betaCauch,col="blue",ylim=c(-5,5))
+```
+Note the `ylim` param there -- the right-side boxplot's outliers otherwise go
+way off the screen.
+
+### Simulation based on a data set
+```{r galton,fig.height=4,fig.width=8}
+library(UsingR)
+data(galton)
+nobs <- dim(galton)[1]
+
+par(mfrow=c(1,2))
+hist(galton$child,col="blue",breaks=100)
+hist(galton$parent,col="blue",breaks=100)
+```
+
+### Calculating means,variances
+```{r,dependson="galton",fig.height=4,fig.width=8}
+lm1 <- lm(galton$child ~ galton$parent)
+parent0 <- rnorm(nobs,sd=sd(galton$parent),mean=mean(galton$parent))
+child0 <- lm1$coeff[1] + lm1$coeff[2]*parent0 + rnorm(nobs,sd=summary(lm1)$sigma)
+par(mfrow=c(1,2))
+plot(galton$parent,galton$child,pch=19)
+plot(parent0,child0,pch=19,col="blue")
+```
+
+### Simulating more complicated scenarios
+```{r stamps,fig.height=4,fig.width=4}
+library(bootstrap)
+data(stamp)
+nobs <- dim(stamp)[1]
+
+hist(stamp$Thickness,col="grey",breaks=100,freq=F)
+dens <- density(stamp$Thickness)
+lines(dens,col="blue",lwd=3)
+```
+
+### A simulation that is too simple
+```{r, dependson="stamps",fig.height=4,fig.width=4}
+plot(density(stamp$Thickness),col="black",lwd=3)
+for (i in 1:10) {
+  newThick <- rnorm(nobs,mean=mean(stamp$Thickness),sd=sd(stamp$Thickness))
+  lines(density(newThick),col="grey",lwd=3)
+}
+```
+
+### How density estimation works
+![How density estimation works](https://dl.dropbox.com/u/7710864/courseraPublic/week8/002simulationForModelChecking/assets/img/kde.png)
+
+<http://en.wikipedia.org/wiki/File:Comparison_of_1D_histogram_and_KDE.png>
+
+### Simulating from the density estimate
+```{r, dependson="stamps",fig.height=4,fig.width=4}
+plot(density(stamp$Thickness),col="black",lwd=3)
+for (i in 1:10) {
+  newThick <- rnorm(nobs,mean=stamp$Thickness,sd=dens$bw)
+  lines(density(newThick),col="grey",lwd=3)
+}
+```
+
+### Increasing variability 
+```{r, dependson="stamps",fig.height=4,fig.width=4}
+plot(density(stamp$Thickness),col="black",lwd=3)
+for (i in 1:10) {
+  newThick <- rnorm(nobs,mean=stamp$Thickness,sd=dens$bw*1.5)
+  lines(density(newThick,bw=dens$bw),col="grey",lwd=3)
+}
+```
+
+### Notes and further resources
+
+#### Notes:
+- Simulation can be applied to missing data problems - simulate what missing
+  data might be
+- Simulation values are often drawn from standard distributions, but this may
+  not be appropriate
+- Sensitivity analysis means trying different simulations with different
+  assumptions and seeing how estimates change
+
+#### Further resources:
+
+- [Advanced Data Analysis From An Elementary Point of View](http://www.stat.cmu.edu/~cshalizi/ADAfaEPoV/ADAfaEPoV.pdf)
+- [The design of simulation studies in medical statistics](http://www.soph.uab.edu/ssg/files/Club_ssg/MPadilla_07.pdf)
+- [Simulation studies in statistics](http://www4.stat.ncsu.edu/~davidian/st810a/simulation_handout.pdf)
+
+
+
+----
+
+Course Wrap-Up
+--------------------------------------------------------------------------------
+
+[slides](https://dl.dropbox.com/u/7710864/courseraPublic/week8/003courseWrapUp/index.html) |
+[video](https://class.coursera.org/dataanalysis-001/lecture/download.mp4?lecture_id=139) |
+[transcript](https://class.coursera.org/dataanalysis-001/lecture/subtitles?q=139_en&format=txt)
+
+### Follow-up:
+
+- <http://www.openintro.org>
+- [The Elements of Statistical Learning](http://www-stat.stanford.edu/~tibs/ElemStatLearn/)
+- [Advanced Data Analysis from an Elementary Point of View](http://www.stat.cmu.edu/~cshalizi/ADAfaEPoV/ADAfaEPoV.pdf)

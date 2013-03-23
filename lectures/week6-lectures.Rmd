@@ -311,8 +311,8 @@ matlines(testFaith$waiting[ord], pred1[ord,], type="l", ,
 Wins & Losses in the 2012-2013 season...
 ```{r}
 download.file("https://dl.dropbox.com/u/7710864/data/ravensData.rda",
-              destfile="./data/ravensData.rda", method="curl")
-load("./data/ravensData.rda")
+              destfile="data/ravensData.rda", method="curl")
+load("data/ravensData.rda")
 head(ravensData)
 ```
 
